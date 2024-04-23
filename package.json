@@ -1,0 +1,73 @@
+{
+  "name": "aptos-nyc-2024",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@aptos-internal/design-system-web": "0.1.0-beta.26",
+    "@aptos-labs/ts-sdk": "^1.13.0",
+    "@aptos-labs/wallet-adapter-ant-design": "^2.2.0",
+    "@aptos-labs/wallet-adapter-core": "^3.10.0",
+    "@aptos-labs/wallet-adapter-react": "^2.3.1",
+    "@identity-connect/wallet-adapter-plugin": "^1.2.5",
+    "@martianwallet/aptos-wallet-adapter": "^0.0.5",
+    "@pandacss/dev": "^0.37.2",
+    "@pontem/wallet-adapter-plugin": "^0.2.1",
+    "@tanstack/react-query": "^5.32.0",
+    "@types/react": "^18.2.79",
+    "@types/react-dom": "^18.2.25",
+    "buffer": "^6.0.3",
+    "fewcha-plugin-wallet-adapter": "^0.1.3",
+    "petra-plugin-wallet-adapter": "^0.4.5",
+    "react": "^18.2.0",
+    "react-colorful": "^5.6.1",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.51.3",
+    "react-icons": "^5.1.0",
+    "react-router-dom": "^6.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "@typescript-eslint/eslint-plugin": "^6.12.0",
+    "@typescript-eslint/parser": "^6.12.0",
+    "@vitejs/plugin-react": "^4.2.0",
+    "eslint": "^8.54.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.1.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-import": "^2.29.0",
+    "prettier": "^3.1.0",
+    "typescript": "^5.4.4",
+    "vite": "^4.5.0"
+  },
+  "homepage": "./",
+  "scripts": {
+    "prepare": "panda codegen",
+    "start": "vite --port 3000",
+    "build": "tsc --noEmit && vite build",
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "fmt": "prettier --write 'src/**/*.(ts|tsx)'",
+    "artifactregistry-login": "pnpm dlx google-artifactregistry-auth"
+  },
+  "eslintConfig": {
+    "extends": "react-app",
+    "rules": {
+      "@typescript-eslint/no-unused-vars": "off",
+      "no-throw-literal": "off",
+      "no-multi-str": "off",
+      "no-empty-pattern": "off"
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
