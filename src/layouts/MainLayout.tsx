@@ -1,16 +1,14 @@
 import "../../global.css";
-
 import React from "react";
-import { Box, Flex } from "../../styled-system/jsx";
+import { css } from "styled-system/css";
+import { flex } from "styled-system/patterns";
 import { Link } from "react-router-dom";
 import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
 import { WalletSelector } from "@aptos-labs/wallet-adapter-ant-design";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import { css } from "../../styled-system/css";
 import { Button, IconGithub } from "@aptos-internal/design-system-web";
 
 export const ConnectWalletComponent = () => {
-  // Wallet icon component.
   return <WalletSelector />;
 };
 
@@ -19,14 +17,22 @@ interface LayoutProps {
 }
 
 export default function MainLayout({ children }: LayoutProps) {
-  let { isLoading } = useWallet();
+  const { isLoading } = useWallet();
 
-  let headerMiddle = null;
-
-  // Not using this for now.
-  let githubIcon = (
-    <Flex justifyContent="flex-end" alignItems="center" gap="[2px]" flex="1">
-      <a href="https://github.com/banool/aptos-account-value">
+  // Courtesy of https://stackoverflow.com/q/75175422/3846032.
+  const headerContent = (
+    <div
+      className={flex({
+        alignItems: "center",
+        justifyContent: "space-between",
+      })}
+    >
+      <div>
+        <p className={css({ textStyle: "heading.300.semibold" })}>
+          <Link to="/">Aptos NYC 2024</Link>
+        </p>
+      </div>
+      <a href="https://github.com/banool/aptos-nyc-2024">
         <Button
           iconOnly={true}
           variant="secondary"
@@ -36,75 +42,44 @@ export default function MainLayout({ children }: LayoutProps) {
           <IconGithub className="aptos-h_16 aptos-w_16" />
         </Button>
       </a>
-    </Flex>
+    </div>
   );
 
-  // Courtesy of https://stackoverflow.com/q/75175422/3846032.
-  // TODO: None of the styles on these boxes is doing anything.
   const body = (
-    <Box display="flex" flexDirection="column">
-      <Box
-        paddingTop="[5px]"
-        paddingBottom="[5px]"
-        paddingLeft="[8px]"
-        paddingRight="[8px]"
-      >
-        <Flex alignItems="center" gap="[2px]">
-          <Flex alignItems="center" gap="[2px]" flex="1">
-            <Box>
-              <p className={css({ textStyle: "heading.400.semibold" })}>
-                <Link to="/">Aptos NYC 2024</Link>
-              </p>
-            </Box>
-          </Flex>
-          <Flex
-            justifyContent="center"
-            alignItems="center"
-            gap="[2px]"
-            flex="1"
-          >
-            {headerMiddle}
-          </Flex>
-        </Flex>
-      </Box>
-      <Box width="[100px]" height="[100px]" backgroundColor="red.100" />
+    <div className={flex({ flexDirection: "column" })}>
       <div
         className={css({
-          width: "[100px]",
-          height: "[100px]",
-          backgroundColor: "red.100",
+          paddingTop: "[5px]",
+          paddingBottom: "[5px]",
+          paddingLeft: "[8px]",
+          paddingRight: "[8px]",
         })}
-      />
-      <div
-        style={{ width: "100px", height: "100px", backgroundColor: "red.100" }}
-      />
+      >
+        {headerContent}
+      </div>
       {children}
-    </Box>
+    </div>
   );
 
   // Blur the content if we're connecting a wallet.
   let out;
   if (isLoading) {
     out = (
-      <Box
-        filter="[blur(4px) brightness(0.8)]"
-        pointerEvents="none"
-        position="absolute"
-        width="[100%]"
-        height="[100%]"
+      <div
+        className={css({
+          filter: "[blur(4px) brightness(0.8)]",
+          pointerEvents: "none",
+          position: "absolute",
+          width: "[100%]",
+          height: "[100%]",
+        })}
       >
         {body}
-      </Box>
+      </div>
     );
   } else {
     out = body;
   }
 
-  return body;
+  return out;
 }
-
-// For some reason this works:
-// <div style={{width:"100px", height:"100px", backgroundColor:"red"}}/>
-
-// But this doesn't, the div just doesn't appear:
-// <div className={css({width:"[100px]", height:"[100px]", backgroundColor:"red.100"})}/>

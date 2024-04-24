@@ -1,7 +1,7 @@
-import { Box } from "../../styled-system/jsx";
+import { css } from "styled-system/css";
 
 export const NotFoundPage = () => (
-  <Box style={{ padding: 8 }}>
+  <div className={css({ padding: "[8]" })}>
     <p>Not found!</p>
-  </Box>
+  </div>
 );

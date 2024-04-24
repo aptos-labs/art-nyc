@@ -1,6 +1,7 @@
 import { defineConfig } from "@pandacss/dev";
 import { aptosPandaPreset } from "@aptos-internal/design-system-web";
 
+// We do not enable JSX components.
 export default defineConfig({
   // Disable preflight because @aptos-internal/design-system-web already includes it
   preflight: false,
@@ -13,10 +14,6 @@ export default defineConfig({
     light: "[data-theme=light] &",
     dark: "[data-theme=dark] &",
   },
-
-  // Enable JSX style components.
-  jsxFramework: "react",
-  jsxStyleProps: "all",
 
   // Make type checking more strict. TODO: Disabled for now.
   strictTokens: true,
