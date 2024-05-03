@@ -16,7 +16,7 @@ export default function MyRoutes() {
         }
       />
       <Route
-        path="/:tokenAddress"
+        path="/:artId"
         element={
           <MainLayout>
             <MintPage />
