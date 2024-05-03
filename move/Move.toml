@@ -13,4 +13,4 @@ rev = "main"
 subdir = "aptos-move/framework/aptos-token-objects"
 
 [addresses]
-addr = "0x1"
+addr = "_"
