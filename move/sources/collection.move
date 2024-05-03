@@ -31,7 +31,7 @@ module addr::nyc_collection {
     /// transfers the art elsewhere, we will still not allow them to mint the same
     /// piece again.
     struct TokenOwners has key {
-        /// This is a map from account address to a vec of art IDs, which is a string
+        /// This is a map from account address to a vec of piece IDs, which is a string
         /// that uniquely identifies each piece of art.
         //
         // There are few enough different pieces of art that we can just use a vec
@@ -51,7 +51,7 @@ module addr::nyc_collection {
 
     /// This is how we store the data for each piece of art.
     struct ArtData has copy, drop, key {
-        /// A map of art ID to the data for that piece of art. Art ID should be a
+        /// A map of piece ID to the data for that piece of art. Piece ID should be a
         /// string roughly matching this regex: [a-z]{1}[a-z0-9-_]*
         data: SimpleMap<String, PieceData>,
     }
@@ -189,7 +189,7 @@ module addr::nyc_collection {
 
     /// Returns true if the given account owns a specific piece of art in the
     /// collection.
-    public fun is_token_owner(address: address, art_id: &String): bool acquires TokenOwners {
+    public fun is_token_owner(address: address, piece_id: &String): bool acquires TokenOwners {
         let collection = get_collection();
         let token_owners = borrow_global<TokenOwners>(
             object::object_address(&collection)
@@ -199,12 +199,12 @@ module addr::nyc_collection {
             address,
             &vector::empty()
         );
-        vector::contains(owned, art_id)
+        vector::contains(owned, piece_id)
     }
 
     /// Record that we minted a particular piece of art in the collection to the given
     /// address.
-    public(friend) fun record_minted(address: address, art_id: String) acquires TokenOwners {
+    public(friend) fun record_minted(address: address, piece_id: String) acquires TokenOwners {
         let collection = get_collection();
         let token_owners = borrow_global_mut<TokenOwners>(
             object::object_address(&collection)
@@ -214,7 +214,7 @@ module addr::nyc_collection {
             address,
             vector::empty()
         );
-        vector::push_back(owned, art_id,);
+        vector::push_back(owned, piece_id,);
     }
 
     /// Set / update the data for a piece of art. This affects future mints, it does
@@ -226,7 +226,7 @@ module addr::nyc_collection {
     // check that our indexing supports it though. <-- TODO
     public entry fun set_art_data(
         caller: &signer,
-        art_id: String,
+        piece_id: String,
         token_name: String,
         token_description: String,
         token_uri: String,
@@ -238,8 +238,8 @@ module addr::nyc_collection {
         let art_data = borrow_global_mut<ArtData>(
             object::object_address(&collection)
         );
-        if (simple_map::contains_key(&art_data.data, &art_id)) {
-            let piece_data = simple_map::borrow_mut(&mut art_data.data, &art_id);
+        if (simple_map::contains_key(&art_data.data, &piece_id)) {
+            let piece_data = simple_map::borrow_mut(&mut art_data.data, &piece_id);
             piece_data.token_name = token_name;
             piece_data.token_description = token_description;
             piece_data.token_uri = token_uri;
@@ -251,7 +251,7 @@ module addr::nyc_collection {
             };
             simple_map::add(
                 &mut art_data.data,
-                art_id,
+                piece_id,
                 piece_data
             );
         };
@@ -272,8 +272,8 @@ module addr::nyc_collection {
     // The next few functions are only necessary because accessing the fields of a
     // struct from outside / the module where it is defined is not allowed.
 
-    public fun get_piece_data(art_data: &ArtData, art_id: &String): &PieceData {
-        simple_map::borrow(&art_data.data, art_id)
+    public fun get_piece_data(art_data: &ArtData, piece_id: &String): &PieceData {
+        simple_map::borrow(&art_data.data, piece_id)
     }
 
     public fun get_piece_name(piece_data: &PieceData): String {

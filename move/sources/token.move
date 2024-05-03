@@ -31,24 +31,24 @@ module addr::nyc_token {
         /// if necessary.
         mutator_ref: MutatorRef,
 
-        /// Store the art ID too, we need it do some mutations more easily.
-        art_id: String,
+        /// Store the piece ID too, we need it do some mutations more easily.
+        piece_id: String,
     }
 
     /// Mint one of the pieces of art in the collection. Anyone can call this.
-    public entry fun mint(caller: &signer, art_id: String) {
+    public entry fun mint(caller: &signer, piece_id: String) {
         let caller_addr = signer::address_of(caller);
-        mint_inner(caller_addr, art_id);
+        mint_inner(caller_addr, piece_id);
     }
 
     /// Helper function. The collection creator can mint any token they want to whoever
     /// they want.
-    public entry fun mint_to(caller: &signer, art_id: String, mint_to: address) {
+    public entry fun mint_to(caller: &signer, piece_id: String, mint_to: address) {
         // Confirm the caller is the collection owner.
         assert_caller_is_collection_creator(caller);
 
         // For now we're making it that only the collection owner can mint tokens.
-        mint_inner(mint_to, art_id);
+        mint_inner(mint_to, piece_id);
     }
 
     // This function is separate from the top level mint function so we can use it
@@ -57,9 +57,9 @@ module addr::nyc_token {
     // cannot take in struct arguments, which again is convenient for testing.
     //
     // It is intentional that these tokens are not soulbound.
-    fun mint_inner(mint_to: address, art_id: String): Object<Token> {
+    fun mint_inner(mint_to: address, piece_id: String): Object<Token> {
         let art_data = get_art_data();
-        let piece_data = get_piece_data(&art_data, &art_id);
+        let piece_data = get_piece_data(&art_data, &piece_id);
 
         let name_prefix = get_piece_name(piece_data);
         let name_suffix = string::utf8(b"");
@@ -68,7 +68,7 @@ module addr::nyc_token {
 
         // Confirm the user does not already own this piece of art.
         assert!(
-            !is_token_owner(mint_to, &art_id),
+            !is_token_owner(mint_to, &piece_id),
             error::invalid_state(E_ALREADY_MINTED)
         );
 
@@ -91,7 +91,7 @@ module addr::nyc_token {
 
         move_to(
             &object_signer,
-            TokenRefs { mutator_ref, art_id }
+            TokenRefs { mutator_ref, piece_id }
         );
 
         // Transfer ownership of the token to the minter.
@@ -100,7 +100,7 @@ module addr::nyc_token {
         object::transfer_with_ref(linear_transfer_ref, mint_to);
 
         // Record that the user has minted this piece of art.
-        record_minted(mint_to, art_id);
+        record_minted(mint_to, piece_id);
 
         object::object_from_constructor_ref(&constructor_ref)
     }
@@ -123,7 +123,7 @@ module addr::nyc_token {
         vector::for_each(tokens, |token| {
             let object_addr = object::object_address(&token);
             let refs_ = borrow_global<TokenRefs>(object_addr);
-            let piece_data = get_piece_data(&art_data, &refs_.art_id);
+            let piece_data = get_piece_data(&art_data, &refs_.piece_id);
             token::set_name(&refs_.mutator_ref, get_piece_name(piece_data));
             token::set_description(&refs_.mutator_ref, get_piece_description(piece_data));
             token::set_uri(&refs_.mutator_ref, get_piece_uri(piece_data));
@@ -200,16 +200,16 @@ module addr::nyc_token {
         chain_id::initialize_for_test(aptos_framework, 3);
         create_collection_for_test(caller);
 
-        set_art_data(caller, string::utf8(b"artid1"), string::utf8(b"Art 1"), string::utf8(b"Art 1 description"), string::utf8(b"Art 1 URI"));
-        set_art_data(caller, string::utf8(b"artid2"), string::utf8(b"Art 2"), string::utf8(b"Art 2 description"), string::utf8(b"Art 2 URI"));
+        set_art_data(caller, string::utf8(b"pieceid1"), string::utf8(b"Piece 1"), string::utf8(b"Piece 1 description"), string::utf8(b"Piece 1 URI"));
+        set_art_data(caller, string::utf8(b"pieceid2"), string::utf8(b"Piece 2"), string::utf8(b"Piece 2 description"), string::utf8(b"Piece 2 URI"));
         create_test_account(caller, aptos_framework, caller);
         create_test_account(caller, aptos_framework, friend1);
         create_test_account(caller, aptos_framework, friend2);
     }
 
     #[test_only]
-    fun mint_token(caller: &signer, art_id: String): Object<Token> {
-        mint_inner(signer::address_of(caller), art_id)
+    fun mint_token(caller: &signer, piece_id: String): Object<Token> {
+        mint_inner(signer::address_of(caller), piece_id)
     }
 
     // See that not just the creator can mint a token.
@@ -226,9 +226,9 @@ module addr::nyc_token {
             &friend2,
             &aptos_framework
         );
-        let tok1 = mint_token(&caller, string::utf8(b"artid1"));
+        let tok1 = mint_token(&caller, string::utf8(b"pieceid1"));
         aptos_std::debug::print(&token::uri(tok1));
-        let tok2 = mint_token(&friend1, string::utf8(b"artid1"));
+        let tok2 = mint_token(&friend1, string::utf8(b"pieceid1"));
         aptos_std::debug::print(&token::uri(tok2));
     }
 
@@ -247,14 +247,14 @@ module addr::nyc_token {
             &friend2,
             &aptos_framework
         );
-        mint_token(&friend1, string::utf8(b"artid1"));
-        mint_token(&friend1, string::utf8(b"artid1"));
+        mint_token(&friend1, string::utf8(b"pieceid1"));
+        mint_token(&friend1, string::utf8(b"pieceid1"));
     }
 
     // Confirm that you can mint multiple tokens in the collection so long as they have
-    // different art IDs.
+    // different piece IDs.
     #[test(caller = @addr, friend1 = @0x456, friend2 = @0x789, aptos_framework = @aptos_framework)]
-    fun test_mint_twice_different_art_ids(
+    fun test_mint_twice_different_piece_ids(
         caller: signer,
         friend1: signer,
         friend2: signer,
@@ -266,14 +266,14 @@ module addr::nyc_token {
             &friend2,
             &aptos_framework
         );
-        mint_token(&friend1, string::utf8(b"artid1"));
-        mint_token(&friend1, string::utf8(b"artid2"));
+        mint_token(&friend1, string::utf8(b"pieceid1"));
+        mint_token(&friend1, string::utf8(b"pieceid2"));
     }
 
     // Confirm that you can't mint with an unknown art ID.
     #[expected_failure(abort_code = 65538, location = aptos_std::simple_map)]
     #[test(caller = @addr, friend1 = @0x456, friend2 = @0x789, aptos_framework = @aptos_framework)]
-    fun test_mint_unknown_art_id(
+    fun test_mint_unknown_piece_id(
         caller: signer,
         friend1: signer,
         friend2: signer,
@@ -285,7 +285,7 @@ module addr::nyc_token {
             &friend2,
             &aptos_framework
         );
-        mint_token(&friend1, string::utf8(b"artidunknown"));
+        mint_token(&friend1, string::utf8(b"pieceidunknown"));
     }
 
     // Confirm that you can update existing art data and fix_Data works.
@@ -303,17 +303,17 @@ module addr::nyc_token {
             &aptos_framework
         );
         // Mint a token.
-        let tok1 = mint_token(&friend1, string::utf8(b"artid1"));
+        let tok1 = mint_token(&friend1, string::utf8(b"pieceid1"));
 
-        // Update the data for artid1.
-        set_art_data(&caller, string::utf8(b"artid1"), string::utf8(b"Art 1"), string::utf8(b"newdescription"), string::utf8(b"Art 1 URI"));
+        // Update the data for pieceid1.
+        set_art_data(&caller, string::utf8(b"pieceid1"), string::utf8(b"Piece 1"), string::utf8(b"newdescription"), string::utf8(b"Piece 1 URI"));
 
         // Mint a new token and see that it uses the new description.
-        let tok2 = mint_token(&friend2, string::utf8(b"artid1"));
+        let tok2 = mint_token(&friend2, string::utf8(b"pieceid1"));
         assert!(token::description(tok2) == string::utf8(b"newdescription"), 0);
 
         // Confirm the description is still the old value for the old token.
-        assert!(token::description(tok1) == string::utf8(b"Art 1 description"), 0);
+        assert!(token::description(tok1) == string::utf8(b"Piece 1 description"), 0);
 
         // Call the fix function.
         fix_data(&caller, vector::singleton(tok1));
