@@ -199,17 +199,53 @@ def fresh_start(args):
             "--function-id",
             f"{ACCOUNT_ADDRESS}::{COLLECTION_MODULE}::set_art_data",
             "--args",
-            "string:art1",
+            "string:pieceid1",
             "string:tokenname1",
             "string:tokendescription1",
             "string:tokenuri1",
         ],
         **DEFAULT_SUBPROCESS_KWARGS,
     )
+    subprocess.run(
+        [
+            args.aptos_cli_path,
+            "move",
+            "run",
+            "--assume-yes",
+            "--profile",
+            PROFILE_NAME,
+            "--function-id",
+            f"{ACCOUNT_ADDRESS}::{COLLECTION_MODULE}::set_art_data",
+            "--args",
+            "string:pieceid2",
+            "string:tokenname2",
+            "string:tokendescription2",
+            "string:tokenuri2",
+        ],
+        **DEFAULT_SUBPROCESS_KWARGS,
+    )
 
-    print(f"[Local] Set art data for art ID art1")
+    print(f"[Local] Set art data for piece ID pieceid1")
 
-    # Mint a token as player 2.
+    # Mint pieceid1 as player 1.
+    subprocess.run(
+        [
+            args.aptos_cli_path,
+            "move",
+            "run",
+            "--assume-yes",
+            "--profile",
+            PROFILE_NAME,
+            "--function-id",
+            f"{ACCOUNT_ADDRESS}::{TOKEN_MODULE}::mint",
+            "--args",
+            "string:pieceid1",
+        ],
+        **DEFAULT_SUBPROCESS_KWARGS,
+    )
+    print(f"[Local] Minted piece with pieceid1 token as player 1")
+
+    # Mint pieceid2 as player 2.
     subprocess.run(
         [
             args.aptos_cli_path,
@@ -221,11 +257,11 @@ def fresh_start(args):
             "--function-id",
             f"{ACCOUNT_ADDRESS}::{TOKEN_MODULE}::mint",
             "--args",
-            "string:art1",
+            "string:pieceid2",
         ],
         **DEFAULT_SUBPROCESS_KWARGS,
     )
-    print(f"[Local] Minted art1 token as player 2")
+    print(f"[Local] Minted piece with pieceid2 token as player 2")
 
 
 # Kill the process running at the given port.

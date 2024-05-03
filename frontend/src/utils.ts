@@ -124,10 +124,6 @@ function range(size: number, startAt: number = 0): ReadonlyArray<number> {
   return [...Array(size).keys()].map((i) => i + startAt);
 }
 
-// Meaning, the denominator can go as high as 64, starting from 1.
-const acceptableDenominators = range(63, 1);
-const maxDistanceToNumerator = 0.001;
-
 export function getShortAddress(addr: string): string {
   console.log(`addrrrrrrrrrrr: ${JSON.stringify(addr)}`);
   return addr.slice(0, 5) + "..." + addr.slice(-3);

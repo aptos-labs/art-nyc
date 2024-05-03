@@ -4,18 +4,15 @@ import { css } from "styled-system/css";
 import { flex } from "styled-system/patterns";
 import { Link } from "react-router-dom";
 import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
-import { WalletSelector } from "@aptos-labs/wallet-adapter-ant-design";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { Button, IconGithub } from "@aptos-internal/design-system-web";
-
-export const ConnectWalletComponent = () => {
-  return <WalletSelector />;
-};
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
+// TODO: Add hamburger menu with a button that lets you disconnect your wallet.
+// Investigate how this normally works on mobile, like popping up a modal maybe.
 export default function MainLayout({ children }: LayoutProps) {
   const { isLoading } = useWallet();
 

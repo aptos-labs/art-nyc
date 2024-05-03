@@ -8,6 +8,10 @@ export type GlobalState = {
   readonly network: Network;
   /** derived from network_value */
   readonly client: Aptos;
+  /** derived from network_value */
+  readonly moduleAddress: string;
+  /** derived from network_value */
+  readonly collectionAddress: string;
 };
 
 type GlobalActions = {
@@ -17,9 +21,14 @@ type GlobalActions = {
 function deriveGlobalState({ network }: { network: Network }): GlobalState {
   const config = new AptosConfig({ network });
   const client = new Aptos(config);
+  // TODO: Use a switch on network to set module / collection address.
   return {
     network,
     client,
+    moduleAddress:
+      "0x296102a3893d43e11de2aa142fbb126377120d7d71c246a2f95d5b4f3ba16b30",
+    collectionAddress:
+      "0x1c281d4c0567c8559e914db083c2f0a5d84dc9c49a3cf7ba8afec35c62a012fa",
   };
 }
 

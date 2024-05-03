@@ -16,7 +16,7 @@ export default function MyRoutes() {
         }
       />
       <Route
-        path="/:pieceId"
+        path="/mint/:pieceId"
         element={
           <MainLayout>
             <MintPage />
