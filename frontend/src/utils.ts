@@ -176,3 +176,8 @@ export function validateAptString(s: string): number | null {
 export function sum<T>(arr: T[], fn: (item: T) => number): number {
   return arr.reduce((acc, item) => acc + fn(item), 0);
 }
+
+export function standardizeAddress(handle: string): string {
+  const cleanHandle = handle.startsWith("0x") ? handle.slice(2) : handle;
+  return `0x${cleanHandle.padStart(64, "0")}`;
+}

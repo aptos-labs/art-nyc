@@ -15,16 +15,12 @@ export const MintPage = () => {
     account,
   } = useWallet();
 
-  if (!pieceId) {
-    return <p>No piece ID in path</p>;
-  }
-
   // Look up the data for this piece (name, description, etc).
   const {
     pieceData,
     isLoading: pieceDataIsLoading,
     error: pieceDataError,
-  } = useGetPieceData(pieceId, {
+  } = useGetPieceData(pieceId!, {
     enabled: pieceId !== undefined,
   });
 
@@ -48,8 +44,13 @@ export const MintPage = () => {
       enabled: tokensData !== undefined,
     },
   );
+
+  if (!pieceId) {
+    return <p>No piece ID in path</p>;
+  }
+
   // TODO fix this up obviously.
-  const ownedPieceIds = ["pieceid1"];
+  const ownedPieceIds: string[] | undefined = ["pieceid1"];
 
   if (pieceDataError || tokensError || pieceIdsError) {
     return (
@@ -67,14 +68,6 @@ export const MintPage = () => {
 
   if (!pieceData) {
     return <p>No data found for this piece ID</p>;
-  }
-  if (tokensData === undefined) {
-    return <p>Somehow no token data even after it loaded successfully.</p>;
-  }
-  if (pieceIdsData === undefined) {
-    return (
-      <p>Somehow no owned piece IDs data even after it loaded successfully.</p>
-    );
   }
 
   const userOwnsThisPieceAlready = ownedPieceIds.includes(pieceId);

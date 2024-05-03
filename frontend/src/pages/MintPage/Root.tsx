@@ -21,12 +21,13 @@ export const Root = ({
   const { connected: walletConnected } = useWallet();
 
   // get the user's current tokens and if they have one of these, make it a "view" button instead.
+  // TODO: in the hamburger, add a button to toggle sponsored txn vs direct submission mode
   let button;
   if (!walletConnected) {
     button = <WalletSelector />;
   } else if (userOwnsThisPieceAlready) {
     // TODO: Some button to view the token, or just a greyed out "you already have this token" if we show the art on the main minting page.
-    button = <></>;
+    button = <p>You own this piece already!</p>;
   } else {
     button = <MintButton pieceId={pieceId} pieceData={pieceData} />;
   }

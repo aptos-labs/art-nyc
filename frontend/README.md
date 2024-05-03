@@ -6,14 +6,6 @@ Run the development server:
 pnpm start
 ```
 
-## Codegen
-TODO: Remove this if not relevant.
-To generate types based on the indexer API queries we use, run this:
-
-```bash
-pnpm generate-from-indexer-queries
-```
-
 ## Surf
 We use [Surf](https://github.com/ThalaLabs/surf). Surf requires the ABI of the Move module in the JSON format that comes from the node API. First, spin up the localnet environment (run this from the root of the repo):
 ```
@@ -32,3 +24,7 @@ src/types/abis.ts
 
 ## Notes
 Be careful about updating the GraphQL codegen deps because of this issue: https://github.com/dotansimha/graphql-code-generator/issues/9046.
+
+TODO: postcss might not be working properly. I see in IC it has postcss and postcss-import as explicit dev deps. postcss-import is used in the postcss config file.
+
+TODO: The storybook for Input and TextArea shows examples for FormField.

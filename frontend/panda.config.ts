@@ -15,7 +15,8 @@ export default defineConfig({
     dark: "[data-theme=dark] &",
   },
 
-  // Make type checking more strict. TODO: Disabled for now.
+  // Make type checking more strict. For some reason this restricts padding to certain
+  // values, e.g. multiples of 4.
   strictTokens: true,
   strictPropertyValues: true,
 

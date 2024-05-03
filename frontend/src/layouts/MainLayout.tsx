@@ -1,44 +1,53 @@
 import "../../global.css";
-import React from "react";
+import React, { useState } from "react";
 import { css } from "styled-system/css";
 import { flex } from "styled-system/patterns";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import { Button, IconGithub } from "@aptos-internal/design-system-web";
+import {
+  Button,
+  IconGithub,
+  IconLogoutBoxLine,
+  IconLoginBoxLine,
+  IconMenu3Line,
+  Menu,
+} from "@aptos-internal/design-system-web";
+import { WalletSelector } from "@aptos-labs/wallet-adapter-ant-design";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
-// TODO: Add hamburger menu with a button that lets you disconnect your wallet.
-// Investigate how this normally works on mobile, like popping up a modal maybe.
+// TODO: It seems old school to not have an Image component I can use, vs having to use
+// img and figure out the src based on the path of the file at "runtime".
 export default function MainLayout({ children }: LayoutProps) {
   const { isLoading } = useWallet();
 
-  // Courtesy of https://stackoverflow.com/q/75175422/3846032.
+  // TODO: For some reason the padding here is not being respected.
   const headerContent = (
     <div
       className={flex({
         alignItems: "center",
         justifyContent: "space-between",
+        gap: "16",
+        padding: "16",
+        margin: "16",
       })}
     >
       <div>
         <p className={css({ textStyle: "heading.300.semibold" })}>
-          <Link to="/">Aptos NYC 2024</Link>
+          <Link to="/">
+            <img
+              width="48"
+              height="48"
+              alt="Aptos logo"
+              src="images/aptos_logo.png"
+            />
+          </Link>
         </p>
       </div>
-      <a href="https://github.com/banool/aptos-nyc-2024">
-        <Button
-          iconOnly={true}
-          variant="secondary"
-          size="md"
-          aria-label={`View source code on GitHub`}
-        >
-          <IconGithub className="aptos-h_16 aptos-w_16" />
-        </Button>
-      </a>
+      <MyMenu />
     </div>
   );
 
@@ -46,10 +55,10 @@ export default function MainLayout({ children }: LayoutProps) {
     <div className={flex({ flexDirection: "column" })}>
       <div
         className={css({
-          paddingTop: "[5px]",
-          paddingBottom: "[5px]",
-          paddingLeft: "[8px]",
-          paddingRight: "[8px]",
+          paddingTop: "4",
+          paddingBottom: "4",
+          paddingLeft: "8",
+          paddingRight: "8",
         })}
       >
         {headerContent}
@@ -67,8 +76,8 @@ export default function MainLayout({ children }: LayoutProps) {
           filter: "[blur(4px) brightness(0.8)]",
           pointerEvents: "none",
           position: "absolute",
-          width: "[100%]",
-          height: "[100%]",
+          width: "max",
+          height: "max",
         })}
       >
         {body}
@@ -79,4 +88,68 @@ export default function MainLayout({ children }: LayoutProps) {
   }
 
   return out;
+}
+
+function MyMenu() {
+  const { connected, disconnect } = useWallet();
+  const [modalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  let walletItem;
+  if (connected) {
+    walletItem = {
+      Icon: IconLogoutBoxLine,
+      id: "disconnect",
+      label: "Disconnect",
+      onSelect: () => {
+        disconnect();
+      },
+    };
+  } else {
+    walletItem = {
+      Icon: IconLoginBoxLine,
+      id: "connect",
+      label: "Connect",
+      onSelect: () => {
+        setModalOpen(true);
+      },
+    };
+  }
+
+  return (
+    <>
+      <Menu
+        menuItems={[
+          walletItem,
+          {
+            Icon: IconGithub,
+            id: "source",
+            label: "View Source",
+            onSelect: () => {
+              // TODO: This doesn't open the new site, it updates the path. Figure out
+              // how to actually navigate. We can't use an <a> here.
+              navigate("https://github.com/banool/aptos-nyc-2024", {
+                replace: true,
+                relative: "path",
+              });
+            },
+          },
+        ]}
+        trigger={
+          <Button
+            iconOnly={true}
+            variant="secondary"
+            size="md"
+            aria-label={`Open hamburger menu`}
+          >
+            <IconMenu3Line className="aptos-h_32 aptos-w_32" />
+          </Button>
+        }
+      />
+      <div hidden={true}>
+        <WalletSelector setModalOpen={setModalOpen} isModalOpen={modalOpen} />
+      </div>
+    </>
+  );
+  // TODO: Consider making this a larger button with text desktop rather than a hamburger.
 }
