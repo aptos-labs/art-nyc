@@ -35,6 +35,10 @@ export const DataPage = () => {
 
   return (
     <div>
+      <p>
+        It is not recommended to edit names for existing pieces right now, we
+        need to confirm how the indexer behaves first.
+      </p>
       {editorElements}
       <PieceCreator />
     </div>

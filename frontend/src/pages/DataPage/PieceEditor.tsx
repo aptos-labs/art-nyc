@@ -26,7 +26,9 @@ export const PieceEditor = ({
 
   return (
     <form>
-      <p className={css({ textStyle: "heading.100.semibold" })}>{`Piece ID: ${pieceId}`}</p>
+      <p
+        className={css({ textStyle: "heading.100.semibold" })}
+      >{`Piece ID: ${pieceId}`}</p>
       <SharedFormFields
         pieceName={pieceName}
         pieceDescription={pieceDescription}

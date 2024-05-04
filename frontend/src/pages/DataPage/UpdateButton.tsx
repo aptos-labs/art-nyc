@@ -60,7 +60,6 @@ export const UpdateButton = ({
     }
   };
 
-
   const finalEnabled =
     enabled &&
     connected &&
@@ -69,5 +68,12 @@ export const UpdateButton = ({
     pieceDescription &&
     pieceUri;
 
-  return <><Button disabled={!finalEnabled} onClick={onClick}>{text}</Button><Toaster /></>;
+  return (
+    <>
+      <Button disabled={!finalEnabled} onClick={onClick}>
+        {text}
+      </Button>
+      <Toaster />
+    </>
+  );
 };

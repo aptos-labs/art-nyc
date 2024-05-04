@@ -18,7 +18,7 @@ export function SharedFormFields({
   // TODO: Use the css function instead.
   // How to add spacing between items in a div rather than adding spacing on each item in it?
   return (
-    <div style={{gap: 24}}>
+    <div style={{ gap: 24 }}>
       <FormField label="Name">
         {(formControlProps) => (
           <Input
@@ -53,15 +53,3 @@ export function SharedFormFields({
     </div>
   );
 }
-
-export function onClick({
-  pieceId,
-  pieceName,
-  pieceDescription,
-  pieceUri,
-}: {
-  pieceId: string;
-  pieceName: string;
-  pieceDescription: string;
-  pieceUri: string;
-}) {}
