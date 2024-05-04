@@ -35,17 +35,15 @@ export default function MainLayout({ children }: LayoutProps) {
         margin: "16",
       })}
     >
-      <div>
-        <p className={css({ textStyle: "heading.300.semibold" })}>
-          <Link to="/">
-            <img
-              width="48"
-              height="48"
-              alt="Aptos logo"
-              src="images/aptos_logo.png"
-            />
-          </Link>
-        </p>
+      <div className={css({ padding: "16", margin: "16", gap: "16" })}>
+        <Link to="/">
+          <img
+            width="48"
+            height="48"
+            alt="Aptos logo"
+            src="images/aptos_logo.png"
+          />
+        </Link>
       </div>
       <MyMenu />
     </div>

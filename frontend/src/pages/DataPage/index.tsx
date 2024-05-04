@@ -1,7 +1,7 @@
 import { useGetArtData } from "@/api/hooks/useGetArtData";
 import { PieceEditor } from "./PieceEditor";
 import { PieceCreator } from "./PieceCreator";
-import { css } from "@aptos-internal/design-system-web/dist/styled-system/css";
+import { css } from "styled-system/css";
 
 /**
  * A place where you can see the existing art data and make changes.
