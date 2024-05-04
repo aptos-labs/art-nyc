@@ -28,7 +28,7 @@ export const UpdateButton = ({
     }
 
     const payload: InputEntryFunctionData = {
-      function: `${globalState.moduleAddress}::nyc_token::set_art_data`,
+      function: `${globalState.moduleAddress}::nyc_collection::set_art_data`,
       typeArguments: [],
       functionArguments: [pieceId, pieceName, pieceDescription, pieceUri],
     };
@@ -47,7 +47,7 @@ export const UpdateButton = ({
         title: "Success!",
         description: `Successfully updated art data for ${pieceId}`,
         variant: "success",
-        duration: 2000,
+        duration: 5000,
       });
     } catch (error) {
       console.log(`Error updating art data: ${JSON.stringify(error)}`);
@@ -55,7 +55,7 @@ export const UpdateButton = ({
         title: "Error updating art data",
         description: `${error}`,
         variant: "error",
-        duration: 4000,
+        duration: 5000,
       });
     }
   };

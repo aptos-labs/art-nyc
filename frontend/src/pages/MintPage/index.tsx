@@ -33,24 +33,21 @@ export const MintPage = () => {
     enabled: account !== null && account.address !== undefined,
   });
 
+  console.log("tokensData", tokensData);
+  const tokenAddresses = tokensData?.map((t) => t.token_data_id);
+  console.log("tokenAddressesouter", tokenAddresses);
   // Lookup the piece IDs of those tokens.
   const {
-    data: pieceIdsData,
-    isLoading: pieceIdsIsLoading,
+    pieceIds,
     error: pieceIdsError,
-  } = useGetPieceIds(
-    tokensData?.filter((t) => t.amount > 0).map((t) => t.token_data_id)!,
-    {
-      enabled: tokensData !== undefined,
-    },
-  );
+    isLoading: pieceIdsIsLoading,
+  } = useGetPieceIds(tokenAddresses!, {
+    enabled: tokenAddresses !== undefined,
+  });
 
   if (!pieceId) {
     return <p>No piece ID in path</p>;
   }
-
-  // TODO fix this up obviously.
-  const ownedPieceIds: string[] | undefined = ["pieceid1"];
 
   if (pieceDataError || tokensError || pieceIdsError) {
     return (
@@ -70,7 +67,7 @@ export const MintPage = () => {
     return <p>No data found for this piece ID</p>;
   }
 
-  const userOwnsThisPieceAlready = ownedPieceIds.includes(pieceId);
+  const userOwnsThisPieceAlready = pieceIds.includes(pieceId);
 
   // At this point all the data we need is available.
   return (

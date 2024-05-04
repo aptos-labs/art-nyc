@@ -16,3 +16,8 @@ export type PieceData = ExtractStructType<
   typeof COLLECTION_ABI,
   "PieceData"
 >;
+export type TokenRefs = ExtractStructType<
+  ABITAble,
+  typeof TOKEN_ABI,
+  "TokenRefs"
+>;
