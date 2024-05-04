@@ -30,12 +30,9 @@ export default function MainLayout({ children }: LayoutProps) {
       className={flex({
         alignItems: "center",
         justifyContent: "space-between",
-        gap: "16",
-        padding: "16",
-        margin: "16",
       })}
     >
-      <div className={css({ padding: "16", margin: "16", gap: "16" })}>
+      <div>
         <Link to="/">
           <img
             width="48"
@@ -50,17 +47,8 @@ export default function MainLayout({ children }: LayoutProps) {
   );
 
   const body = (
-    <div className={flex({ flexDirection: "column" })}>
-      <div
-        className={css({
-          paddingTop: "4",
-          paddingBottom: "4",
-          paddingLeft: "8",
-          paddingRight: "8",
-        })}
-      >
-        {headerContent}
-      </div>
+    <div className={flex({ flexDirection: "column", margin: "16" })}>
+      {headerContent}
       {children}
     </div>
   );
@@ -140,7 +128,7 @@ function MyMenu() {
             size="md"
             aria-label={`Open hamburger menu`}
           >
-            <IconMenu3Line className="aptos-h_32 aptos-w_32" />
+            <IconMenu3Line className="aptos-h_24 aptos-w_24" />
           </Button>
         }
       />

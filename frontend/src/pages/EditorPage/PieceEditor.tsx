@@ -20,15 +20,15 @@ export const PieceEditor = ({
   const [pieceUri, setPieceUri] = useState(pieceData.token_uri);
 
   const anythingChanged =
-    pieceName != pieceData.token_name ||
-    pieceDescription != pieceData.token_description ||
-    pieceUri != pieceData.token_uri;
+    pieceName !== pieceData.token_name ||
+    pieceDescription !== pieceData.token_description ||
+    pieceUri !== pieceData.token_uri;
 
   return (
-    <form>
+    <form style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
       <p
         className={css({ textStyle: "heading.100.semibold" })}
-      >{`Piece ID: ${pieceId}`}</p>
+      >{`${pieceId}`}</p>
       <SharedFormFields
         pieceName={pieceName}
         pieceDescription={pieceDescription}

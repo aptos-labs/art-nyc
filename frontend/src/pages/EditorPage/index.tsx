@@ -2,6 +2,7 @@ import { useGetArtData } from "@/api/hooks/useGetArtData";
 import { PieceEditor } from "./PieceEditor";
 import { PieceCreator } from "./PieceCreator";
 import { css } from "styled-system/css";
+import { Card } from "@aptos-internal/design-system-web";
 
 /**
  * A place where you can see the existing art data and make changes.
@@ -9,7 +10,7 @@ import { css } from "styled-system/css";
  * We don't bother with validating if the user is an admin in the frontend, this is only
  * intended for admins, the experience doesn't need to be good for anyone else.
  */
-export const DataPage = () => {
+export const EditorPage = () => {
   const { artDataInner, isLoading, error } = useGetArtData();
 
   if (isLoading) {
@@ -27,20 +28,44 @@ export const DataPage = () => {
   let editorElements = [];
   for (var [key, value] of artDataInner) {
     editorElements.push(
-      <div className={css({ padding: "12", paddingBottom: "64" })}>
-        <PieceEditor pieceId={key} pieceData={value} />
+      <div key={key} className={css({ padding: "12" })}>
+        <Card>
+          <PieceEditor pieceId={key} pieceData={value} />
+        </Card>
       </div>,
     );
   }
 
   return (
-    <div>
-      <p>
+    <div className={css({ paddingTop: "32" })}>
+      <p
+        className={css({
+          paddingLeft: "12",
+          textStyle: "heading.300.semibold",
+        })}
+      >
+        Editor
+      </p>
+      <p className={css({ paddingLeft: "12" })}>
         It is not recommended to edit names for existing pieces right now, we
         need to confirm how the indexer behaves first.
       </p>
       {editorElements}
-      <PieceCreator />
+      <div
+        style={{
+          height: "1px",
+          backgroundColor: "#ccc",
+          marginLeft: "100px",
+          marginRight: "100px",
+          marginTop: "25px",
+          marginBottom: "25px",
+        }}
+      ></div>
+      <div className={css({ padding: "12" })}>
+        <Card>
+          <PieceCreator />
+        </Card>
+      </div>
     </div>
   );
 };

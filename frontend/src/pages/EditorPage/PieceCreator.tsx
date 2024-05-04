@@ -2,6 +2,7 @@ import { Button, FormField, Input } from "@aptos-internal/design-system-web";
 import { useState } from "react";
 import { SharedFormFields } from "./SharedFormFields";
 import { UpdateButton } from "./UpdateButton";
+import { css } from "styled-system/css";
 
 /** A component with which you can create new piece data in the art data. */
 export const PieceCreator = () => {
@@ -13,7 +14,10 @@ export const PieceCreator = () => {
   const canSubmit = pieceId && pieceName && pieceDescription && pieceUri;
 
   return (
-    <form>
+    <form style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+      <p
+        className={css({ textStyle: "heading.100.semibold" })}
+      >{`Create a new piece`}</p>
       <FormField label="Piece ID">
         {(formControlProps) => (
           <Input
@@ -32,7 +36,6 @@ export const PieceCreator = () => {
         setPieceDescription={setPieceDescription}
         setPieceUri={setPieceUri}
       />
-      <Button disabled={!canSubmit}>Create</Button>
       <UpdateButton
         pieceId={pieceId}
         pieceName={pieceName}

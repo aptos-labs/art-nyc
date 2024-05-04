@@ -3,7 +3,7 @@ import { HomePage } from "./pages/HomePage";
 import MainLayout from "./layouts/MainLayout";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { MintPage } from "./pages/MintPage";
-import { DataPage } from "./pages/DataPage";
+import { EditorPage } from "./pages/EditorPage";
 
 export default function MyRoutes() {
   return (
@@ -28,7 +28,7 @@ export default function MyRoutes() {
         path="/data"
         element={
           <MainLayout>
-            <DataPage />
+            <EditorPage />
           </MainLayout>
         }
       />
