@@ -181,3 +181,23 @@ export function standardizeAddress(handle: string): string {
   const cleanHandle = handle.startsWith("0x") ? handle.slice(2) : handle;
   return `0x${cleanHandle.padStart(64, "0")}`;
 }
+
+export function mapsAreEqual(
+  map1: Map<string, string>,
+  map2: Map<string, string>,
+): boolean {
+  // Check if the maps are the same size
+  if (map1.size !== map2.size) {
+    return false;
+  }
+
+  // Check each key-value pair
+  for (const [key, value] of map1) {
+    if (!map2.has(key) || map2.get(key) !== value) {
+      return false; // Either the key isn't found, or the value doesn't match
+    }
+  }
+
+  // If no discrepancies are found, the maps are equal
+  return true;
+}

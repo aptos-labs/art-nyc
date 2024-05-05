@@ -50,6 +50,9 @@ export const EditorPage = () => {
         It is not recommended to edit names for existing pieces right now, we
         need to confirm how the indexer behaves first.
       </p>
+      <p className={css({ paddingLeft: "12" })}>
+        These are the metadata keys the UI knows how to handle: todo
+      </p>
       {editorElements}
       <div
         style={{

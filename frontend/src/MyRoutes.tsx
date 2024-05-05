@@ -25,7 +25,7 @@ export default function MyRoutes() {
         }
       />
       <Route
-        path="/data"
+        path="/edit"
         element={
           <MainLayout>
             <EditorPage />

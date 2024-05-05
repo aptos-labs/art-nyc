@@ -199,10 +199,12 @@ def fresh_start(args):
             "--function-id",
             f"{ACCOUNT_ADDRESS}::{COLLECTION_MODULE}::set_art_data",
             "--args",
-            "string:pieceid1",
-            "string:tokenname1",
-            "string:tokendescription1",
-            "string:tokenuri1",
+            "string:overflow",
+            "string:Overflow",
+            "string:Dipping our hands in an endless ocean",
+            "string:uritodo",
+            'string:["instagram_handle", "creation_year"]',
+            'string:["rubeensalem", "2024"]',
         ],
         **DEFAULT_SUBPROCESS_KWARGS,
     )
@@ -217,17 +219,19 @@ def fresh_start(args):
             "--function-id",
             f"{ACCOUNT_ADDRESS}::{COLLECTION_MODULE}::set_art_data",
             "--args",
-            "string:pieceid2",
-            "string:tokenname2",
-            "string:tokendescription2",
-            "string:tokenuri2",
+            "string:multifaceted",
+            "string:Multifaceted, Lv<^",
+            "string:The multifaceted nature of this painting",
+            "string:uritodo",
+            'string:["instagram_handle", "creation_year"]',
+            'string:["design_de_luca", "2024"]',
         ],
         **DEFAULT_SUBPROCESS_KWARGS,
     )
 
-    print(f"[Local] Set art data for piece ID pieceid1")
+    print(f"[Local] Set art data for two pieces")
 
-    # Mint pieceid1 as player 1.
+    # Mint overflow as player 1.
     subprocess.run(
         [
             args.aptos_cli_path,
@@ -239,13 +243,13 @@ def fresh_start(args):
             "--function-id",
             f"{ACCOUNT_ADDRESS}::{TOKEN_MODULE}::mint",
             "--args",
-            "string:pieceid1",
+            "string:overflow",
         ],
         **DEFAULT_SUBPROCESS_KWARGS,
     )
-    print(f"[Local] Minted piece with pieceid1 token as player 1")
+    print(f"[Local] Minted piece 'overflow' as player 1")
 
-    # Mint pieceid2 as player 2.
+    # Mint multifaceted as player 2.
     subprocess.run(
         [
             args.aptos_cli_path,
@@ -257,11 +261,11 @@ def fresh_start(args):
             "--function-id",
             f"{ACCOUNT_ADDRESS}::{TOKEN_MODULE}::mint",
             "--args",
-            "string:pieceid2",
+            "string:multifaceted",
         ],
         **DEFAULT_SUBPROCESS_KWARGS,
     )
-    print(f"[Local] Minted piece with pieceid2 token as player 2")
+    print(f"[Local] Minted piece 'multifaceted' as player 2")
 
 
 # Kill the process running at the given port.

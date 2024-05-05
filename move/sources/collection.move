@@ -232,28 +232,28 @@ module addr::nyc_collection {
         token_name: String,
         token_description: String,
         token_uri: String,
-        additional_metadata_keys: vector<String>,
-        additional_metadata_values: vector<String>,
+        metadata_keys: vector<String>,
+        metadata_values: vector<String>,
     ) acquires ArtData {
         assert_caller_is_collection_creator(caller);
         let collection = get_collection();
 
         assert!(
-            vector::length(&additional_metadata_keys) == vector::length(
-                &additional_metadata_values
+            vector::length(&metadata_keys) == vector::length(
+                &metadata_values
             ),
             0
         );
 
-        // Build the aditional metadata.
+        // Build the additional metadata.
         let metadata = simple_map::new();
         let i = 0;
-        let len = vector::length(&additional_metadata_keys);
+        let len = vector::length(&metadata_keys);
         while (i < len) {
             simple_map::add(
                 &mut metadata,
-                vector::pop_back(&mut additional_metadata_keys),
-                vector::pop_back(&mut additional_metadata_values),
+                vector::pop_back(&mut metadata_keys),
+                vector::pop_back(&mut metadata_values),
             );
             i = i + 1;
         };

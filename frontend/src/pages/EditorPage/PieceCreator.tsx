@@ -3,6 +3,7 @@ import { useState } from "react";
 import { SharedFormFields } from "./SharedFormFields";
 import { UpdateButton } from "./UpdateButton";
 import { css } from "styled-system/css";
+import { MetadataFields } from "./MetadataFields";
 
 /** A component with which you can create new piece data in the art data. */
 export const PieceCreator = () => {
@@ -11,7 +12,7 @@ export const PieceCreator = () => {
   const [pieceDescription, setPieceDescription] = useState("");
   const [pieceUri, setPieceUri] = useState("");
 
-  const canSubmit = pieceId && pieceName && pieceDescription && pieceUri;
+  const [metadata, setMetadata] = useState<Map<string, string>>(new Map());
 
   return (
     <form style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -36,11 +37,13 @@ export const PieceCreator = () => {
         setPieceDescription={setPieceDescription}
         setPieceUri={setPieceUri}
       />
+      <MetadataFields metadata={metadata} setMetadata={setMetadata} />
       <UpdateButton
         pieceId={pieceId}
         pieceName={pieceName}
         pieceDescription={pieceDescription}
         pieceUri={pieceUri}
+        metadata={metadata}
         enabled={true}
         text={"Create"}
       />

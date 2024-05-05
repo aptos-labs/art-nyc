@@ -9,6 +9,7 @@ export const UpdateButton = ({
   pieceName,
   pieceDescription,
   pieceUri,
+  metadata,
   enabled,
   text,
 }: {
@@ -16,6 +17,7 @@ export const UpdateButton = ({
   pieceName: string;
   pieceDescription: string;
   pieceUri: string;
+  metadata: Map<string, string>;
   enabled: boolean;
   text: string;
 }) => {
@@ -27,10 +29,19 @@ export const UpdateButton = ({
       throw "Account should be non null at this point";
     }
 
+    let metadataKeys = Array.from(metadata.keys());
+    let metadataValues = Array.from(metadata.values());
     const payload: InputEntryFunctionData = {
       function: `${globalState.moduleAddress}::nyc_collection::set_art_data`,
       typeArguments: [],
-      functionArguments: [pieceId, pieceName, pieceDescription, pieceUri],
+      functionArguments: [
+        pieceId,
+        pieceName,
+        pieceDescription,
+        pieceUri,
+        metadataKeys,
+        metadataValues,
+      ],
     };
 
     try {

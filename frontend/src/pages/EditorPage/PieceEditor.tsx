@@ -1,9 +1,10 @@
-import { PieceData } from "@/types/surf";
-import { Button } from "@aptos-internal/design-system-web";
+import { PieceData, getPieceDataMetadata } from "@/types/surf";
 import { useState } from "react";
 import { SharedFormFields } from "./SharedFormFields";
 import { UpdateButton } from "./UpdateButton";
 import { css } from "styled-system/css";
+import { MetadataFields } from "./MetadataFields";
+import { mapsAreEqual } from "@/utils";
 
 /** A component where you can see the existing art data and make changes. */
 export const PieceEditor = ({
@@ -19,10 +20,15 @@ export const PieceEditor = ({
   );
   const [pieceUri, setPieceUri] = useState(pieceData.token_uri);
 
+  const originalMetadata = getPieceDataMetadata(pieceData);
+  const [metadata, setMetadata] =
+    useState<Map<string, string>>(originalMetadata);
+
   const anythingChanged =
     pieceName !== pieceData.token_name ||
     pieceDescription !== pieceData.token_description ||
-    pieceUri !== pieceData.token_uri;
+    pieceUri !== pieceData.token_uri ||
+    !mapsAreEqual(metadata, originalMetadata);
 
   return (
     <form style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -37,11 +43,13 @@ export const PieceEditor = ({
         setPieceDescription={setPieceDescription}
         setPieceUri={setPieceUri}
       />
+      <MetadataFields metadata={metadata} setMetadata={setMetadata} />
       <UpdateButton
         pieceId={pieceId}
         pieceName={pieceName}
         pieceDescription={pieceDescription}
         pieceUri={pieceUri}
+        metadata={metadata}
         enabled={anythingChanged}
         text={"Update"}
       />

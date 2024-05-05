@@ -149,6 +149,8 @@ export const COLLECTION_ABI = {
         "0x1::string::String",
         "0x1::string::String",
         "0x1::string::String",
+        "vector<0x1::string::String>",
+        "vector<0x1::string::String>",
       ],
       return: [],
     },
@@ -217,6 +219,10 @@ export const COLLECTION_ABI = {
         {
           name: "token_uri",
           type: "0x1::string::String",
+        },
+        {
+          name: "metadata",
+          type: "0x1::simple_map::SimpleMap<0x1::string::String, 0x1::string::String>",
         },
       ],
     },

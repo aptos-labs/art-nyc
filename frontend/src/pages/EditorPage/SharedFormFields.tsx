@@ -15,7 +15,6 @@ export function SharedFormFields({
   setPieceDescription: React.Dispatch<React.SetStateAction<string>>;
   setPieceUri: React.Dispatch<React.SetStateAction<string>>;
 }) {
-  // How to add spacing between items in a div rather than adding spacing on each item in it?
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
       <FormField label="Name">
