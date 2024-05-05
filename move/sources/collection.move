@@ -47,6 +47,8 @@ module addr::nyc_collection {
         token_name: String,
         token_description: String,
         token_uri: String,
+        // Any additional metadata. Just a map for the sake of extensibility.
+        metadata: SimpleMap<String, String>,
     }
 
     /// This is how we store the data for each piece of art.
@@ -230,9 +232,31 @@ module addr::nyc_collection {
         token_name: String,
         token_description: String,
         token_uri: String,
+        additional_metadata_keys: vector<String>,
+        additional_metadata_values: vector<String>,
     ) acquires ArtData {
         assert_caller_is_collection_creator(caller);
         let collection = get_collection();
+
+        assert!(
+            vector::length(&additional_metadata_keys) == vector::length(
+                &additional_metadata_values
+            ),
+            0
+        );
+
+        // Build the aditional metadata.
+        let metadata = simple_map::new();
+        let i = 0;
+        let len = vector::length(&additional_metadata_keys);
+        while (i < len) {
+            simple_map::add(
+                &mut metadata,
+                vector::pop_back(&mut additional_metadata_keys),
+                vector::pop_back(&mut additional_metadata_values),
+            );
+            i = i + 1;
+        };
 
         // Set the art data.
         let art_data = borrow_global_mut<ArtData>(
@@ -243,11 +267,13 @@ module addr::nyc_collection {
             piece_data.token_name = token_name;
             piece_data.token_description = token_description;
             piece_data.token_uri = token_uri;
+            piece_data.metadata = metadata;
         } else {
             let piece_data = PieceData {
                 token_name,
                 token_description,
                 token_uri,
+                metadata,
             };
             simple_map::add(
                 &mut art_data.data,

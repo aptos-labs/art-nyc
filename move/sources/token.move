@@ -43,7 +43,11 @@ module addr::nyc_token {
 
     /// Helper function. The collection creator can mint any token they want to whoever
     /// they want.
-    public entry fun mint_to(caller: &signer, piece_id: String, mint_to: address) {
+    public entry fun mint_to(
+        caller: &signer,
+        piece_id: String,
+        mint_to: address
+    ) {
         // Confirm the caller is the collection owner.
         assert_caller_is_collection_creator(caller);
 
@@ -91,7 +95,7 @@ module addr::nyc_token {
 
         move_to(
             &object_signer,
-            TokenRefs { mutator_ref, piece_id }
+            TokenRefs {mutator_ref, piece_id}
         );
 
         // Transfer ownership of the token to the minter.
@@ -120,14 +124,26 @@ module addr::nyc_token {
 
         let art_data = get_art_data();
 
-        vector::for_each(tokens, |token| {
-            let object_addr = object::object_address(&token);
-            let refs_ = borrow_global<TokenRefs>(object_addr);
-            let piece_data = get_piece_data(&art_data, &refs_.piece_id);
-            token::set_name(&refs_.mutator_ref, get_piece_name(piece_data));
-            token::set_description(&refs_.mutator_ref, get_piece_description(piece_data));
-            token::set_uri(&refs_.mutator_ref, get_piece_uri(piece_data));
-        });
+        vector::for_each(
+            tokens,
+            |token| {
+                let object_addr = object::object_address(&token);
+                let refs_ = borrow_global<TokenRefs>(object_addr);
+                let piece_data = get_piece_data(&art_data, &refs_.piece_id);
+                token::set_name(
+                    &refs_.mutator_ref,
+                    get_piece_name(piece_data)
+                );
+                token::set_description(
+                    &refs_.mutator_ref,
+                    get_piece_description(piece_data)
+                );
+                token::set_uri(
+                    &refs_.mutator_ref,
+                    get_piece_uri(piece_data)
+                );
+            }
+        );
     }
 
     ///////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +151,10 @@ module addr::nyc_token {
     ///////////////////////////////////////////////////////////////////////////////////
 
     #[test_only]
-    use addr::nyc_collection::{create_for_test as create_collection_for_test, set_art_data};
+    use addr::nyc_collection::{
+        create_for_test as create_collection_for_test,
+        set_art_data
+    };
     #[test_only]
     use std::timestamp;
     #[test_only]
@@ -200,8 +219,24 @@ module addr::nyc_token {
         chain_id::initialize_for_test(aptos_framework, 3);
         create_collection_for_test(caller);
 
-        set_art_data(caller, string::utf8(b"pieceid1"), string::utf8(b"Piece 1"), string::utf8(b"Piece 1 description"), string::utf8(b"Piece 1 URI"));
-        set_art_data(caller, string::utf8(b"pieceid2"), string::utf8(b"Piece 2"), string::utf8(b"Piece 2 description"), string::utf8(b"Piece 2 URI"));
+        set_art_data(
+            caller,
+            string::utf8(b"pieceid1"),
+            string::utf8(b"Piece 1"),
+            string::utf8(b"Piece 1 description"),
+            string::utf8(b"Piece 1 URI"),
+            vector::empty(),
+            vector::empty()
+        );
+        set_art_data(
+            caller,
+            string::utf8(b"pieceid2"),
+            string::utf8(b"Piece 2"),
+            string::utf8(b"Piece 2 description"),
+            string::utf8(b"Piece 2 URI"),
+            vector::empty(),
+            vector::empty()
+        );
         create_test_account(caller, aptos_framework, caller);
         create_test_account(caller, aptos_framework, friend1);
         create_test_account(caller, aptos_framework, friend2);
@@ -209,7 +244,10 @@ module addr::nyc_token {
 
     #[test_only]
     fun mint_token(caller: &signer, piece_id: String): Object<Token> {
-        mint_inner(signer::address_of(caller), piece_id)
+        mint_inner(
+            signer::address_of(caller),
+            piece_id
+        )
     }
 
     // See that not just the creator can mint a token.
@@ -285,7 +323,10 @@ module addr::nyc_token {
             &friend2,
             &aptos_framework
         );
-        mint_token(&friend1, string::utf8(b"pieceidunknown"));
+        mint_token(
+            &friend1,
+            string::utf8(b"pieceidunknown")
+        );
     }
 
     // Confirm that you can update existing art data and fix_Data works.
@@ -306,20 +347,37 @@ module addr::nyc_token {
         let tok1 = mint_token(&friend1, string::utf8(b"pieceid1"));
 
         // Update the data for pieceid1.
-        set_art_data(&caller, string::utf8(b"pieceid1"), string::utf8(b"Piece 1"), string::utf8(b"newdescription"), string::utf8(b"Piece 1 URI"));
+        set_art_data(
+            &caller,
+            string::utf8(b"pieceid1"),
+            string::utf8(b"Piece 1"),
+            string::utf8(b"newdescription"),
+            string::utf8(b"Piece 1 URI"),
+            vector::empty(),
+            vector::empty()
+        );
 
         // Mint a new token and see that it uses the new description.
         let tok2 = mint_token(&friend2, string::utf8(b"pieceid1"));
-        assert!(token::description(tok2) == string::utf8(b"newdescription"), 0);
+        assert!(
+            token::description(tok2) == string::utf8(b"newdescription"),
+            0
+        );
 
         // Confirm the description is still the old value for the old token.
-        assert!(token::description(tok1) == string::utf8(b"Piece 1 description"), 0);
+        assert!(
+            token::description(tok1) == string::utf8(b"Piece 1 description"),
+            0
+        );
 
         // Call the fix function.
         fix_data(&caller, vector::singleton(tok1));
 
         // See that the description for the old token has been updated.
-        assert!(token::description(tok1) == string::utf8(b"newdescription"), 0);
+        assert!(
+            token::description(tok1) == string::utf8(b"newdescription"),
+            0
+        );
     }
 
     // Confirm that others can not update the URI.
@@ -337,6 +395,14 @@ module addr::nyc_token {
             &friend2,
             &aptos_framework
         );
-        set_art_data(&friend1, string::utf8(b"blah"), string::utf8(b"blah"), string::utf8(b"blah"), string::utf8(b"blah"));
+        set_art_data(
+            &friend1,
+            string::utf8(b"blah"),
+            string::utf8(b"blah"),
+            string::utf8(b"blah"),
+            string::utf8(b"blah"),
+            vector::empty(),
+            vector::empty()
+        );
     }
 }
