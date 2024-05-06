@@ -1,22 +1,23 @@
+import { PINATA_GATEWAY_TOKEN } from "@/constants";
 import { PieceData } from "@/types/surf";
-import {
-  Button,
-  Modal,
-  ModalContent,
-  ModalHeader,
-} from "@aptos-internal/design-system-web";
+import { Button, Modal, ModalContent } from "@aptos-internal/design-system-web";
+import { css } from "styled-system/css";
 
 export const ViewButton = ({ pieceData }: { pieceData: PieceData }) => {
   return (
     <>
       <Modal
         renderContent={({ close }) => {
+          const ipfsGatewayUrl = getImageUrl(pieceData);
           return (
-            <ModalContent>
-              <ModalHeader onClose={close}>{pieceData.token_name}</ModalHeader>
+            <ModalContent
+              className={css({
+                maxW: "[100vw]",
+                maxH: "[100vh]",
+              })}
+            >
               <div>
-                <img src="getImageUrl" />
-                <p>You have already minted this piece.</p>
+                <img src={ipfsGatewayUrl} alt={pieceData.token_name} />
               </div>
             </ModalContent>
           );
@@ -28,5 +29,6 @@ export const ViewButton = ({ pieceData }: { pieceData: PieceData }) => {
 };
 
 function getImageUrl(pieceData: PieceData) {
-  return pieceData.token_uri;
+  const hash = pieceData.token_uri.split("/").pop();
+  return `https://aptos-labs.mypinata.cloud/ipfs/${hash}?pinataGatewayToken=${PINATA_GATEWAY_TOKEN}`;
 }

@@ -3,9 +3,7 @@ import { navigateExternal } from "@/utils";
 import {
   Button,
   IconExternalLinkLine,
-  IconGlobeFill,
   IconInstagramLine,
-  IconLink,
   IconTwitter,
 } from "@aptos-internal/design-system-web";
 import { isMobile } from "@aptos-labs/wallet-adapter-core";
