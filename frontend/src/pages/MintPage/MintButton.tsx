@@ -23,6 +23,7 @@ export const MintButton = ({
   const { account, signAndSubmitTransaction } = useWallet();
   const [globalState] = useGlobalState();
   const [tokenAddress, setTokenAddress] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   // TODO: Is the fee payer's seqnum part of the txn? If so, there need to be many of
   // them and some fancy way to manage seqnums, esp if we do the server_as_sponsor.ts approach.
@@ -30,6 +31,7 @@ export const MintButton = ({
     if (account === null) {
       throw "Account should be non null at this point";
     }
+    setSubmitting(true);
 
     const payload: InputEntryFunctionData = {
       function: `${globalState.moduleAddress}::nyc_token::mint`,
@@ -92,12 +94,15 @@ export const MintButton = ({
         duration: 4000,
       });
     }
+    setSubmitting(false);
   };
 
   return (
     <>
       <Toaster />
-      <Button onClick={onClick}>Mint</Button>
+      <Button variant="secondary" onClick={onClick} loading={submitting}>
+        Mint
+      </Button>
     </>
   );
 };

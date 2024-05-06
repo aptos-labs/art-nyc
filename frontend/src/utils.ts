@@ -201,3 +201,7 @@ export function mapsAreEqual(
   // If no discrepancies are found, the maps are equal
   return true;
 }
+
+export const navigateExternal = (url: string) => {
+  window.open(url, "_blank");
+};

@@ -3,6 +3,8 @@ import { PieceEditor } from "./PieceEditor";
 import { PieceCreator } from "./PieceCreator";
 import { css } from "styled-system/css";
 import { Card } from "@aptos-internal/design-system-web";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { knownMetadataKeys } from "../MintPage/TokenInfo";
 
 /**
  * A place where you can see the existing art data and make changes.
@@ -12,6 +14,7 @@ import { Card } from "@aptos-internal/design-system-web";
  */
 export const EditorPage = () => {
   const { artDataInner, isLoading, error } = useGetArtData();
+  const { connected } = useWallet();
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -23,8 +26,6 @@ export const EditorPage = () => {
     return <p>Art data unexpectedly undefined</p>;
   }
 
-  // TODO: Add spacing between all this stuff.
-  // mysteriously padding 12 does something but padding 16 doesn't?
   let editorElements = [];
   for (var [key, value] of artDataInner) {
     editorElements.push(
@@ -33,6 +34,17 @@ export const EditorPage = () => {
           <PieceEditor pieceId={key} pieceData={value} />
         </Card>
       </div>,
+    );
+  }
+
+  let walletConnectComponent = null;
+  if (!connected) {
+    walletConnectComponent = (
+      <div
+        className={css({ padding: "12", textStyle: "heading.100.semibold" })}
+      >
+        <p>Please connect your wallet.</p>
+      </div>
     );
   }
 
@@ -50,19 +62,25 @@ export const EditorPage = () => {
         It is not recommended to edit names for existing pieces right now, we
         need to confirm how the indexer behaves first.
       </p>
-      <p className={css({ paddingLeft: "12" })}>
-        These are the metadata keys the UI knows how to handle: todo
-      </p>
+      <div className={css({ paddingLeft: "12" })}>
+        <p>These are the metadata keys the UI knows how to handle:</p>
+        <ul>
+          {knownMetadataKeys.map((key) => (
+            <li key={key}>{`    • ${key}`}</li>
+          ))}
+        </ul>
+      </div>
+      {walletConnectComponent}
       {editorElements}
       <div
-        style={{
-          height: "1px",
-          backgroundColor: "#ccc",
-          marginLeft: "100px",
-          marginRight: "100px",
-          marginTop: "25px",
-          marginBottom: "25px",
-        }}
+        className={css({
+          height: "[1px]",
+          backgroundColor: "[#ccc]",
+          marginLeft: "[100px]",
+          marginRight: "[100px]",
+          marginTop: "24",
+          marginBottom: "24",
+        })}
       ></div>
       <div className={css({ padding: "12" })}>
         <Card>

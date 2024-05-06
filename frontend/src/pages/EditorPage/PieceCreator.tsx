@@ -15,7 +15,9 @@ export const PieceCreator = () => {
   const [metadata, setMetadata] = useState<Map<string, string>>(new Map());
 
   return (
-    <form style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+    <form
+      className={css({ display: "flex", flexDirection: "column", gap: "16" })}
+    >
       <p
         className={css({ textStyle: "heading.100.semibold" })}
       >{`Create a new piece`}</p>

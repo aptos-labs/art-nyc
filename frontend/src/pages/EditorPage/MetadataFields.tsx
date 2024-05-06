@@ -1,5 +1,6 @@
 import { FormField, Input, Button } from "@aptos-internal/design-system-web";
 import React, { useState } from "react";
+import { css } from "styled-system/css";
 
 export function MetadataFields({
   metadata,
@@ -32,7 +33,7 @@ export function MetadataFields({
     .map(([key, value]) => (
       <div
         key={key}
-        style={{ display: "flex", alignItems: "flex-end", gap: "10px" }}
+        className={css({ display: "flex", alignItems: "flex-end", gap: "12" })}
       >
         <FormField label={key}>
           {(formControlProps) => (
@@ -60,22 +61,24 @@ export function MetadataFields({
 
   return (
     <div>
-      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+      <div
+        className={css({ display: "flex", flexDirection: "column", gap: "16" })}
+      >
         {fields}
       </div>
       <div
-        style={{
-          marginTop: "20px",
+        className={css({
+          marginTop: "20",
           display: "flex",
           alignItems: "center",
-          gap: "10px",
-        }}
+          gap: "12",
+        })}
       >
         <Input
+          className={css({ marginRight: "12" })}
           value={newKey}
           onChange={(e) => setNewKey(e.target.value)}
           placeholder="Enter new field key"
-          style={{ marginRight: "10px" }}
         />
         <Button
           onClick={addField}

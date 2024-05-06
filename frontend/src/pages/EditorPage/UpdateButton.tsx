@@ -1,7 +1,13 @@
 import { useGlobalState } from "@/context/GlobalState";
-import { Button, Toaster, toast } from "@aptos-internal/design-system-web";
+import {
+  Button,
+  Toaster,
+  Tooltip,
+  toast,
+} from "@aptos-internal/design-system-web";
 import { InputEntryFunctionData } from "@aptos-labs/ts-sdk";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { useState } from "react";
 
 /** A component with which you can create new piece data in the art data. */
 export const UpdateButton = ({
@@ -22,12 +28,14 @@ export const UpdateButton = ({
   text: string;
 }) => {
   const { account, connected, signAndSubmitTransaction } = useWallet();
+  const [submitting, setSubmitting] = useState(false);
   const [globalState] = useGlobalState();
 
   const onClick = async () => {
     if (account === null) {
       throw "Account should be non null at this point";
     }
+    setSubmitting(true);
 
     let metadataKeys = Array.from(metadata.keys());
     let metadataValues = Array.from(metadata.values());
@@ -69,6 +77,7 @@ export const UpdateButton = ({
         duration: 5000,
       });
     }
+    setSubmitting(false);
   };
 
   const finalEnabled =
@@ -81,7 +90,7 @@ export const UpdateButton = ({
 
   return (
     <>
-      <Button disabled={!finalEnabled} onClick={onClick}>
+      <Button loading={submitting} disabled={!finalEnabled} onClick={onClick}>
         {text}
       </Button>
       <Toaster />

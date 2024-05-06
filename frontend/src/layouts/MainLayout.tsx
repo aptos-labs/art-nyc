@@ -14,6 +14,7 @@ import {
   Menu,
 } from "@aptos-internal/design-system-web";
 import { WalletSelector } from "@aptos-labs/wallet-adapter-ant-design";
+import { navigateExternal } from "@/utils";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -112,12 +113,7 @@ function MyMenu() {
             id: "source",
             label: "View Source",
             onSelect: () => {
-              // TODO: This doesn't open the new site, it updates the path. Figure out
-              // how to actually navigate. We can't use an <a> here.
-              navigate("https://github.com/banool/aptos-nyc-2024", {
-                replace: true,
-                relative: "path",
-              });
+              navigateExternal("https://github.com/banool/aptos-nyc-2024");
             },
           },
         ]}

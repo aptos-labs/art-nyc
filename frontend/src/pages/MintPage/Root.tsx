@@ -1,8 +1,10 @@
 import { TokenInfo } from "./TokenInfo";
 import { MintButton } from "./MintButton";
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { isMobile, useWallet } from "@aptos-labs/wallet-adapter-react";
 import { WalletSelector } from "@aptos-labs/wallet-adapter-ant-design";
 import { PieceData } from "@/types/surf";
+import { css } from "styled-system/css";
+import { ViewButton } from "./ViewButton";
 
 /**
  * In the index we handle all the data fetching and showing different stuff if the data
@@ -26,17 +28,24 @@ export const Root = ({
   if (!walletConnected) {
     button = <WalletSelector />;
   } else if (userOwnsThisPieceAlready) {
-    // TODO: Some button to view the token, or just a greyed out "you already have this token" if we show the art on the main minting page.
-    button = <p>You own this piece already!</p>;
+    button = <ViewButton pieceData={pieceData} />;
   } else {
     button = <MintButton pieceId={pieceId} pieceData={pieceData} />;
   }
 
+  let outerCss;
+  if (isMobile()) {
+    outerCss = css({ padding: "16" });
+  } else {
+    outerCss = css({ padding: "32", display: "grid", placeItems: "center" });
+  }
+
   // TODO: Make sure any newlines and the like in the description are respected.
   return (
-    <>
+    <div className={outerCss}>
       <TokenInfo pieceData={pieceData} />
+      <br />
       {button}
-    </>
+    </div>
   );
 };

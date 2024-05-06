@@ -1,4 +1,5 @@
 import { FormField, Input, TextArea } from "@aptos-internal/design-system-web";
+import { css } from "styled-system/css";
 
 export function SharedFormFields({
   pieceName,
@@ -16,7 +17,9 @@ export function SharedFormFields({
   setPieceUri: React.Dispatch<React.SetStateAction<string>>;
 }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+    <div
+      className={css({ display: "flex", flexDirection: "column", gap: "16" })}
+    >
       <FormField label="Name">
         {(formControlProps) => (
           <Input
