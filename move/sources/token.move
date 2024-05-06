@@ -3,6 +3,7 @@
 
 module addr::nyc_token {
     use addr::nyc_collection::{
+        assert_caller_is_collection_admin,
         assert_caller_is_collection_creator,
         is_token_owner,
         get_art_data,
@@ -120,7 +121,7 @@ module addr::nyc_token {
         caller: &signer,
         tokens: vector<Object<Token>>,
     ) acquires TokenRefs {
-        assert_caller_is_collection_creator(caller);
+        assert_caller_is_collection_admin(caller);
 
         let art_data = get_art_data();
 
@@ -381,7 +382,7 @@ module addr::nyc_token {
     }
 
     // Confirm that others can not update the URI.
-    #[expected_failure(abort_code = 196609, location = addr::nyc_collection)]
+    #[expected_failure(abort_code = 196610, location = addr::nyc_collection)]
     #[test(caller = @addr, friend1 = @0x456, friend2 = @0x789, aptos_framework = @aptos_framework)]
     fun test_set_art_data_not_creator(
         caller: signer,
