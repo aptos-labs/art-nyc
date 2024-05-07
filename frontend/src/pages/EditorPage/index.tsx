@@ -30,7 +30,7 @@ export const EditorPage = () => {
   for (var [key, value] of artDataInner) {
     editorElements.push(
       <div key={key} className={css({ padding: "12" })}>
-        <Card>
+        <Card className={css({ backgroundColor: "slate.100" })}>
           <PieceEditor pieceId={key} pieceData={value} />
         </Card>
       </div>,
@@ -59,8 +59,8 @@ export const EditorPage = () => {
         Editor
       </p>
       <p className={css({ paddingLeft: "12" })}>
-        It is not recommended to edit names for existing pieces right now, we
-        need to confirm how the indexer behaves first.
+        It is not recommended to edit names for pieces that people have minted,
+        it makes indexing complex.
       </p>
       <div className={css({ paddingLeft: "12" })}>
         <p>These are the metadata keys the UI knows how to handle:</p>
@@ -71,22 +71,26 @@ export const EditorPage = () => {
         </ul>
       </div>
       {walletConnectComponent}
-      {editorElements}
-      <div
-        className={css({
-          height: "[1px]",
-          backgroundColor: "[#ccc]",
-          marginLeft: "[100px]",
-          marginRight: "[100px]",
-          marginTop: "24",
-          marginBottom: "24",
-        })}
-      ></div>
       <div className={css({ padding: "12" })}>
-        <Card>
+        <Card className={css({ backgroundColor: "slate.100" })}>
           <PieceCreator />
         </Card>
       </div>
+      <Divider />
+      {editorElements}
     </div>
   );
 };
+
+const Divider = () => (
+  <div
+    className={css({
+      height: "[1px]",
+      backgroundColor: "[#ccc]",
+      marginLeft: "[100px]",
+      marginRight: "[100px]",
+      marginTop: "24",
+      marginBottom: "24",
+    })}
+  ></div>
+);
