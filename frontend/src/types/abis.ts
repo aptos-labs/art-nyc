@@ -8,6 +8,24 @@ export const COLLECTION_ABI = {
   ],
   exposed_functions: [
     {
+      name: "add_admin",
+      visibility: "public",
+      is_entry: false,
+      is_view: false,
+      generic_type_params: [],
+      params: ["&signer", "address"],
+      return: [],
+    },
+    {
+      name: "assert_caller_is_collection_admin",
+      visibility: "public",
+      is_entry: false,
+      is_view: false,
+      generic_type_params: [],
+      params: ["&signer"],
+      return: [],
+    },
+    {
       name: "assert_caller_is_collection_creator",
       visibility: "public",
       is_entry: false,
@@ -62,6 +80,15 @@ export const COLLECTION_ABI = {
       generic_type_params: [],
       params: [],
       return: ["signer"],
+    },
+    {
+      name: "get_minting_enabled",
+      visibility: "public",
+      is_entry: false,
+      is_view: false,
+      generic_type_params: [],
+      params: [],
+      return: ["bool"],
     },
     {
       name: "get_piece_data",
@@ -138,6 +165,15 @@ export const COLLECTION_ABI = {
       return: [],
     },
     {
+      name: "remove_admin",
+      visibility: "public",
+      is_entry: false,
+      is_view: false,
+      generic_type_params: [],
+      params: ["&signer", "address"],
+      return: [],
+    },
+    {
       name: "set_art_data",
       visibility: "public",
       is_entry: true,
@@ -164,6 +200,15 @@ export const COLLECTION_ABI = {
       return: [],
     },
     {
+      name: "set_minting_enabled",
+      visibility: "public",
+      is_entry: true,
+      is_view: false,
+      generic_type_params: [],
+      params: ["&signer", "bool"],
+      return: [],
+    },
+    {
       name: "set_uri",
       visibility: "public",
       is_entry: true,
@@ -174,6 +219,22 @@ export const COLLECTION_ABI = {
     },
   ],
   structs: [
+    {
+      name: "AdminData",
+      is_native: false,
+      abilities: ["key"],
+      generic_type_params: [],
+      fields: [
+        {
+          name: "admins",
+          type: "vector<address>",
+        },
+        {
+          name: "minting_enabled",
+          type: "bool",
+        },
+      ],
+    },
     {
       name: "ArtData",
       is_native: false,

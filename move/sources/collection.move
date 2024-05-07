@@ -43,9 +43,10 @@ module addr::nyc_collection {
         owners: SmartTable<address, vector<String>>,
     }
 
-    /// People who are allowed to do admin operations.
-    struct Admins has key {
+    /// Data related to admins, e.g. people who are allowed to do admin operations.
+    struct AdminData has key {
         admins: vector<address>,
+        minting_enabled: bool,
     }
 
     /// The data for a single piece of art in the collection. Whenever we update these,
@@ -66,8 +67,8 @@ module addr::nyc_collection {
         data: SimpleMap<String, PieceData>,
     }
 
-    const COLLECTION_NAME: vector<u8> = b"APTOS PASSPORT: Ecosystem Summit One";
-    const COLLECTION_SEED: vector<u8> = b"AptosPassportEcosystemSummitOneSeed";
+    const COLLECTION_NAME: vector<u8> = b"Aptos Art Gallery NYC";
+    const COLLECTION_SEED: vector<u8> = b"AptosArtGalleryNyc2024";
 
     /// Create the collection and all the related structs.
     /// You can only call this once unless you change COLLECTION_SEED.
@@ -115,7 +116,7 @@ module addr::nyc_collection {
         // Store the holder for the admins.
         move_to(
             &object_signer,
-            Admins {admins: vector::empty()}
+            AdminData {admins: vector::empty(), minting_enabled: true}
         );
 
         // Store the map of who owns which pieces of art in the collection.
@@ -132,7 +133,7 @@ module addr::nyc_collection {
     }
 
     /// Set the URI of the collection.
-    public entry fun set_uri(caller: &signer, uri: String) acquires Admins, CollectionRefs {
+    public entry fun set_uri(caller: &signer, uri: String) acquires AdminData, CollectionRefs {
         assert_caller_is_collection_admin(caller);
         let collection = get_collection();
         let collection_refs = borrow_global<CollectionRefs>(
@@ -145,7 +146,7 @@ module addr::nyc_collection {
     }
 
     /// Set the description of the collection.
-    public entry fun set_description(caller: &signer, description: String) acquires Admins, CollectionRefs {
+    public entry fun set_description(caller: &signer, description: String) acquires AdminData, CollectionRefs {
         assert_caller_is_collection_admin(caller);
         let collection = get_collection();
         let collection_refs = borrow_global<CollectionRefs>(
@@ -204,40 +205,40 @@ module addr::nyc_collection {
     }
 
     /// Assert the caller is an admin. The creator is always an admin.
-    public fun assert_caller_is_collection_admin(caller: &signer) acquires Admins {
+    public fun assert_caller_is_collection_admin(caller: &signer) acquires AdminData {
         if (is_creator(caller)) {
             return
         };
         let collection = get_collection();
-        let admins = borrow_global<Admins>(
+        let admin_data = borrow_global<AdminData>(
             object::object_address(&collection)
         );
         assert!(
-            vector::contains(&admins.admins, &signer::address_of(caller)),
+            vector::contains(&admin_data.admins, &signer::address_of(caller)),
             error::invalid_state(E_CALLER_NOT_COLLECTION_ADMIN)
         );
     }
 
     /// Add an admin. Only the collection creator can do this.
-    public fun add_admin(caller: &signer, admin: address) acquires Admins {
+    public fun add_admin(caller: &signer, admin: address) acquires AdminData {
         assert_caller_is_collection_creator(caller);
         let collection = get_collection();
-        let admins = borrow_global_mut<Admins>(
+        let admin_data = borrow_global_mut<AdminData>(
             object::object_address(&collection)
         );
-        vector::push_back(&mut admins.admins, admin);
+        vector::push_back(&mut admin_data.admins, admin);
     }
 
     /// Remove an admin. Only the collection creator can do this.
-    public fun remove_admin(caller: &signer, admin: address) acquires Admins {
+    public fun remove_admin(caller: &signer, admin: address) acquires AdminData {
         assert_caller_is_collection_creator(caller);
         let collection = get_collection();
-        let admins = borrow_global_mut<Admins>(
+        let admin_data = borrow_global_mut<AdminData>(
             object::object_address(&collection)
         );
-        let (present, index) = vector::index_of(&admins.admins, &admin);
+        let (present, index) = vector::index_of(&admin_data.admins, &admin);
         assert!(present, 0);
-        vector::remove(&mut admins.admins, index);
+        vector::remove(&mut admin_data.admins, index);
     }
 
     /// Returns true if the given account owns a specific piece of art in the
@@ -285,7 +286,7 @@ module addr::nyc_collection {
         token_uri: String,
         metadata_keys: vector<String>,
         metadata_values: vector<String>,
-    ) acquires Admins, ArtData {
+    ) acquires AdminData, ArtData {
         assert_caller_is_collection_admin(caller);
         let collection = get_collection();
 
@@ -363,6 +364,23 @@ module addr::nyc_collection {
 
     public fun get_piece_uri(piece_data: &PieceData): String {
         piece_data.token_uri
+    }
+
+    public entry fun set_minting_enabled(caller: &signer, enabled: bool) acquires AdminData {
+        assert_caller_is_collection_admin(caller);
+        let collection = get_collection();
+        let admin_data = borrow_global_mut<AdminData>(
+            object::object_address(&collection)
+        );
+        admin_data.minting_enabled = enabled;
+    }
+
+    public fun get_minting_enabled(): bool acquires AdminData {
+        let collection = get_collection();
+        let admin_data = borrow_global<AdminData>(
+            object::object_address(&collection)
+        );
+        admin_data.minting_enabled
     }
 
     #[test_only]

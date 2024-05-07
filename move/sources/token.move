@@ -4,15 +4,15 @@
 module addr::nyc_token {
     use addr::nyc_collection::{
         assert_caller_is_collection_admin,
-        assert_caller_is_collection_creator,
-        is_token_owner,
         get_art_data,
+        get_collection_name,
+        get_collection_owner_signer,
+        get_minting_enabled,
         get_piece_data,
         get_piece_description,
         get_piece_name,
         get_piece_uri,
-        get_collection_name,
-        get_collection_owner_signer,
+        is_token_owner,
         record_minted,
     };
     use std::error;
@@ -25,6 +25,9 @@ module addr::nyc_token {
 
     /// You have already minted this piece of art.
     const E_ALREADY_MINTED: u64 = 100;
+
+    /// Minting is globally disabled at the moment.
+    const E_MINTING_DISABLED: u64 = 101;
 
     #[resource_group_member(group = aptos_framework::object::ObjectGroup)]
     struct TokenRefs has key {
@@ -42,15 +45,15 @@ module addr::nyc_token {
         mint_inner(caller_addr, piece_id);
     }
 
-    /// Helper function. The collection creator can mint any token they want to whoever
+    /// Helper function. The collection admins can mint any token they want to whoever
     /// they want.
     public entry fun mint_to(
         caller: &signer,
         piece_id: String,
         mint_to: address
     ) {
-        // Confirm the caller is the collection owner.
-        assert_caller_is_collection_creator(caller);
+        // Confirm the caller is a collection admin.
+        assert_caller_is_collection_admin(caller);
 
         // For now we're making it that only the collection owner can mint tokens.
         mint_inner(mint_to, piece_id);
@@ -63,6 +66,8 @@ module addr::nyc_token {
     //
     // It is intentional that these tokens are not soulbound.
     fun mint_inner(mint_to: address, piece_id: String): Object<Token> {
+        assert!(get_minting_enabled(), error::invalid_state(E_MINTING_DISABLED));
+
         let art_data = get_art_data();
         let piece_data = get_piece_data(&art_data, &piece_id);
 
@@ -154,7 +159,8 @@ module addr::nyc_token {
     #[test_only]
     use addr::nyc_collection::{
         create_for_test as create_collection_for_test,
-        set_art_data
+        set_art_data,
+        set_minting_enabled,
     };
     #[test_only]
     use std::timestamp;
@@ -404,6 +410,28 @@ module addr::nyc_token {
             string::utf8(b"blah"),
             vector::empty(),
             vector::empty()
+        );
+    }
+
+    // Confirm that you cannot mint if minting_enabled is false.
+    #[expected_failure(abort_code = 196709, location = Self)]
+    #[test(caller = @addr, friend1 = @0x456, friend2 = @0x789, aptos_framework = @aptos_framework)]
+    fun test_mint_minting_disabled(
+        caller: signer,
+        friend1: signer,
+        friend2: signer,
+        aptos_framework: signer
+    ) {
+        init_test(
+            &caller,
+            &friend1,
+            &friend2,
+            &aptos_framework
+        );
+        set_minting_enabled(&caller, false);
+        mint_token(
+            &friend1,
+            string::utf8(b"pieceid1")
         );
     }
 }
