@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { GlobalStateProvider, useGlobalState } from "./context/GlobalState";
 import MyRoutes from "./MyRoutes";
 import {
@@ -22,11 +22,11 @@ const identityConnectDappId = "16c1632d-6b59-47d0-a7e3-3b00c216425f";
 const queryClient = new QueryClient();
 
 export const App = () => (
-  <HashRouter>
+  <BrowserRouter>
     <GlobalStateProvider>
       <AppInner />
     </GlobalStateProvider>
-  </HashRouter>
+  </BrowserRouter>
 );
 
 export const AppInner = () => {

@@ -220,7 +220,7 @@ module addr::nyc_collection {
     }
 
     /// Add an admin. Only the collection creator can do this.
-    public fun add_admin(caller: &signer, admin: address) acquires AdminData {
+    public entry fun add_admin(caller: &signer, admin: address) acquires AdminData {
         assert_caller_is_collection_creator(caller);
         let collection = get_collection();
         let admin_data = borrow_global_mut<AdminData>(
@@ -230,7 +230,7 @@ module addr::nyc_collection {
     }
 
     /// Remove an admin. Only the collection creator can do this.
-    public fun remove_admin(caller: &signer, admin: address) acquires AdminData {
+    public entry fun remove_admin(caller: &signer, admin: address) acquires AdminData {
         assert_caller_is_collection_creator(caller);
         let collection = get_collection();
         let admin_data = borrow_global_mut<AdminData>(
