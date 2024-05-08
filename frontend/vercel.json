@@ -1,7 +1,7 @@
 {
     "buildCommand": "pnpm prepare && pnpm build",
     "outputDirectory": "build",
-    "installCommand": "echo $SERVICE_ACCOUNT_JSON_BASE64 | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS && pnpm dlx google-artifactregistry-auth && pnpm install",
+    "installCommand": "echo $SERVICE_ACCOUNT_JSON_BASE64 | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS && pnpm dlx google-artifactregistry-auth && pnpm install --prod false",
     "framework": "vite",
     "rewrites": [{ "source": "/(.*)", "destination": "/" }]
 }
