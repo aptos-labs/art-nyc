@@ -72,6 +72,8 @@ module addr::nyc_token {
         let piece_data = get_piece_data(&art_data, &piece_id);
 
         let name_prefix = get_piece_name(piece_data);
+        string::append(&mut name_prefix, string::utf8(b" #"));
+
         let name_suffix = string::utf8(b"");
         let description = get_piece_description(piece_data);
         let uri = get_piece_uri(piece_data);
