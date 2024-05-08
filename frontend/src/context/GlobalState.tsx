@@ -21,7 +21,6 @@ type GlobalActions = {
 function deriveGlobalState({ network }: { network: Network }): GlobalState {
   const config = new AptosConfig({ network });
   const client = new Aptos(config);
-  // TODO: Use a switch on network to set module / collection address.
   let moduleAddress;
   let collectionAddress;
   switch (network) {
@@ -30,6 +29,7 @@ function deriveGlobalState({ network }: { network: Network }): GlobalState {
         "0x296102a3893d43e11de2aa142fbb126377120d7d71c246a2f95d5b4f3ba16b30";
       collectionAddress =
         "0xd976c82c8e5ac55e585d16899dc9390225231538fc0c5ab31e3612271fe8f446";
+      break;
     case "devnet":
       moduleAddress =
         "";
