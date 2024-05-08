@@ -39,7 +39,7 @@ export default function MainLayout({ children }: LayoutProps) {
             width="48"
             height="48"
             alt="Aptos logo"
-            src="/aptos_logo.png"
+            src="/images/aptos_logo.png"
           />
         </Link>
       </div>
