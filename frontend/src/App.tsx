@@ -16,8 +16,7 @@ import { MartianWallet } from "@martianwallet/aptos-wallet-adapter";
 import { PontemWallet } from "@pontem/wallet-adapter-plugin";
 
 // It is okay for this to be publicly accessible.
-// todo update if necessary
-const identityConnectDappId = "16c1632d-6b59-47d0-a7e3-3b00c216425f";
+const identityConnectDappId = "ca7fe716-4187-4d84-8fc4-641aaf98ccd7";
 
 const queryClient = new QueryClient();
 
