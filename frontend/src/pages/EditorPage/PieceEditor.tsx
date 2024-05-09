@@ -5,6 +5,8 @@ import { UpdateButton } from "./UpdateButton";
 import { css } from "styled-system/css";
 import { MetadataFields } from "./MetadataFields";
 import { mapsAreEqual } from "@/utils";
+import { Link } from "react-router-dom";
+import { useGlobalState } from "@/context/GlobalState";
 
 /** A component where you can see the existing art data and make changes. */
 export const PieceEditor = ({
@@ -14,6 +16,7 @@ export const PieceEditor = ({
   pieceId: string;
   pieceData: PieceData;
 }) => {
+  const [globalState] = useGlobalState();
   const [pieceName, setPieceName] = useState(pieceData.token_name);
   const [pieceDescription, setPieceDescription] = useState(
     pieceData.token_description,
@@ -34,9 +37,11 @@ export const PieceEditor = ({
     <form
       className={css({ display: "flex", flexDirection: "column", gap: "16" })}
     >
-      <p
-        className={css({ textStyle: "heading.100.semibold" })}
-      >{`${pieceId}`}</p>
+      <p className={css({ textStyle: "heading.100.semibold" })}>
+        <Link to={`/mint/${pieceId}?network=${globalState.network}`}>
+          {pieceId}
+        </Link>
+      </p>
       <SharedFormFields
         pieceName={pieceName}
         pieceDescription={pieceDescription}
