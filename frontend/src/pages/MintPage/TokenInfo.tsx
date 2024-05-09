@@ -101,7 +101,11 @@ export const TokenInfo = ({ pieceData }: { pieceData: PieceData }) => {
             className={css({ margin: "0", padding: "4", gap: "0" })}
             iconOnly={true}
             onClick={() => {
-              navigateExternal(metadata.website_url!);
+              let url = metadata.website_url!.trim();
+              if (!url.startsWith("http")) {
+                url = `https://${url}`;
+              }
+              navigateExternal(url);
             }}
             variant="secondaryText"
             size="sm"
