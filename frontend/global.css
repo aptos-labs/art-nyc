@@ -1,2 +1,23 @@
 @import url("@aptos-internal/design-system-web/dist/style.css");
 @layer reset, base, tokens, recipes, utilities;
+
+@layer base {
+  @font-face {
+    font-family: "IBMPlexSans";
+    font-style: normal;
+    font-weight: 100 700;
+    font-display: fallback;
+    src: url(../../node_modules/@aptos-internal/design-system-web/dist/fonts/IBMPlexSans-Variable.woff2)
+      format("woff2");
+  }
+
+  html {
+    --font-ibm-plex-sans: "IBMPlexSans";
+  }
+
+  body {
+    font-family: var(--font-ibm-plex-sans);
+    background-color: var(--aptos-colors-background-primary);
+    color: var(--aptos-colors-text-primary);
+  }
+}

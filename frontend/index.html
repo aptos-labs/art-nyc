@@ -1,21 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <meta name="viewport" content="initial-scale=1, width=device-width" />
     <meta name="theme-color" content="#000000" />
-    <meta property="og:title" content="Aptos Move GraphQL Test" />
+    <meta property="og:title" content="Aptos Art Gallery NYC" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="/manifest.json" />
     <title>Aptos Art Gallery NYC</title>
-    <link
-      rel="stylesheet"
-      href="https://use.typekit.net/ifl8enc.css"
-    />
+    <link rel="stylesheet" href="https://use.typekit.net/ifl8enc.css" />
+    <script>
+      (function getTheme() {
+        function applyColorScheme(colorScheme) {
+          document.documentElement.style.setProperty(
+            "color-scheme",
+            colorScheme,
+          );
+          document.documentElement.dataset.theme = colorScheme;
+        }
+
+        // Apply initial color scheme
+        let storedScheme;
+        try {
+          storedScheme = window.localStorage.getItem("color-scheme");
+        } catch (err) {}
+        const mql = window.matchMedia("(prefers-color-scheme: dark)");
+        const colorScheme = storedScheme ?? (mql.matches ? "dark" : "light");
+        applyColorScheme(colorScheme);
+
+        // Listen for color scheme changes from media query
+        mql.addEventListener("change", (e) => {
+          const newColorScheme = e.matches ? "dark" : "light";
+          try {
+            window.localStorage.removeItem("color-scheme");
+          } catch (err) {}
+          applyColorScheme(newColorScheme);
+        });
+
+        // Listen for color scheme changes from session storage
+        window.addEventListener("storage", (e) => {
+          if (e.key === "color-scheme") {
+            applyColorScheme(e.newValue);
+          }
+        });
+      })();
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

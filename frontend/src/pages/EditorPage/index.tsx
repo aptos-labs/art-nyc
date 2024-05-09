@@ -30,7 +30,7 @@ export const EditorPage = () => {
   for (var [key, value] of artDataInner) {
     editorElements.push(
       <div key={key} className={css({ padding: "12" })}>
-        <Card className={css({ backgroundColor: "slate.100" })}>
+        <Card>
           <PieceEditor pieceId={key} pieceData={value} />
         </Card>
       </div>,
@@ -72,7 +72,7 @@ export const EditorPage = () => {
       </div>
       {walletConnectComponent}
       <div className={css({ padding: "12" })}>
-        <Card className={css({ backgroundColor: "slate.100" })}>
+        <Card>
           <PieceCreator />
         </Card>
       </div>
@@ -86,7 +86,7 @@ const Divider = () => (
   <div
     className={css({
       height: "[1px]",
-      backgroundColor: "[#ccc]",
+      backgroundColor: "border.divider.primary",
       marginLeft: "[100px]",
       marginRight: "[100px]",
       marginTop: "24",

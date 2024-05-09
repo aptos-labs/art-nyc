@@ -1,20 +1,20 @@
 import "../../global.css";
-import React, { useState } from "react";
-import { css } from "styled-system/css";
-import { flex } from "styled-system/patterns";
-import { Link, useNavigate } from "react-router-dom";
-import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { AptosLogo } from "@/components/AptosLogo";
+import { openWalletSelector } from "@/components/WalletSelector";
+import { navigateExternal } from "@/utils";
 import {
   Button,
   IconGithub,
-  IconLogoutBoxLine,
   IconLoginBoxLine,
+  IconLogoutBoxLine,
   IconMenu3Line,
   Menu,
 } from "@aptos-internal/design-system-web";
-import { WalletSelector } from "@aptos-labs/wallet-adapter-ant-design";
-import { navigateExternal } from "@/utils";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import React from "react";
+import { Link } from "react-router-dom";
+import { css } from "styled-system/css";
+import { flex } from "styled-system/patterns";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -33,16 +33,11 @@ export default function MainLayout({ children }: LayoutProps) {
         justifyContent: "space-between",
       })}
     >
-      <div>
-        <Link to="/">
-          <img
-            width="48"
-            height="48"
-            alt="Aptos logo"
-            src="/images/aptos_logo.png"
-          />
-        </Link>
-      </div>
+      <Link to="/">
+        <AptosLogo
+          className={css({ h: "48", w: "48", color: "text.primary" })}
+        />
+      </Link>
       <MyMenu />
     </div>
   );
@@ -79,29 +74,20 @@ export default function MainLayout({ children }: LayoutProps) {
 
 function MyMenu() {
   const { connected, disconnect } = useWallet();
-  const [modalOpen, setModalOpen] = useState(false);
-  const navigate = useNavigate();
 
-  let walletItem;
-  if (connected) {
-    walletItem = {
-      Icon: IconLogoutBoxLine,
-      id: "disconnect",
-      label: "Disconnect",
-      onSelect: () => {
-        disconnect();
-      },
-    };
-  } else {
-    walletItem = {
-      Icon: IconLoginBoxLine,
-      id: "connect",
-      label: "Connect",
-      onSelect: () => {
-        setModalOpen(true);
-      },
-    };
-  }
+  const walletItem = connected
+    ? {
+        Icon: IconLogoutBoxLine,
+        id: "disconnect",
+        label: "Disconnect",
+        onSelect: disconnect,
+      }
+    : {
+        Icon: IconLoginBoxLine,
+        id: "connect",
+        label: "Connect",
+        onSelect: openWalletSelector,
+      };
 
   return (
     <>
@@ -128,9 +114,6 @@ function MyMenu() {
           </Button>
         }
       />
-      <div hidden={true}>
-        <WalletSelector setModalOpen={setModalOpen} isModalOpen={modalOpen} />
-      </div>
     </>
   );
   // TODO: Consider making this a larger button with text desktop rather than a hamburger.

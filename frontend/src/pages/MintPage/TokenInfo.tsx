@@ -118,7 +118,13 @@ export const TokenInfo = ({ pieceData }: { pieceData: PieceData }) => {
         <p className={css({})}>{metadata.material_description}</p>
       )}
       <br />
-      <p className={css({ whiteSpace: "pre-wrap", textAlign: "center" })}>
+      <p
+        className={css({
+          whiteSpace: "pre-wrap",
+          textAlign: "center",
+          textStyle: "body.300.regular",
+        })}
+      >
         {pieceData.token_description}
       </p>
     </>

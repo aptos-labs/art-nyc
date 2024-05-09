@@ -1,10 +1,11 @@
 import { TokenInfo } from "./TokenInfo";
 import { MintButton } from "./MintButton";
 import { isMobile, useWallet } from "@aptos-labs/wallet-adapter-react";
-import { WalletSelector } from "@aptos-labs/wallet-adapter-ant-design";
+import { openWalletSelector } from "@/components/WalletSelector";
 import { PieceData } from "@/types/surf";
 import { css } from "styled-system/css";
 import { ViewButton } from "./ViewButton";
+import { Button } from "@aptos-internal/design-system-web";
 
 /**
  * In the index we handle all the data fetching and showing different stuff if the data
@@ -26,7 +27,7 @@ export const Root = ({
   // TODO: in the hamburger, add a button to toggle sponsored txn vs direct submission mode
   let button;
   if (!walletConnected) {
-    button = <WalletSelector />;
+    button = <Button onClick={openWalletSelector}>Connect Wallet</Button>;
   } else if (userOwnsThisPieceAlready) {
     button = <ViewButton pieceData={pieceData} />;
   } else {
