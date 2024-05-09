@@ -7,8 +7,7 @@
     font-style: normal;
     font-weight: 100 700;
     font-display: fallback;
-    src: url(../../node_modules/@aptos-internal/design-system-web/dist/fonts/IBMPlexSans-Variable.woff2)
-      format("woff2");
+    src: url(/IBMPlexSans-Variable.woff2) format("woff2");
   }
 
   html {
