@@ -1,4 +1,5 @@
 import { CreateToastArgs, toast } from "@aptos-internal/design-system-web";
+import { Client } from "@aptos-labs/aptos-fee-payer-client";
 import {
   AccountAuthenticator,
   AnyRawTransaction,
@@ -9,25 +10,12 @@ import {
   InputGenerateTransactionOptions,
   PendingTransactionResponse,
   PublicKey,
-  SimpleTransaction,
 } from "@aptos-labs/ts-sdk";
 import {
   AccountInfo,
   InputTransactionData,
   Types,
 } from "@aptos-labs/wallet-adapter-core";
-import { Client } from "@aptos-labs/aptos-fee-payer-client";
-import { GlobalState } from "./context/GlobalState";
-
-/**
- * Helper function for exhaustiveness checks.
- *
- * Hint: If this function is causing a type error, check to make sure that your
- * switch statement covers all cases!
- */
-export function assertNever(x: never): never {
-  throw new Error("Unexpected object: " + x);
-}
 
 /*
  * Converts a utf8 string encoded as hex back to string
@@ -238,7 +226,7 @@ export type FeePayerArgs = {
 };
 
 // TODO: Make successToast and errorToast be functions that take in the
-// wait repsonse and error respectively instead.
+// wait response and error respectively instead.
 export async function onClickSubmitTransaction({
   payload,
   signAndSubmitTransaction,

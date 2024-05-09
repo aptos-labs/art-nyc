@@ -1,11 +1,11 @@
-import { TokenInfo } from "./TokenInfo";
-import { MintButton } from "./MintButton";
-import { isMobile, useWallet } from "@aptos-labs/wallet-adapter-react";
 import { openWalletSelector } from "@/components/WalletSelector";
 import { PieceData } from "@/types/surf";
-import { css } from "styled-system/css";
-import { ViewButton } from "./ViewButton";
 import { Button } from "@aptos-internal/design-system-web";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { css } from "styled-system/css";
+import { MintButton } from "./MintButton";
+import { TokenInfo } from "./TokenInfo";
+import { ViewButton } from "./ViewButton";
 
 /**
  * In the index we handle all the data fetching and showing different stuff if the data
@@ -34,16 +34,15 @@ export const Root = ({
     button = <MintButton pieceId={pieceId} pieceData={pieceData} />;
   }
 
-  let outerCss;
-  if (isMobile()) {
-    outerCss = css({ padding: "16" });
-  } else {
-    outerCss = css({ padding: "32", display: "grid", placeItems: "center" });
-  }
-
   // TODO: Make sure any newlines and the like in the description are respected.
   return (
-    <div className={outerCss}>
+    <div
+      className={css({
+        display: "grid",
+        placeItems: "center",
+        padding: { base: "16", md: "32" },
+      })}
+    >
       <TokenInfo pieceData={pieceData} />
       <br />
       {button}

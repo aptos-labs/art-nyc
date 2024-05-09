@@ -20,12 +20,9 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-// TODO: It seems old school to not have an Image component I can use, vs having to use
-// img and figure out the src based on the path of the file at "runtime".
 export default function MainLayout({ children }: LayoutProps) {
   const { isLoading } = useWallet();
 
-  // TODO: For some reason the padding here is not being respected.
   const headerContent = (
     <div
       className={flex({
@@ -108,9 +105,9 @@ function MyMenu() {
             iconOnly={true}
             variant="secondary"
             size="md"
-            aria-label={`Open hamburger menu`}
+            aria-label="Open Menu"
           >
-            <IconMenu3Line className="aptos-h_24 aptos-w_24" />
+            <IconMenu3Line className={css({ h: "24", w: "24" })} />
           </Button>
         }
       />

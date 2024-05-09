@@ -1,11 +1,6 @@
 import { useGlobalState } from "@/context/GlobalState";
 import { FeePayerArgs, onClickSubmitTransaction } from "@/utils";
-import {
-  Button,
-  Toaster,
-  Tooltip,
-  toast,
-} from "@aptos-internal/design-system-web";
+import { Button } from "@aptos-internal/design-system-web";
 import { InputEntryFunctionData } from "@aptos-labs/ts-sdk";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useState } from "react";
@@ -91,7 +86,6 @@ export const UpdateButton = ({
       <Button loading={submitting} disabled={!finalEnabled} onClick={onClick}>
         {text}
       </Button>
-      <Toaster />
     </>
   );
 };

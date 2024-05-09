@@ -1,12 +1,10 @@
 import { PieceData, getPieceDataMetadata } from "@/types/surf";
-import { navigateExternal } from "@/utils";
 import {
   Button,
   IconExternalLinkLine,
   IconInstagramLine,
-  IconTwitter,
+  IconTwitterLine,
 } from "@aptos-internal/design-system-web";
-import { isMobile } from "@aptos-labs/wallet-adapter-core";
 import { css } from "styled-system/css";
 
 type TypedMetadata = {
@@ -44,15 +42,17 @@ function getTypedMetadata(metadata: Map<string, string>): TypedMetadata {
 export const TokenInfo = ({ pieceData }: { pieceData: PieceData }) => {
   const metadata = getTypedMetadata(getPieceDataMetadata(pieceData));
 
-  let descriptionCss;
-  if (isMobile()) {
-    descriptionCss = css({ whiteSpace: "pre-wrap", textAlign: "center" });
-  } else {
-    descriptionCss = css({
-      whiteSpace: "pre-wrap",
-      textAlign: "center",
-      maxWidth: "[50%]",
-    });
+  const instagramHref =
+    metadata.instagram_handle &&
+    `https://instagram.com/${metadata.instagram_handle.trim().replace("@", "")}`;
+
+  const twitterHref =
+    metadata.twitter_handle &&
+    `https://twitter.com/${metadata.twitter_handle.trim().replace("@", "")}`;
+
+  let websiteHref = metadata.website_url?.trim();
+  if (websiteHref && !websiteHref.startsWith("http")) {
+    websiteHref = `https://${websiteHref}`;
   }
 
   return (
@@ -68,49 +68,43 @@ export const TokenInfo = ({ pieceData }: { pieceData: PieceData }) => {
         {metadata.artist_name && (
           <p className={css({ paddingRight: "4" })}>{metadata.artist_name}</p>
         )}
-        {metadata.instagram_handle && (
+        {instagramHref && (
           <Button
-            className={css({ margin: "0", padding: "4", gap: "0" })}
-            iconOnly={true}
-            onClick={() => {
-              const handle = metadata.instagram_handle!.trim().replace("@", "");
-              navigateExternal(`https://instagram.com/${handle}`);
-            }}
+            className={css({ p: "4" })}
             variant="secondaryText"
             size="sm"
+            iconOnly
+            asChild
           >
-            <IconInstagramLine className="aptos-h_24 aptos-w_24" />
+            <a href={instagramHref}>
+              <IconInstagramLine className={css({ h: "24", w: "24" })} />
+            </a>
           </Button>
         )}
-        {metadata.twitter_handle && (
+        {twitterHref && (
           <Button
-            className={css({ margin: "0", padding: "4", gap: "0" })}
-            iconOnly={true}
-            onClick={() => {
-              const handle = metadata.twitter_handle!.trim().replace("@", "");
-              navigateExternal(`https://twitter.com/${handle}`);
-            }}
+            className={css({ p: "4" })}
             variant="secondaryText"
             size="sm"
+            iconOnly
+            asChild
           >
-            <IconTwitter className="aptos-h_24 aptos-w_24" />
+            <a href={twitterHref}>
+              <IconTwitterLine className={css({ h: "24", w: "24" })} />
+            </a>
           </Button>
         )}
-        {metadata.website_url && (
+        {websiteHref && (
           <Button
-            className={css({ margin: "0", padding: "4", gap: "0" })}
-            iconOnly={true}
-            onClick={() => {
-              let url = metadata.website_url!.trim();
-              if (!url.startsWith("http")) {
-                url = `https://${url}`;
-              }
-              navigateExternal(url);
-            }}
+            className={css({ p: "4" })}
             variant="secondaryText"
             size="sm"
+            iconOnly
+            asChild
           >
-            <IconExternalLinkLine className="aptos-h_24 aptos-w_24" />
+            <a href={websiteHref}>
+              <IconExternalLinkLine className={css({ h: "24", w: "24" })} />
+            </a>
           </Button>
         )}
       </div>
@@ -127,6 +121,7 @@ export const TokenInfo = ({ pieceData }: { pieceData: PieceData }) => {
           whiteSpace: "pre-wrap",
           textAlign: "center",
           textStyle: "body.300.regular",
+          maxW: "prose",
         })}
       >
         {pieceData.token_description}

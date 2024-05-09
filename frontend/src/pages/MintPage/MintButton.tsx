@@ -1,20 +1,18 @@
 import { PieceData } from "@/types/surf";
-import { Button, toast, Toaster } from "@aptos-internal/design-system-web";
-import { css } from "styled-system/css";
-import React, { useState } from "react";
-import { useGlobalState } from "../../context/GlobalState";
+import {
+  FeePayerArgs,
+  onClickSubmitTransaction,
+  standardizeAddress,
+} from "@/utils";
+import { Button } from "@aptos-internal/design-system-web";
 import {
   InputEntryFunctionData,
   TransactionResponseType,
   WriteSetChangeWriteResource,
 } from "@aptos-labs/ts-sdk";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import { useNavigate } from "react-router-dom";
-import {
-  FeePayerArgs,
-  onClickSubmitTransaction,
-  standardizeAddress,
-} from "@/utils";
+import { useState } from "react";
+import { useGlobalState } from "../../context/GlobalState";
 
 /** Only show this component if the user doesn't already own the piece and their wallet is connected. */
 export const MintButton = ({
@@ -98,7 +96,6 @@ export const MintButton = ({
 
   return (
     <>
-      <Toaster />
       <Button variant="secondary" onClick={onClick} loading={submitting}>
         Mint
       </Button>

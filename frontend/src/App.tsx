@@ -14,7 +14,7 @@ import {
 import { FewchaWallet } from "fewcha-plugin-wallet-adapter";
 import { MartianWallet } from "@martianwallet/aptos-wallet-adapter";
 import { PontemWallet } from "@pontem/wallet-adapter-plugin";
-import { ModalContainer } from "@aptos-internal/design-system-web";
+import { ModalContainer, Toaster } from "@aptos-internal/design-system-web";
 
 // It is okay for this to be publicly accessible.
 const identityConnectDappId = "ca7fe716-4187-4d84-8fc4-641aaf98ccd7";
@@ -64,6 +64,7 @@ export const AppInner = () => {
         <QueryClientProvider client={queryClient}>
           <MyRoutes />
           <ModalContainer />
+          <Toaster />
         </QueryClientProvider>
       </AptosWalletAdapterProvider>
     </div>
