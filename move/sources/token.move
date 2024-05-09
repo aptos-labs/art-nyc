@@ -138,12 +138,10 @@ module addr::nyc_token {
                 let object_addr = object::object_address(&token);
                 let refs_ = borrow_global<TokenRefs>(object_addr);
                 let piece_data = get_piece_data(&art_data, &refs_.piece_id);
-                /*
                 token::set_name(
                     &refs_.mutator_ref,
                     get_piece_name(piece_data)
                 );
-                */
                 token::set_description(
                     &refs_.mutator_ref,
                     get_piece_description(piece_data)
