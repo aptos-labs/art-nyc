@@ -5,6 +5,7 @@
   "dependencies": {
     "@aptos-internal/design-system-web": "0.1.0-beta.28",
     "@aptos-labs/ts-sdk": "^1.13.3",
+    "@aptos-labs/aptos-fee-payer-client": "^0.0.7",
     "@aptos-labs/wallet-adapter-ant-design": "^2.2.4",
     "@aptos-labs/wallet-adapter-core": "^3.12.0",
     "@aptos-labs/wallet-adapter-react": "^2.3.5",

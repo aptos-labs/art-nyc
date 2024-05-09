@@ -1,4 +1,5 @@
 import { useGlobalState } from "@/context/GlobalState";
+import { FeePayerArgs, onClickSubmitTransaction } from "@/utils";
 import {
   Button,
   Toaster,
@@ -27,16 +28,14 @@ export const UpdateButton = ({
   enabled: boolean;
   text: string;
 }) => {
-  const { account, connected, signAndSubmitTransaction } = useWallet();
+  const { account, connected, signAndSubmitTransaction, signTransaction } =
+    useWallet();
   const [submitting, setSubmitting] = useState(false);
   const [globalState] = useGlobalState();
 
-  const onClick = async () => {
-    if (account === null) {
-      throw "Account should be non null at this point";
-    }
-    setSubmitting(true);
+  // todo
 
+  const onClick = async () => {
     let metadataKeys = Array.from(metadata.keys());
     let metadataValues = Array.from(metadata.values());
     const payload: InputEntryFunctionData = {
@@ -51,33 +50,32 @@ export const UpdateButton = ({
         metadataValues,
       ],
     };
-
-    try {
-      let submissionResponse = await signAndSubmitTransaction({
-        sender: account.address,
-        data: payload,
-      });
-      await globalState.client.waitForTransaction({
-        transactionHash: submissionResponse.hash,
-        options: { checkSuccess: true, waitForIndexer: true },
-      });
-
-      toast({
+    let feePayerArgs: FeePayerArgs | undefined;
+    if (globalState.feePayerClient) {
+      feePayerArgs = {
+        feePayerClient: globalState.feePayerClient,
+        signTransaction,
+      };
+    }
+    await onClickSubmitTransaction({
+      payload,
+      signAndSubmitTransaction,
+      feePayerArgs,
+      setSubmitting,
+      account,
+      aptos: globalState.client,
+      successToast: {
         title: "Success!",
         description: `Successfully updated art data for ${pieceId}`,
         variant: "success",
         duration: 5000,
-      });
-    } catch (error) {
-      console.log(`Error updating art data: ${JSON.stringify(error)}`);
-      toast({
+      },
+      errorToast: {
         title: "Error updating art data",
-        description: `${error}`,
         variant: "error",
         duration: 5000,
-      });
-    }
-    setSubmitting(false);
+      },
+    });
   };
 
   const finalEnabled =
