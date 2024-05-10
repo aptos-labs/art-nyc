@@ -63,7 +63,7 @@ export const PieceEditor = ({
             onClick={async () => {
               const url = `${window.location.protocol}//${window.location.host}/mint/${pieceId}?network=${globalState.network}`;
               await navigator.clipboard.writeText(
-                `https://petra.app/explore?link=${encodeURI(url)}`,
+                `https://petra.app/explore?link=${url}`,
               );
             }}
           >
