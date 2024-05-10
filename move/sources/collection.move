@@ -366,6 +366,10 @@ module addr::nyc_collection {
         piece_data.token_uri
     }
 
+    public fun get_piece_metadata(piece_data: &PieceData): SimpleMap<String, String> {
+        piece_data.metadata
+    }
+
     public entry fun set_minting_enabled(caller: &signer, enabled: bool) acquires AdminData {
         assert_caller_is_collection_admin(caller);
         let collection = get_collection();

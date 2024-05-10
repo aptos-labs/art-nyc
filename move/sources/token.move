@@ -10,6 +10,7 @@ module addr::nyc_token {
         get_minting_enabled,
         get_piece_data,
         get_piece_description,
+        get_piece_metadata,
         get_piece_name,
         get_piece_uri,
         is_token_owner,
@@ -20,8 +21,10 @@ module addr::nyc_token {
     use std::string::{Self, String};
     use std::signer;
     use std::vector;
-    use aptos_std::object::{Self, Object};
+    use aptos_std::object::{Self, ConstructorRef, Object};
+    use aptos_std::simple_map;
     use aptos_token_objects::token::{Self, MutatorRef, Token};
+    use aptos_token_objects::property_map;
 
     /// You have already minted this piece of art.
     const E_ALREADY_MINTED: u64 = 100;
@@ -98,6 +101,9 @@ module addr::nyc_token {
             uri,
         );
 
+        // Set a property map on the token.
+        set_property_map(&constructor_ref, piece_id);
+
         let object_signer = object::generate_signer(&constructor_ref);
         let mutator_ref = token::generate_mutator_ref(&constructor_ref);
 
@@ -115,6 +121,25 @@ module addr::nyc_token {
         record_minted(mint_to, piece_id);
 
         object::object_from_constructor_ref(&constructor_ref)
+    }
+
+    fun set_property_map(constructor_ref: &ConstructorRef, piece_id: String) {
+        let art_data = get_art_data();
+        let piece_data = get_piece_data(&art_data, &piece_id);
+        let metadata = get_piece_metadata(piece_data);
+        property_map::init(
+            constructor_ref,
+            property_map::prepare_input(vector::empty(), vector::empty(), vector::empty())
+        );
+        let mutator_ref = property_map::generate_mutator_ref(constructor_ref);
+        let (keys, values) = simple_map::to_vec_pair(metadata);
+        vector::zip(
+            keys,
+            values,
+            |key, value| {
+                property_map::add_typed(&mutator_ref, key, value);
+            }
+        );
     }
 
     ///////////////////////////////////////////////////////////////////////////////////
