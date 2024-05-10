@@ -101,7 +101,8 @@ module addr::nyc_token {
             uri,
         );
 
-        // Set a property map on the token.
+        // Set a property map on the token with all the piece metadata so it shows
+        // up in the attributes section in Petra.
         set_property_map(&constructor_ref, piece_id);
 
         let object_signer = object::generate_signer(&constructor_ref);
@@ -137,6 +138,8 @@ module addr::nyc_token {
             keys,
             values,
             |key, value| {
+                // TODO: Replace _ with " "
+                // https://aptos-org.slack.com/archives/C036X27DZNG/p1715368231700529
                 property_map::add_typed(&mutator_ref, key, value);
             }
         );
@@ -149,6 +152,8 @@ module addr::nyc_token {
 
     /// For a given list of tokens, update the token name, description, and URI based on
     /// the current ArtData.
+    //
+    // TODO: Support fixing the property map based on the metadata too.
     public entry fun fix_data(
         caller: &signer,
         tokens: vector<Object<Token>>,
@@ -462,3 +467,4 @@ module addr::nyc_token {
         );
     }
 }
+
