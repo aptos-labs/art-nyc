@@ -7,6 +7,11 @@ import { MetadataFields } from "./MetadataFields";
 import { mapsAreEqual } from "@/utils";
 import { Link } from "react-router-dom";
 import { useGlobalState } from "@/context/GlobalState";
+import {
+  Button,
+  IconClipboardLine,
+  Tooltip,
+} from "@aptos-internal/design-system-web";
 
 /** A component where you can see the existing art data and make changes. */
 export const PieceEditor = ({
@@ -41,6 +46,29 @@ export const PieceEditor = ({
         <Link to={`/mint/${pieceId}?network=${globalState.network}`}>
           {pieceId}
         </Link>
+        <Tooltip
+          placement="top-start"
+          content={
+            <p className={css({ textStyle: "body.300.regular" })}>
+              Copy Petra deeplink URL
+            </p>
+          }
+        >
+          <Button
+            type="button"
+            className={css({ marginLeft: "16" })}
+            iconOnly={true}
+            variant="secondary"
+            size="sm"
+            onClick={async () => {
+              await navigator.clipboard.writeText(
+                `https://petra.app/explore?link=${window.location.protocol}//${window.location.host}/mint/${pieceId}?network=${globalState.network}`,
+              );
+            }}
+          >
+            <IconClipboardLine />
+          </Button>
+        </Tooltip>
       </p>
       <SharedFormFields
         pieceName={pieceName}

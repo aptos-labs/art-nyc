@@ -44,7 +44,9 @@ export const TokenInfo = ({ pieceData }: { pieceData: PieceData }) => {
 
   const instagramHref =
     metadata.instagram_handle &&
-    `https://instagram.com/${metadata.instagram_handle.trim().replace("@", "")}`;
+    `https://instagram.com/${metadata.instagram_handle
+      .trim()
+      .replace("@", "")}`;
 
   const twitterHref =
     metadata.twitter_handle &&
