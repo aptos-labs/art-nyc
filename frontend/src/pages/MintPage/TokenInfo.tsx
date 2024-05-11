@@ -1,11 +1,13 @@
 import { PieceData, getPieceDataMetadata } from "@/types/surf";
 import {
   Button,
+  Card,
   IconExternalLinkLine,
   IconInstagramLine,
   IconTwitterLine,
 } from "@aptos-internal/design-system-web";
 import { css } from "styled-system/css";
+import { stack } from "styled-system/patterns";
 
 type TypedMetadata = {
   artist_name?: string;
@@ -58,7 +60,7 @@ export const TokenInfo = ({ pieceData }: { pieceData: PieceData }) => {
   }
 
   return (
-    <>
+    <Card className={stack({ align: "center", gap: "0" })}>
       <div
         className={css({
           display: "flex",
@@ -128,6 +130,6 @@ export const TokenInfo = ({ pieceData }: { pieceData: PieceData }) => {
       >
         {pieceData.token_description}
       </p>
-    </>
+    </Card>
   );
 };

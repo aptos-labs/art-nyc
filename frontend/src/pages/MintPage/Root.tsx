@@ -6,6 +6,7 @@ import { css } from "styled-system/css";
 import { MintButton } from "./MintButton";
 import { TokenInfo } from "./TokenInfo";
 import { ViewButton } from "./ViewButton";
+import { stack } from "styled-system/patterns";
 
 /**
  * In the index we handle all the data fetching and showing different stuff if the data
@@ -27,24 +28,27 @@ export const Root = ({
   // TODO: in the hamburger, add a button to toggle sponsored txn vs direct submission mode
   let button;
   if (!walletConnected) {
-    button = <Button onClick={openWalletSelector}>Connect Wallet</Button>;
+    button = (
+      <Button size="lg" onClick={openWalletSelector}>
+        Connect Wallet
+      </Button>
+    );
   } else if (userOwnsThisPieceAlready) {
     button = <ViewButton pieceData={pieceData} />;
   } else {
-    button = <MintButton pieceId={pieceId} pieceData={pieceData} />;
+    button = <MintButton pieceId={pieceId} />;
   }
 
   // TODO: Make sure any newlines and the like in the description are respected.
   return (
     <div
-      className={css({
-        display: "grid",
-        placeItems: "center",
+      className={stack({
+        align: "center",
+        gap: "32",
         padding: { base: "16", md: "32" },
       })}
     >
       <TokenInfo pieceData={pieceData} />
-      <br />
       {button}
     </div>
   );

@@ -233,7 +233,6 @@ export async function onClickSubmitTransaction({
   payload,
   signAndSubmitTransaction,
   feePayerArgs,
-  setSubmitting,
   account,
   aptos,
   successToast,
@@ -242,7 +241,6 @@ export async function onClickSubmitTransaction({
   payload: InputEntryFunctionData;
   signAndSubmitTransaction: (transaction: InputTransactionData) => Promise<any>;
   feePayerArgs?: FeePayerArgs;
-  setSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
   account: AccountInfo | null;
   aptos: Aptos;
   successToast: CreateToastArgs;
@@ -251,7 +249,6 @@ export async function onClickSubmitTransaction({
   if (account === null) {
     throw "Account should be non null at this point";
   }
-  setSubmitting(true);
 
   let out: CommittedTransactionResponse | null = null;
   try {
@@ -305,6 +302,6 @@ export async function onClickSubmitTransaction({
       ...errorToast,
     });
   }
-  setSubmitting(false);
+
   return out;
 }

@@ -21,8 +21,6 @@ export function useGetPieceIds(
   const [globalState] = useGlobalState();
   const resourceType = `${globalState.moduleAddress}::nyc_token::TokenRefs`;
 
-  console.log(options);
-
   const result: Output = useQueries({
     queries: (tokenAddresses ?? []).map((address) => ({
       queryKey: ["getPieceId", address],
@@ -39,7 +37,6 @@ export function useGetPieceIds(
       // Combine all results into a single state object
       return results.reduce(
         (acc: Output, result, index) => {
-          console.log("res", result);
           const refs = result.data as TokenRefs | undefined;
           const pieceId = refs ? refs.piece_id : undefined;
 

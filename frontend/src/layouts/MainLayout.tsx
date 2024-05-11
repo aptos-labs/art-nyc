@@ -25,8 +25,6 @@ interface LayoutProps {
 }
 
 export default function MainLayout({ children }: LayoutProps) {
-  const { isLoading } = useWallet();
-
   const headerContent = (
     <div
       className={flex({
@@ -43,34 +41,12 @@ export default function MainLayout({ children }: LayoutProps) {
     </div>
   );
 
-  const body = (
+  return (
     <div className={flex({ flexDirection: "column", margin: "16" })}>
       {headerContent}
       {children}
     </div>
   );
-
-  // Blur the content if we're connecting a wallet.
-  let out;
-  if (isLoading) {
-    out = (
-      <div
-        className={css({
-          filter: "[blur(4px) brightness(0.8)]",
-          pointerEvents: "none",
-          position: "absolute",
-          width: "max",
-          height: "max",
-        })}
-      >
-        {body}
-      </div>
-    );
-  } else {
-    out = body;
-  }
-
-  return out;
 }
 
 function MyMenu() {

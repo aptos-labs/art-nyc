@@ -31,6 +31,7 @@ export const UpdateButton = ({
   // todo
 
   const onClick = async () => {
+    setSubmitting(true);
     let metadataKeys = Array.from(metadata.keys());
     let metadataValues = Array.from(metadata.values());
     const payload: InputEntryFunctionData = {
@@ -57,7 +58,6 @@ export const UpdateButton = ({
       payload,
       signAndSubmitTransaction,
       feePayerArgs,
-      setSubmitting,
       account,
       aptos: globalState.client,
       successToast: {
@@ -72,6 +72,7 @@ export const UpdateButton = ({
         duration: 5000,
       },
     });
+    setSubmitting(false);
   };
 
   const finalEnabled =

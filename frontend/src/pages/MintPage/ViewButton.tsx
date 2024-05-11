@@ -5,26 +5,24 @@ import { css } from "styled-system/css";
 
 export const ViewButton = ({ pieceData }: { pieceData: PieceData }) => {
   return (
-    <>
-      <Modal
-        renderContent={({ close }) => {
-          const ipfsGatewayUrl = getImageUrl(pieceData);
-          return (
-            <ModalContent
-              className={css({
-                maxW: "[100vw]",
-                maxH: "[100vh]",
-              })}
-            >
-              <div>
-                <img src={ipfsGatewayUrl} alt={pieceData.token_name} />
-              </div>
-            </ModalContent>
-          );
-        }}
-        trigger={<Button variant="secondary">View</Button>}
-      />
-    </>
+    <Modal
+      renderContent={({ close }) => {
+        const ipfsGatewayUrl = getImageUrl(pieceData);
+        return (
+          <ModalContent
+            className={css({
+              maxW: "[100vw]",
+              maxH: "[100vh]",
+            })}
+          >
+            <div>
+              <img src={ipfsGatewayUrl} alt={pieceData.token_name} />
+            </div>
+          </ModalContent>
+        );
+      }}
+      trigger={<Button size="lg">View</Button>}
+    />
   );
 };
 

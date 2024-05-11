@@ -1,19 +1,16 @@
 import { useGetPieceData } from "@/api/hooks/useGetPieceData";
 import { useParams } from "react-router-dom";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import { useGetTokens } from "@/api/hooks/useGetTokens";
+import { useGetTokenAddresses } from "@/api/hooks/useGetTokenAddresses";
 import { useGetPieceIds } from "@/api/hooks/useGetPieceIds";
 import { Root } from "./Root";
+import { Button, Card } from "@aptos-internal/design-system-web";
+import { stack } from "styled-system/patterns";
 
 export const MintPage = () => {
   const { pieceId } = useParams();
 
-  // TODO: Figure out when isLoading is which value.
-  const {
-    connected: walletConnected,
-    isLoading: walletIsLoading,
-    account,
-  } = useWallet();
+  const { isLoading: walletIsLoading, account } = useWallet();
 
   // Look up the data for this piece (name, description, etc).
   const {
@@ -26,16 +23,13 @@ export const MintPage = () => {
 
   // Lookup what tokens the user owns right now in this collection.
   const {
-    data: tokensData,
+    data: tokenAddresses,
     isLoading: tokensIsLoading,
     error: tokensError,
-  } = useGetTokens(account?.address!, {
+  } = useGetTokenAddresses(account?.address!, {
     enabled: account !== null && account.address !== undefined,
   });
 
-  console.log("tokensData", tokensData);
-  const tokenAddresses = tokensData?.map((t) => t.token_data_id);
-  console.log("tokenAddressesouter", tokenAddresses);
   // Lookup the piece IDs of those tokens.
   const {
     pieceIds,
@@ -44,6 +38,12 @@ export const MintPage = () => {
   } = useGetPieceIds(tokenAddresses!, {
     enabled: tokenAddresses !== undefined,
   });
+
+  const isLoading =
+    walletIsLoading ||
+    !tokenAddresses ||
+    pieceDataIsLoading ||
+    pieceIdsIsLoading;
 
   if (!pieceId) {
     return <p>No piece ID in path</p>;
@@ -59,8 +59,21 @@ export const MintPage = () => {
     );
   }
 
-  if (pieceDataIsLoading || tokensIsLoading || pieceIdsError) {
-    return <p>Loading...</p>;
+  if (isLoading) {
+    return (
+      <div
+        className={stack({
+          align: "center",
+          gap: "32",
+          padding: { base: "16", md: "32" },
+        })}
+      >
+        <Card>Loading...</Card>
+        <Button size="lg" loading>
+          Mint
+        </Button>
+      </div>
+    );
   }
 
   if (!pieceData) {
