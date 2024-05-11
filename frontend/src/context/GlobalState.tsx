@@ -15,13 +15,17 @@ export type GlobalState = {
   readonly collectionAddress: string;
   /** derived from network_value */
   readonly feePayerClient?: Client;
+  /** determined by the user using the toggle in the menu */
+  useFeePayer: boolean;
 };
 
-type GlobalActions = {
-  selectNetwork: ReturnType<typeof useNetworkSelector>[1];
-};
-
-function deriveGlobalState({ network }: { network: Network }): GlobalState {
+function deriveGlobalState({
+  network,
+  useFeePayer,
+}: {
+  network: Network;
+  useFeePayer: boolean;
+}): GlobalState {
   const config = new AptosConfig({ network });
   const client = new Aptos(config);
   let moduleAddress;
@@ -60,12 +64,19 @@ function deriveGlobalState({ network }: { network: Network }): GlobalState {
     moduleAddress,
     collectionAddress,
     feePayerClient,
+    useFeePayer,
   };
 }
 
 const initialGlobalState = deriveGlobalState({
   network: defaultNetwork,
+  useFeePayer: true,
 });
+
+type GlobalActions = {
+  selectNetwork: ReturnType<typeof useNetworkSelector>[1];
+  setUseFeePayer: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 export const GlobalStateContext = createContext(initialGlobalState);
 export const GlobalActionsContext = createContext({} as GlobalActions);
@@ -76,19 +87,22 @@ export const GlobalStateProvider = ({
   children: React.ReactNode;
 }) => {
   const [selectedNetwork, selectNetwork] = useNetworkSelector();
+  const [useFeePayer, setUseFeePayer] = React.useState(true);
   const globalState: GlobalState = useMemo(
     () =>
       deriveGlobalState({
         network: selectedNetwork,
+        useFeePayer,
       }),
-    [selectedNetwork],
+    [selectedNetwork, useFeePayer],
   );
 
   const globalActions = useMemo(
     () => ({
       selectNetwork,
+      setUseFeePayer,
     }),
-    [selectNetwork],
+    [selectNetwork, setUseFeePayer],
   );
 
   return (

@@ -1,14 +1,18 @@
 import "../../global.css";
 import { AptosLogo } from "@/components/AptosLogo";
 import { openWalletSelector } from "@/components/WalletSelector";
+import { useGlobalState } from "@/context/GlobalState";
 import { navigateExternal } from "@/utils";
 import {
   Button,
+  IconGasStationLine,
   IconGithub,
   IconLoginBoxLine,
   IconLogoutBoxLine,
   IconMenu3Line,
+  IconMoneyDollarBoxLine,
   Menu,
+  toast,
 } from "@aptos-internal/design-system-web";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import React from "react";
@@ -71,6 +75,7 @@ export default function MainLayout({ children }: LayoutProps) {
 
 function MyMenu() {
   const { connected, disconnect } = useWallet();
+  const [globalState, globalActions] = useGlobalState();
 
   const walletItem = connected
     ? {
@@ -86,11 +91,38 @@ function MyMenu() {
         onSelect: openWalletSelector,
       };
 
+  function getFeePayerItem(
+    label: string,
+    icon: (props: React.SVGProps<SVGSVGElement>) => React.JSX.Element,
+  ) {
+    return {
+      Icon: icon,
+      id: "feepayer",
+      label,
+      onSelect: () => {
+        globalActions.setUseFeePayer((current) => {
+          let newValue = !current;
+          let title = newValue ? "Fee Payer Enabled" : "Fee Payer Disabled";
+          let description = newValue
+            ? "The fee payer will pay gas on your behalf."
+            : "You will pay for gas yourself.";
+          toast({ title, description, variant: "info", duration: 5000 });
+          return !current;
+        });
+      },
+    };
+  }
+
+  const feePayerItem = globalState.useFeePayer
+    ? getFeePayerItem("Pay Own Gas", IconGasStationLine)
+    : getFeePayerItem("Use Fee Payer", IconMoneyDollarBoxLine);
+
   return (
     <>
       <Menu
         menuItems={[
           walletItem,
+          feePayerItem,
           {
             Icon: IconGithub,
             id: "source",

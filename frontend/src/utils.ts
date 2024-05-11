@@ -216,6 +216,8 @@ export const navigateExternal = (url: string) => {
 };
 
 export type FeePayerArgs = {
+  /** This should come from useFeePayer in the global state. */
+  useFeePayer: boolean;
   feePayerClient: Client;
   signTransaction: (
     transactionOrPayload: AnyRawTransaction | Types.TransactionPayload,
@@ -254,7 +256,7 @@ export async function onClickSubmitTransaction({
   let out: CommittedTransactionResponse | null = null;
   try {
     let submissionResponse: PendingTransactionResponse;
-    if (feePayerArgs) {
+    if (feePayerArgs && feePayerArgs.useFeePayer) {
       const unsignedTransaction = await aptos.transaction.build.simple({
         sender: account.address,
         data: payload,

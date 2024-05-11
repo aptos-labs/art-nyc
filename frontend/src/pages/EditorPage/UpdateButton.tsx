@@ -48,6 +48,7 @@ export const UpdateButton = ({
     let feePayerArgs: FeePayerArgs | undefined;
     if (globalState.feePayerClient) {
       feePayerArgs = {
+        useFeePayer: globalState.useFeePayer,
         feePayerClient: globalState.feePayerClient,
         signTransaction,
       };
