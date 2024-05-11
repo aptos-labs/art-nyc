@@ -10,7 +10,7 @@ import { stack } from "styled-system/patterns";
 export const MintPage = () => {
   const { pieceId } = useParams();
 
-  const { isLoading: walletIsLoading, account } = useWallet();
+  const { account } = useWallet();
 
   // Look up the data for this piece (name, description, etc).
   const {
@@ -39,11 +39,7 @@ export const MintPage = () => {
     enabled: tokenAddresses !== undefined,
   });
 
-  const isLoading =
-    walletIsLoading ||
-    !tokenAddresses ||
-    pieceDataIsLoading ||
-    pieceIdsIsLoading;
+  const isLoading = !tokenAddresses || pieceDataIsLoading || pieceIdsIsLoading;
 
   if (!pieceId) {
     return <p>No piece ID in path</p>;
