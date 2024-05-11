@@ -39,8 +39,6 @@ export const MintPage = () => {
     enabled: tokenAddresses !== undefined,
   });
 
-  const isLoading = !tokenAddresses || pieceDataIsLoading || pieceIdsIsLoading;
-
   if (!pieceId) {
     return <p>No piece ID in path</p>;
   }
@@ -55,7 +53,7 @@ export const MintPage = () => {
     );
   }
 
-  if (isLoading) {
+  if (pieceDataIsLoading) {
     return (
       <div
         className={stack({
