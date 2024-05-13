@@ -1,6 +1,6 @@
 import { useGetPieceData } from "@/api/hooks/useGetPieceData";
 import { useParams } from "react-router-dom";
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { WalletReadyState, useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useGetTokenAddresses } from "@/api/hooks/useGetTokenAddresses";
 import { useGetPieceIds } from "@/api/hooks/useGetPieceIds";
 import { Root } from "./Root";
@@ -8,10 +8,26 @@ import { Button, Card } from "@aptos-internal/design-system-web";
 import { stack } from "styled-system/patterns";
 import { Skeleton } from "@/components/Skeleton";
 import { css } from "styled-system/css";
+import { useEffect } from "react";
 
 export const MintPage = () => {
   const { pieceId } = useParams();
-  const { account } = useWallet();
+  const { account, connected, isLoading, connect, wallets } = useWallet();
+
+  useEffect(() => {
+    const supportsTouch = "ontouchstart" in document.documentElement;
+    const petra = wallets?.find((wallet) => wallet.name === "Petra");
+
+    // Auto-connect when running inside the Petra browser
+    if (
+      !isLoading &&
+      !connected &&
+      supportsTouch &&
+      petra?.readyState === WalletReadyState.Installed
+    ) {
+      connect(petra.name);
+    }
+  }, [connect, connected, isLoading, wallets]);
 
   // Look up the data for this piece (name, description, etc).
   const {
