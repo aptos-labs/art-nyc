@@ -22,7 +22,7 @@ export const HomePage = () => {
       })}
     >
       <div
-        style={{ opacity: isLoading ? 1 : 1 }}
+        style={{ opacity: isLoading ? 1 : 0 }}
         className={flex({
           position: "absolute",
           w: "full",
