@@ -17,19 +17,19 @@ export const HomePage = () => {
         wrap: "wrap",
         gap: "32",
         justify: "center",
+        w: "full",
         maxW: "[1200px]",
       })}
     >
       <div
-        style={{ opacity: isLoading ? 1 : 0 }}
+        style={{ opacity: isLoading ? 1 : 1 }}
         className={flex({
           position: "absolute",
-          p: "16",
+          w: "full",
           wrap: "wrap",
           gap: "32",
           justify: "center",
-          w: "full",
-          transition: "[opacity 0.6s ease]",
+          transition: "[opacity 1.4s ease]",
         })}
       >
         {range(0, 16).map((i) => (
