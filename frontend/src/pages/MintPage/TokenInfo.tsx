@@ -66,14 +66,15 @@ export const TokenInfo = ({ pieceData }: { pieceData: PieceData }) => {
       className={stack({
         position: "relative",
         w: "full",
-        align: "center",
         gap: "0",
       })}
     >
       <ImageShadow name={pieceData.token_name} src={getImageUrl(pieceData)} />
       <div className={flex({ align: "center" })}>
         {metadata.artist_name && (
-          <p className={css({ pr: "4" })}>{metadata.artist_name}</p>
+          <p className={css({ textStyle: "body.300.regular", pr: "4" })}>
+            {metadata.artist_name}
+          </p>
         )}
         {instagramHref && (
           <Button
@@ -115,18 +116,31 @@ export const TokenInfo = ({ pieceData }: { pieceData: PieceData }) => {
           </Button>
         )}
       </div>
-      <p className={css({ textStyle: "heading.100.semibold" })}>
+      <p
+        className={css({
+          textStyle: "heading.100.semibold",
+          fontWeight: "bold",
+        })}
+      >
         <i>{pieceData.token_name}</i>
-        {metadata.creation_year ? `, ${metadata.creation_year}` : ""}
+        <span className={css({ fontWeight: "regular" })}>
+          {metadata.creation_year ? `, ${metadata.creation_year}` : ""}
+        </span>
       </p>
       {metadata.material_description && (
-        <p className={css({})}>{metadata.material_description}</p>
+        <p
+          className={css({
+            color: "text.secondary",
+            textStyle: "body.300.regular",
+          })}
+        >
+          {metadata.material_description}
+        </p>
       )}
       <br />
       <p
         className={css({
           whiteSpace: "pre-wrap",
-          textAlign: "center",
           textStyle: "body.300.regular",
           maxW: "prose",
         })}
