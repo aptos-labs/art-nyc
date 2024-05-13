@@ -60,7 +60,7 @@ export default function MainLayout({ children }: LayoutProps) {
 }
 
 function MyMenu() {
-  const { connected, connect, disconnect } = useWallet();
+  const { connected, connect, disconnect, wallets } = useWallet();
   const [globalState, globalActions] = useGlobalState();
 
   const walletItem = connected
@@ -119,10 +119,18 @@ function MyMenu() {
         // TODO: Remove later. This is for debugging
         {
           Icon: IconBugLine,
-          id: "userAgent",
-          label: "View User Agent",
+          id: "debug",
+          label: "Debug",
           onSelect: () => {
-            alert(window.navigator.userAgent);
+            const petra = wallets?.find((wallet) => wallet.name === "Petra");
+
+            alert(
+              JSON.stringify({
+                name: petra?.name,
+                readyState: petra?.readyState,
+                url: petra?.url,
+              }),
+            );
           },
         },
       ]}
