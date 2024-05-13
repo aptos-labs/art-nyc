@@ -1,4 +1,8 @@
-import { PieceData, getPieceDataMetadata } from "@/types/surf";
+import {
+  PieceData,
+  getPieceDataMetadata,
+  getTypedMetadata,
+} from "@/types/surf";
 import { getImageUrl } from "@/utils";
 import {
   Button,
@@ -10,38 +14,6 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { css } from "styled-system/css";
 import { flex, stack } from "styled-system/patterns";
-
-type TypedMetadata = {
-  artist_name?: string;
-  creation_year?: string;
-  material_description?: string;
-  website_url?: string;
-  instagram_handle?: string;
-  twitter_handle?: string;
-};
-
-/**
- * Just a convenience for the edit page. Try to keep this up to date with the fields
- * in AdditionalArtData.
- */
-export const knownMetadataKeys: (keyof TypedMetadata)[] = [
-  "artist_name",
-  "creation_year",
-  "material_description",
-  "website_url",
-  "instagram_handle",
-  "twitter_handle",
-];
-
-function getTypedMetadata(metadata: Map<string, string>): TypedMetadata {
-  const additionalData: Partial<TypedMetadata> = {};
-
-  knownMetadataKeys.forEach((field) => {
-    additionalData[field] = metadata.get(field) || undefined;
-  });
-
-  return additionalData as TypedMetadata;
-}
 
 export const TokenInfo = ({ pieceData }: { pieceData: PieceData }) => {
   const metadata = getTypedMetadata(getPieceDataMetadata(pieceData));

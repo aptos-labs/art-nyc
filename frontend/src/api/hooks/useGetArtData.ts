@@ -1,7 +1,7 @@
 import { simpleMapArrayToMap } from "@/utils";
 import { useGlobalState } from "../../context/GlobalState";
 import { useGetAccountResource } from "./useGetAccountResource";
-import { ArtData } from "@/types/surf";
+import { ArtData, PieceData } from "@/types/surf";
 
 export function useGetArtData(
   options: { enabled?: boolean; refetchInterval?: number } = {},
@@ -21,7 +21,7 @@ export function useGetArtData(
     }
   }
   const artDataInner = artData?.data
-    ? simpleMapArrayToMap(artData.data as any)
+    ? (simpleMapArrayToMap(artData.data as any) as Map<string, PieceData>)
     : undefined;
   return { artDataInner, ...result };
 }

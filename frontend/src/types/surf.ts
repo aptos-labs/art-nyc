@@ -28,3 +28,35 @@ export function getPieceDataMetadata(
 ): Map<string, string> {
   return simpleMapArrayToMap((pieceData.metadata as any).data);
 }
+
+export type TypedMetadata = {
+  artist_name?: string;
+  creation_year?: string;
+  material_description?: string;
+  website_url?: string;
+  instagram_handle?: string;
+  twitter_handle?: string;
+};
+
+/**
+ * Just a convenience for the edit page. Try to keep this up to date with the fields
+ * in AdditionalArtData.
+ */
+export const knownMetadataKeys: (keyof TypedMetadata)[] = [
+  "artist_name",
+  "creation_year",
+  "material_description",
+  "website_url",
+  "instagram_handle",
+  "twitter_handle",
+];
+
+export function getTypedMetadata(metadata: Map<string, string>): TypedMetadata {
+  const additionalData: Partial<TypedMetadata> = {};
+
+  knownMetadataKeys.forEach((field) => {
+    additionalData[field] = metadata.get(field) || undefined;
+  });
+
+  return additionalData as TypedMetadata;
+}

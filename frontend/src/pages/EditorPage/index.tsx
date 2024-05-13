@@ -4,7 +4,7 @@ import { PieceCreator } from "./PieceCreator";
 import { css } from "styled-system/css";
 import { Card } from "@aptos-internal/design-system-web";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import { knownMetadataKeys } from "../MintPage/TokenInfo";
+import { knownMetadataKeys } from "@/types/surf";
 
 /**
  * A place where you can see the existing art data and make changes.
