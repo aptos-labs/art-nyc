@@ -116,23 +116,6 @@ function MyMenu() {
             navigateExternal("https://github.com/banool/aptos-nyc-2024");
           },
         },
-        // TODO: Remove later. This is for debugging
-        {
-          Icon: IconBugLine,
-          id: "debug",
-          label: "Debug",
-          onSelect: () => {
-            const petra = wallets?.find((wallet) => wallet.name === "Petra");
-
-            alert(
-              JSON.stringify({
-                name: petra?.name,
-                readyState: petra?.readyState,
-                url: petra?.url,
-              }),
-            );
-          },
-        },
       ]}
       trigger={
         <Button
