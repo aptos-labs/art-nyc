@@ -68,7 +68,7 @@ export const MintPage = () => {
           p: "16",
           w: "full",
           maxW: "[500px]",
-          transition: "[transform 0.6s ease]",
+          transition: "[opacity 0.6s ease]",
         })}
       >
         <Skeleton
