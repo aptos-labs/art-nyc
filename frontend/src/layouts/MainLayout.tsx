@@ -45,7 +45,7 @@ export default function MainLayout({ children }: LayoutProps) {
         />
       </Link>
       <h1 className={css({ textStyle: "heading.100.semibold" })}>
-        Art Night in NYC
+        Aptos Art Gallery NYC
       </h1>
       <MyMenu />
     </div>
