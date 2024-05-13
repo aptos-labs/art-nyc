@@ -7,10 +7,12 @@ import {
   Button,
   IconGasStationLine,
   IconGithub,
+  IconGithubLine,
   IconLoginBoxLine,
   IconLogoutBoxLine,
   IconMenu3Line,
   IconMoneyDollarBoxLine,
+  IconMore2Line,
   Menu,
   toast,
 } from "@aptos-internal/design-system-web";
@@ -18,7 +20,7 @@ import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { css } from "styled-system/css";
-import { flex } from "styled-system/patterns";
+import { flex, stack } from "styled-system/patterns";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -28,21 +30,28 @@ export default function MainLayout({ children }: LayoutProps) {
   const headerContent = (
     <div
       className={flex({
-        alignItems: "center",
-        justifyContent: "space-between",
+        align: "center",
+        justify: "space-between",
+        w: "full",
+        px: "16",
+        py: "12",
+        color: "text.primary",
       })}
     >
       <Link to="/">
         <AptosLogo
-          className={css({ h: "48", w: "48", color: "text.primary" })}
+          className={css({ h: "32", w: "32", color: "text.primary" })}
         />
       </Link>
+      <h1 className={css({ textStyle: "heading.100.semibold" })}>
+        Art Night in NYC
+      </h1>
       <MyMenu />
     </div>
   );
 
   return (
-    <div className={flex({ flexDirection: "column", margin: "16" })}>
+    <div className={stack({ align: "center", gap: "0" })}>
       {headerContent}
       {children}
     </div>
@@ -94,32 +103,30 @@ function MyMenu() {
     : getFeePayerItem("Use Fee Payer", IconMoneyDollarBoxLine);
 
   return (
-    <>
-      <Menu
-        menuItems={[
-          walletItem,
-          feePayerItem,
-          {
-            Icon: IconGithub,
-            id: "source",
-            label: "View Source",
-            onSelect: () => {
-              navigateExternal("https://github.com/banool/aptos-nyc-2024");
-            },
+    <Menu
+      menuItems={[
+        walletItem,
+        feePayerItem,
+        {
+          Icon: IconGithubLine,
+          id: "source",
+          label: "View Source",
+          onSelect: () => {
+            navigateExternal("https://github.com/banool/aptos-nyc-2024");
           },
-        ]}
-        trigger={
-          <Button
-            iconOnly={true}
-            variant="secondary"
-            size="md"
-            aria-label="Open Menu"
-          >
-            <IconMenu3Line className={css({ h: "24", w: "24" })} />
-          </Button>
-        }
-      />
-    </>
+        },
+      ]}
+      trigger={
+        <Button
+          iconOnly={true}
+          variant="secondaryText"
+          size="sm"
+          aria-label="Open Menu"
+        >
+          <IconMore2Line className={css({ h: "24", w: "24" })} />
+        </Button>
+      }
+    />
   );
   // TODO: Consider making this a larger button with text desktop rather than a hamburger.
 }

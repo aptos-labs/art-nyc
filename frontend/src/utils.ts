@@ -16,6 +16,8 @@ import {
   InputTransactionData,
   Types,
 } from "@aptos-labs/wallet-adapter-core";
+import { PieceData } from "./types/surf";
+import { PINATA_GATEWAY_TOKEN } from "./constants";
 
 /*
  * Converts a utf8 string encoded as hex back to string
@@ -304,4 +306,9 @@ export async function onClickSubmitTransaction({
   }
 
   return out;
+}
+
+export function getImageUrl(pieceData: PieceData) {
+  const hash = pieceData.token_uri.split("/").pop();
+  return `https://aptos-labs.mypinata.cloud/ipfs/${hash}?pinataGatewayToken=${PINATA_GATEWAY_TOKEN}`;
 }

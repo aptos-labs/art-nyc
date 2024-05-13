@@ -6,10 +6,11 @@ import { useGetPieceIds } from "@/api/hooks/useGetPieceIds";
 import { Root } from "./Root";
 import { Button, Card } from "@aptos-internal/design-system-web";
 import { stack } from "styled-system/patterns";
+import { Skeleton } from "@/components/Skeleton";
+import { css } from "styled-system/css";
 
 export const MintPage = () => {
   const { pieceId } = useParams();
-
   const { account } = useWallet();
 
   // Look up the data for this piece (name, description, etc).
@@ -22,20 +23,15 @@ export const MintPage = () => {
   });
 
   // Lookup what tokens the user owns right now in this collection.
-  const {
-    data: tokenAddresses,
-    isLoading: tokensIsLoading,
-    error: tokensError,
-  } = useGetTokenAddresses(account?.address!, {
-    enabled: account !== null && account.address !== undefined,
-  });
+  const { data: tokenAddresses, error: tokensError } = useGetTokenAddresses(
+    account?.address!,
+    {
+      enabled: account !== null && account.address !== undefined,
+    },
+  );
 
   // Lookup the piece IDs of those tokens.
-  const {
-    pieceIds,
-    error: pieceIdsError,
-    isLoading: pieceIdsIsLoading,
-  } = useGetPieceIds(tokenAddresses!, {
+  const { pieceIds, error: pieceIdsError } = useGetPieceIds(tokenAddresses!, {
     enabled: tokenAddresses !== undefined,
   });
 
@@ -53,24 +49,7 @@ export const MintPage = () => {
     );
   }
 
-  if (pieceDataIsLoading) {
-    return (
-      <div
-        className={stack({
-          align: "center",
-          gap: "32",
-          padding: { base: "16", md: "32" },
-        })}
-      >
-        <Card>Loading...</Card>
-        <Button size="lg" loading>
-          Mint
-        </Button>
-      </div>
-    );
-  }
-
-  if (!pieceData) {
+  if (!pieceDataIsLoading && !pieceData) {
     return <p>No data found for this piece ID</p>;
   }
 
@@ -78,10 +57,31 @@ export const MintPage = () => {
 
   // At this point all the data we need is available.
   return (
-    <Root
-      pieceId={pieceId}
-      pieceData={pieceData}
-      userOwnsThisPieceAlready={userOwnsThisPieceAlready}
-    />
+    <div
+      className={stack({ w: "full", align: "center", position: "relative" })}
+    >
+      <div
+        style={{ opacity: pieceDataIsLoading ? 1 : 0 }}
+        className={stack({
+          position: "absolute",
+          align: "center",
+          p: "16",
+          w: "full",
+          maxW: "[500px]",
+          transition: "[transform 0.6s ease]",
+        })}
+      >
+        <Skeleton
+          className={css({ w: "full", h: "[450px]", rounded: "200" })}
+        />
+      </div>
+      {pieceData && (
+        <Root
+          pieceId={pieceId}
+          pieceData={pieceData}
+          userOwnsThisPieceAlready={userOwnsThisPieceAlready}
+        />
+      )}
+    </div>
   );
 };

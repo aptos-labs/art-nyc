@@ -1,6 +1,7 @@
 import { useMintPiece } from "@/api/hooks/useMintPiece";
 import { PieceData } from "@/types/surf";
 import { Button } from "@aptos-internal/design-system-web";
+import { css } from "styled-system/css";
 
 interface MintButtonProps {
   pieceId: string;
@@ -11,7 +12,12 @@ export const MintButton = ({ pieceId }: MintButtonProps) => {
   const { mutateAsync: mintPiece, isPending } = useMintPiece();
 
   return (
-    <Button size="lg" onClick={() => mintPiece(pieceId)} loading={isPending}>
+    <Button
+      size="lg"
+      className={css({ w: "full" })}
+      onClick={() => mintPiece(pieceId)}
+      loading={isPending}
+    >
       Mint
     </Button>
   );

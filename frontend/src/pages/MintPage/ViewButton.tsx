@@ -1,7 +1,13 @@
 import { PINATA_GATEWAY_TOKEN } from "@/constants";
 import { PieceData } from "@/types/surf";
-import { Button, Modal, ModalContent } from "@aptos-internal/design-system-web";
+import { getImageUrl } from "@/utils";
+import {
+  Button,
+  IconCloseLine,
+  Modal,
+} from "@aptos-internal/design-system-web";
 import { css } from "styled-system/css";
+import { stack } from "styled-system/patterns";
 
 export const ViewButton = ({ pieceData }: { pieceData: PieceData }) => {
   return (
@@ -9,24 +15,29 @@ export const ViewButton = ({ pieceData }: { pieceData: PieceData }) => {
       renderContent={({ close }) => {
         const ipfsGatewayUrl = getImageUrl(pieceData);
         return (
-          <ModalContent
-            className={css({
-              maxW: "[100vw]",
-              maxH: "[100vh]",
+          <div
+            className={stack({
+              w: "[100vw]",
+              gap: "24",
+              align: "center",
             })}
           >
-            <div>
-              <img src={ipfsGatewayUrl} alt={pieceData.token_name} />
-            </div>
-          </ModalContent>
+            <img
+              src={ipfsGatewayUrl}
+              alt={pieceData.token_name}
+              className={css({ w: "full", h: "auto", objectFit: "contain" })}
+            />
+            <Button variant="secondary" iconOnly onClick={close}>
+              <IconCloseLine />
+            </Button>
+          </div>
         );
       }}
-      trigger={<Button size="lg">View</Button>}
+      trigger={
+        <Button size="lg" className={css({ w: "full" })}>
+          View
+        </Button>
+      }
     />
   );
 };
-
-function getImageUrl(pieceData: PieceData) {
-  const hash = pieceData.token_uri.split("/").pop();
-  return `https://aptos-labs.mypinata.cloud/ipfs/${hash}?pinataGatewayToken=${PINATA_GATEWAY_TOKEN}`;
-}

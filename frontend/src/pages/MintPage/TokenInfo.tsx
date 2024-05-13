@@ -1,4 +1,5 @@
 import { PieceData, getPieceDataMetadata } from "@/types/surf";
+import { getImageUrl } from "@/utils";
 import {
   Button,
   Card,
@@ -7,7 +8,7 @@ import {
   IconTwitterLine,
 } from "@aptos-internal/design-system-web";
 import { css } from "styled-system/css";
-import { stack } from "styled-system/patterns";
+import { flex, stack } from "styled-system/patterns";
 
 type TypedMetadata = {
   artist_name?: string;
@@ -60,17 +61,34 @@ export const TokenInfo = ({ pieceData }: { pieceData: PieceData }) => {
   }
 
   return (
-    <Card className={stack({ align: "center", gap: "0" })}>
-      <div
+    <Card
+      className={stack({
+        position: "relative",
+        w: "full",
+        align: "center",
+        gap: "0",
+      })}
+    >
+      <img
+        src={getImageUrl(pieceData)}
+        alt={pieceData.token_name}
         className={css({
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          gap: "0",
+          position: "absolute",
+          inset: "0",
+          h: "full",
+          w: "full",
+          zIndex: "[-1]",
+          objectFit: "cover",
+          filter: "[blur(32px)]",
+          opacity: 0.5,
+          transform: "scale(0)",
+          rounded: "300",
+          animation: "expand 1s ease forwards",
         })}
-      >
+      />
+      <div className={flex({ align: "center" })}>
         {metadata.artist_name && (
-          <p className={css({ paddingRight: "4" })}>{metadata.artist_name}</p>
+          <p className={css({ pr: "4" })}>{metadata.artist_name}</p>
         )}
         {instagramHref && (
           <Button

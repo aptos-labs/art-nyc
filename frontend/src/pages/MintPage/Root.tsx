@@ -2,11 +2,11 @@ import { openWalletSelector } from "@/components/WalletSelector";
 import { PieceData } from "@/types/surf";
 import { Button } from "@aptos-internal/design-system-web";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import { css } from "styled-system/css";
+import { stack } from "styled-system/patterns";
 import { MintButton } from "./MintButton";
 import { TokenInfo } from "./TokenInfo";
 import { ViewButton } from "./ViewButton";
-import { stack } from "styled-system/patterns";
+import { css } from "styled-system/css";
 
 /**
  * In the index we handle all the data fetching and showing different stuff if the data
@@ -29,7 +29,11 @@ export const Root = ({
   let button;
   if (!walletConnected) {
     button = (
-      <Button size="lg" onClick={openWalletSelector}>
+      <Button
+        size="lg"
+        className={css({ w: "full" })}
+        onClick={openWalletSelector}
+      >
         Connect Wallet
       </Button>
     );
@@ -45,11 +49,25 @@ export const Root = ({
       className={stack({
         align: "center",
         gap: "32",
-        padding: { base: "16", md: "32" },
+        p: "16",
+        pb: { base: "96", sm: "16" },
+        w: "full",
+        maxW: "[500px]",
+        animation: "fadeIn 0.6s ease",
       })}
     >
       <TokenInfo pieceData={pieceData} />
-      {button}
+      <div
+        className={css({
+          position: "fixed",
+          bottom: "24",
+          left: "16",
+          right: "16",
+          sm: { position: "static", w: "full" },
+        })}
+      >
+        {button}
+      </div>
     </div>
   );
 };
