@@ -1,14 +1,13 @@
 import { useGetPieceData } from "@/api/hooks/useGetPieceData";
-import { useParams } from "react-router-dom";
-import { WalletReadyState, useWallet } from "@aptos-labs/wallet-adapter-react";
-import { useGetTokenAddresses } from "@/api/hooks/useGetTokenAddresses";
 import { useGetPieceIds } from "@/api/hooks/useGetPieceIds";
-import { Root } from "./Root";
-import { Button, Card } from "@aptos-internal/design-system-web";
-import { stack } from "styled-system/patterns";
+import { useGetTokenAddresses } from "@/api/hooks/useGetTokenAddresses";
 import { Skeleton } from "@/components/Skeleton";
-import { css } from "styled-system/css";
+import { WalletReadyState, useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { css } from "styled-system/css";
+import { stack } from "styled-system/patterns";
+import { Root } from "./Root";
 
 export const MintPage = () => {
   const { pieceId } = useParams();

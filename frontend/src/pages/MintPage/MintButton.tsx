@@ -1,5 +1,4 @@
 import { useMintPiece } from "@/api/hooks/useMintPiece";
-import { PieceData } from "@/types/surf";
 import { Button } from "@aptos-internal/design-system-web";
 import { css } from "styled-system/css";
 

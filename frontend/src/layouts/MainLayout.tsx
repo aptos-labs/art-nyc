@@ -1,17 +1,14 @@
 import "../../global.css";
 import { AptosLogo } from "@/components/AptosLogo";
-import { connectPetra, openWalletSelector } from "@/components/WalletSelector";
+import { connectPetra } from "@/components/WalletSelector";
 import { useGlobalState } from "@/context/GlobalState";
 import { navigateExternal } from "@/utils";
 import {
   Button,
-  IconBugLine,
   IconGasStationLine,
-  IconGithub,
   IconGithubLine,
   IconLoginBoxLine,
   IconLogoutBoxLine,
-  IconMenu3Line,
   IconMoneyDollarBoxLine,
   IconMore2Line,
   Menu,

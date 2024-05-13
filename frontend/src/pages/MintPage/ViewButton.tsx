@@ -1,4 +1,3 @@
-import { PINATA_GATEWAY_TOKEN } from "@/constants";
 import { PieceData } from "@/types/surf";
 import { getImageUrl } from "@/utils";
 import {

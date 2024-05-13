@@ -1,4 +1,4 @@
-import { connectPetra, openWalletSelector } from "@/components/WalletSelector";
+import { connectPetra } from "@/components/WalletSelector";
 import { PieceData } from "@/types/surf";
 import { Button } from "@aptos-internal/design-system-web";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
