@@ -18,14 +18,22 @@ export const ViewButton = ({ pieceData }: { pieceData: PieceData }) => {
           <div
             className={stack({
               w: "[100vw]",
+              maxH: "[100vh]",
+              py: "24",
               gap: "24",
               align: "center",
+              overflow: "auto",
             })}
           >
             <img
               src={ipfsGatewayUrl}
               alt={pieceData.token_name}
-              className={css({ w: "full", h: "auto", objectFit: "contain" })}
+              className={css({
+                w: "full",
+                h: "auto",
+                maxH: "[calc(100vh - 120px)]",
+                objectFit: "contain",
+              })}
             />
             <Button variant="secondary" iconOnly onClick={close}>
               <IconCloseLine />

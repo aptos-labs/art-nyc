@@ -7,6 +7,7 @@ import {
   IconInstagramLine,
   IconTwitterLine,
 } from "@aptos-internal/design-system-web";
+import { useEffect, useRef, useState } from "react";
 import { css } from "styled-system/css";
 import { flex, stack } from "styled-system/patterns";
 
@@ -69,23 +70,7 @@ export const TokenInfo = ({ pieceData }: { pieceData: PieceData }) => {
         gap: "0",
       })}
     >
-      <img
-        src={getImageUrl(pieceData)}
-        alt={pieceData.token_name}
-        className={css({
-          position: "absolute",
-          inset: "0",
-          h: "full",
-          w: "full",
-          zIndex: "[-1]",
-          objectFit: "cover",
-          filter: "[blur(32px)]",
-          opacity: 0.5,
-          transform: "scale(0)",
-          rounded: "300",
-          animation: "expand 1s ease forwards",
-        })}
-      />
+      <ImageShadow name={pieceData.token_name} src={getImageUrl(pieceData)} />
       <div className={flex({ align: "center" })}>
         {metadata.artist_name && (
           <p className={css({ pr: "4" })}>{metadata.artist_name}</p>
@@ -151,3 +136,49 @@ export const TokenInfo = ({ pieceData }: { pieceData: PieceData }) => {
     </Card>
   );
 };
+
+interface ImageShadowProps {
+  name: string;
+  src: string;
+}
+
+function ImageShadow({ name, src }: ImageShadowProps) {
+  const [loaded, setLoaded] = useState(false);
+  const ref = useRef<HTMLImageElement>(null);
+
+  const onLoad = () => {
+    setLoaded(true);
+  };
+
+  useEffect(() => {
+    if (ref.current && ref.current.complete) {
+      onLoad();
+    }
+  }, []);
+
+  return (
+    <img
+      ref={ref}
+      onLoad={onLoad}
+      alt={name}
+      src={src}
+      className={
+        loaded
+          ? css({
+              position: "absolute",
+              inset: "0",
+              h: "full",
+              w: "full",
+              zIndex: "[-1]",
+              objectFit: "cover",
+              filter: "[blur(32px)]",
+              opacity: 0.5,
+              transform: "scale(0)",
+              rounded: "300",
+              animation: "expand 1s ease forwards",
+            })
+          : css({ display: "none" })
+      }
+    />
+  );
+}
