@@ -1,10 +1,11 @@
 import "../../global.css";
 import { AptosLogo } from "@/components/AptosLogo";
-import { openWalletSelector } from "@/components/WalletSelector";
+import { connectPetra, openWalletSelector } from "@/components/WalletSelector";
 import { useGlobalState } from "@/context/GlobalState";
 import { navigateExternal } from "@/utils";
 import {
   Button,
+  IconBugLine,
   IconGasStationLine,
   IconGithub,
   IconGithubLine,
@@ -59,7 +60,7 @@ export default function MainLayout({ children }: LayoutProps) {
 }
 
 function MyMenu() {
-  const { connected, disconnect } = useWallet();
+  const { connected, connect, disconnect } = useWallet();
   const [globalState, globalActions] = useGlobalState();
 
   const walletItem = connected
@@ -73,7 +74,7 @@ function MyMenu() {
         Icon: IconLoginBoxLine,
         id: "connect",
         label: "Connect",
-        onSelect: openWalletSelector,
+        onSelect: connectPetra(connect),
       };
 
   function getFeePayerItem(
@@ -113,6 +114,15 @@ function MyMenu() {
           label: "View Source",
           onSelect: () => {
             navigateExternal("https://github.com/banool/aptos-nyc-2024");
+          },
+        },
+        // TODO: Remove later. This is for debugging
+        {
+          Icon: IconBugLine,
+          id: "userAgent",
+          label: "View User Agent",
+          onSelect: () => {
+            alert(window.navigator.userAgent);
           },
         },
       ]}

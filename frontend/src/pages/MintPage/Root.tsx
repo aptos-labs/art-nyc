@@ -1,4 +1,4 @@
-import { openWalletSelector } from "@/components/WalletSelector";
+import { connectPetra, openWalletSelector } from "@/components/WalletSelector";
 import { PieceData } from "@/types/surf";
 import { Button } from "@aptos-internal/design-system-web";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
@@ -22,7 +22,7 @@ export const Root = ({
   pieceData: PieceData;
   userOwnsThisPieceAlready: boolean;
 }) => {
-  const { connected: walletConnected } = useWallet();
+  const { connected: walletConnected, connect } = useWallet();
 
   // get the user's current tokens and if they have one of these, make it a "view" button instead.
   // TODO: in the hamburger, add a button to toggle sponsored txn vs direct submission mode
@@ -32,9 +32,9 @@ export const Root = ({
       <Button
         size="lg"
         className={css({ w: "full" })}
-        onClick={openWalletSelector}
+        onClick={connectPetra(connect)}
       >
-        Connect Wallet
+        Connect Petra Wallet
       </Button>
     );
   } else if (userOwnsThisPieceAlready) {

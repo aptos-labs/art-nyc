@@ -6,12 +6,18 @@ import {
 } from "@aptos-internal/design-system-web";
 import {
   Wallet,
+  WalletName,
   WalletReadyState,
   isRedirectable,
   useWallet,
 } from "@aptos-labs/wallet-adapter-react";
 import { css } from "styled-system/css";
 import { flex, stack } from "styled-system/patterns";
+
+export const connectPetra =
+  (connect: (walletName: WalletName) => void) => () => {
+    connect("Petra" as WalletName);
+  };
 
 export function openWalletSelector() {
   openModal({
