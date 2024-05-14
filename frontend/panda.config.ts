@@ -2,41 +2,7 @@ import { defineConfig, Config } from "@pandacss/dev";
 import { aptosPandaPreset } from "@aptos-internal/design-system-web";
 
 const themeExtension: NonNullable<Config["theme"]>["extend"] = {
-  semanticTokens: {
-    colors: {
-      skeleton: {
-        DEFAULT: {
-          value: {
-            base: "{colors.zinc.100}",
-            _dark: "{colors.background.secondary}",
-          },
-        },
-        shimmer1: {
-          value: {
-            base: "rgba(255, 255, 255, 0)",
-            _dark: "rgba(64, 64, 64, 0)",
-          },
-        },
-        shimmer2: {
-          value: {
-            base: "rgba(255, 255, 255, 0.2)",
-            _dark: "rgba(64, 64, 64, 0.2)",
-          },
-        },
-        shimmer3: {
-          value: {
-            base: "rgba(255, 255, 255, 0.5)",
-            _dark: "rgba(64, 64, 64, 0.5)",
-          },
-        },
-      },
-    },
-  },
   keyframes: {
-    shimmer: {
-      "0%": { transform: "translateX(-100%)" },
-      "100%": { transform: "translateX(100%)" },
-    },
     expand: {
       "0%": { transform: "scale(0.5)" },
       "100%": { transform: "scale(1.05)" },

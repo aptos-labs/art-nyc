@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@aptos-internal/design-system-web':
-    specifier: 0.1.0-beta.28
-    version: 0.1.0-beta.28(@internationalized/date@3.5.3)(react-dom@18.3.1)(react@18.3.1)
+    specifier: 0.1.0
+    version: 0.1.0(@internationalized/date@3.5.3)(react-dom@18.3.1)(react@18.3.1)
   '@aptos-labs/aptos-fee-payer-client':
     specifier: ^0.0.7
     version: 0.0.7(@trpc/server@10.45.2)
@@ -123,8 +123,8 @@ packages:
       '@jridgewell/trace-mapping': 0.3.25
     dev: true
 
-  /@aptos-internal/design-system-web@0.1.0-beta.28(@internationalized/date@3.5.3)(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-WS8SUGNd4BFYXnmsXjsmD3+ZU0vxbI4WcGNO5PSsnjq3hyhE+TTbAvW9awYiFbEq+oC21tJUegl/c16idHm15Q==, tarball: https://us-npm.pkg.dev/aptos-registry/npm/@aptos-internal/design-system-web/-/@aptos-internal/design-system-web-0.1.0-beta.28.tgz}
+  /@aptos-internal/design-system-web@0.1.0(@internationalized/date@3.5.3)(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-/2Z00dp4oLMla+9PFou5JwrQxWyBtP+JIrcJRPTRfcd9YubKHvaUkmUUZZRibGBX4nstKlnQhjOquySqgfI5kg==, tarball: https://us-npm.pkg.dev/aptos-registry/npm/@aptos-internal/design-system-web/-/@aptos-internal/design-system-web-0.1.0.tgz}
     engines: {node: 20.x}
     peerDependencies:
       react: ^18.2.0

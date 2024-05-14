@@ -1,7 +1,7 @@
 import { useGetPieceData } from "@/api/hooks/useGetPieceData";
 import { useGetPieceIds } from "@/api/hooks/useGetPieceIds";
 import { useGetTokenAddresses } from "@/api/hooks/useGetTokenAddresses";
-import { Skeleton } from "@/components/Skeleton";
+import { Skeleton } from "@aptos-internal/design-system-web";
 import { WalletReadyState, useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";

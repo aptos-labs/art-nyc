@@ -1,8 +1,7 @@
 import { useGetArtData } from "@/api/hooks/useGetArtData";
-import { Skeleton } from "@/components/Skeleton";
 import { getPieceDataMetadata, getTypedMetadata } from "@/types/surf";
 import { getImageUrl } from "@/utils";
-import { Card, range } from "@aptos-internal/design-system-web";
+import { Card, Skeleton, range } from "@aptos-internal/design-system-web";
 import { css } from "styled-system/css";
 import { flex, stack } from "styled-system/patterns";
 
