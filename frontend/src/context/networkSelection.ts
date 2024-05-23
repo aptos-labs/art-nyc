@@ -53,10 +53,13 @@ export function useNetworkSelector() {
     network: string,
     { replace = false }: { replace?: boolean } = {},
   ) {
-    setSearchParams((prev) => {
-      prev.set("network", network);
-      return prev;
-    });
+    setSearchParams(
+      (prev) => {
+        prev.set("network", network);
+        return prev;
+      },
+      { replace },
+    );
     writeSelectedNetworkToLocalStorage(network);
   }
 
