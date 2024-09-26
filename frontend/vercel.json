@@ -3,5 +3,18 @@
     "outputDirectory": "build",
     "installCommand": "echo $SERVICE_ACCOUNT_JSON_BASE64 | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS && pnpm dlx google-artifactregistry-auth && pnpm install --prod false",
     "framework": "vite",
+    "redirects": [
+        {
+            "source": "/:path*",
+            "has": [
+                {
+                    "type": "host",
+                    "value": "art-nyc.aptoslabs.com"
+                }
+            ],
+            "destination": "https://art.aptoslabs.com/nyc/:path*",
+            "permanent": true
+        }
+    ],
     "rewrites": [{ "source": "/(.*)", "destination": "/" }]
 }
