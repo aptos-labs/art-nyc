@@ -22,7 +22,14 @@ function deriveGlobalState({
   network: Network;
   useFeePayer: boolean;
 }): GlobalState {
-  const config = new AptosConfig({ network });
+  let apiKey: string | undefined;
+  if (network === "mainnet") {
+    // This is a frontend API key made by dport.
+    apiKey = "AG-82QP58357YNHHMZMTG8D2MQT99962GQGT";
+  }
+
+  const clientConfig = apiKey ? { API_KEY: apiKey } : undefined;
+  const config = new AptosConfig({ network, clientConfig });
   const client = new Aptos(config);
   let feePayerClient;
   if (network === "mainnet") {
