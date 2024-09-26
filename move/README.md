@@ -1,10 +1,10 @@
-# Aptos Summits: Move
+# Art Gallery: Move
+
+## Note
+In hindsight we should've written the contract so it could support multiple collections, but that's not really what we did. So we just copy paste the code and deploy the contract twice, one per collection.
 
 ## Mainnet
-To mint to someone, do this:
-```
-aptos move run --profile mainnet --function-id 0x`yq .profiles.mainnet.account < .aptos/config.yaml`::summits_token::mint_to --args address:0x123
-```
+See runbook: https://www.notion.so/aptoslabs/Bay-Area-Office-Art-Experience-10d8b846eb7280669808c06f562ad677?pvs=4#832d24329c704ab3817fcf40205e7d6a.
 
 ## Testnet
 To publish to testnet at a new address:
@@ -14,29 +14,5 @@ yes '' | aptos init --profile testnetpublish --assume-yes --network testnet && a
 
 Create the collection:
 ```
-aptos move run --profile testnetpublish --assume-yes --function-id 0x`yq .profiles.testnetpublish.account < .aptos/config.yaml`::summits_collection::create
-```
-
-## Generating schema
-Build the Aptos CLI from the correct aptos-core branch.
-```
-cd ~/a/core
-git checkout banool/rust-move-codegen
-cargo build -p aptos
-```
-
-Generate the GraphQL schema representation of the module ABI.
-```
-~/a/core/target/debug/aptos move generate schema --named-addresses addr=0x123 --schema-path ./
-```
-
-To regenerate the types for the backend run this here.
-```
-~/a/core/target/debug/aptos move generate rust --named-addresses addr=0x123 --generate-to ../api/move-types/src/
-mv ../api/move-types/src/mod.rs ../backend/move-types/src/lib.rs
-```
-
-To regenerate the types for the frontend run this from within `frontend/`.
-```
-pnpm generate-move
+aptos move run --profile testnetpublish --assume-yes --function-id 0x`yq .profiles.testnetpublish.account < .aptos/config.yaml`::bayarea_collection::create
 ```

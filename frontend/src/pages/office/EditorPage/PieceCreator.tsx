@@ -1,4 +1,4 @@
-import { Button, FormField, Input } from "@aptos-internal/design-system-web";
+import { FormField, Input } from "@aptos-internal/design-system-web";
 import { useState } from "react";
 import { SharedFormFields } from "./SharedFormFields";
 import { UpdateButton } from "./UpdateButton";
@@ -18,9 +18,7 @@ export const PieceCreator = () => {
     <form
       className={css({ display: "flex", flexDirection: "column", gap: "16" })}
     >
-      <p
-        className={css({ textStyle: "heading.100.semibold" })}
-      >{`Create a new piece`}</p>
+      <p className={css({ textStyle: "heading.md" })}>{`Create a new piece`}</p>
       <FormField label="Piece ID">
         {(formControlProps) => (
           <Input

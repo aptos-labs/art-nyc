@@ -1,0 +1,15 @@
+{
+    "redirects": [
+        {
+            "source": "/:path*",
+            "has": [
+                {
+                    "type": "host",
+                    "value": "art-nyc.aptoslabs.com"
+                }
+            ],
+            "destination": "https://art.aptoslabs.com/nyc/:path*",
+            "permanent": true
+        }
+    ]
+}

@@ -1,30 +1,41 @@
 import "../../global.css";
 import { AptosLogo } from "@/components/AptosLogo";
 import { connectPetra } from "@/components/WalletSelector";
-import { useGlobalState } from "@/context/GlobalState";
+import { getNetworkQueryParam, useGlobalState } from "@/context/GlobalState";
 import { navigateExternal } from "@/utils";
 import {
-  Button,
-  IconGasStationLine,
-  IconGithubLine,
-  IconLoginBoxLine,
-  IconLogoutBoxLine,
-  IconMoneyDollarBoxLine,
-  IconMore2Line,
+  IconButton,
+  IconDotsThreeVertical,
+  IconGasPump,
+  IconGithub,
+  IconMoney,
+  IconSignIn,
+  IconSignOut,
   Menu,
   toast,
 } from "@aptos-internal/design-system-web";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { css } from "styled-system/css";
 import { flex, stack } from "styled-system/patterns";
 
 interface LayoutProps {
   children: React.ReactNode;
+  headerText: string;
 }
 
-export default function MainLayout({ children }: LayoutProps) {
+/**
+ * Even though it doesn't make sense to use this in all contexts, e.g. /, we still
+ * expect that GlobalState is set.
+ */
+export function MainLayout({ children, headerText }: LayoutProps) {
+  const [globalState] = useGlobalState();
+
+  // Make the home button just return to the office specific home page if we're "in an office".
+  const location = useLocation();
+  const office = location.pathname.split("/")[1];
+
   const headerContent = (
     <div
       className={flex({
@@ -36,14 +47,12 @@ export default function MainLayout({ children }: LayoutProps) {
         color: "text.primary",
       })}
     >
-      <Link to="/">
+      <Link to={`/${office}${getNetworkQueryParam(globalState)}`}>
         <AptosLogo
           className={css({ h: "32", w: "32", color: "text.primary" })}
         />
       </Link>
-      <h1 className={css({ textStyle: "heading.100.semibold" })}>
-        Aptos Art Gallery NYC
-      </h1>
+      <h1 className={css({ textStyle: "heading.md" })}>{headerText}</h1>
       <MyMenu />
     </div>
   );
@@ -57,18 +66,18 @@ export default function MainLayout({ children }: LayoutProps) {
 }
 
 function MyMenu() {
-  const { connected, connect, disconnect, wallets } = useWallet();
+  const { connected, connect, disconnect } = useWallet();
   const [globalState, globalActions] = useGlobalState();
 
   const walletItem = connected
     ? {
-        Icon: IconLogoutBoxLine,
+        Icon: IconSignOut,
         id: "disconnect",
         label: "Disconnect",
         onSelect: disconnect,
       }
     : {
-        Icon: IconLoginBoxLine,
+        Icon: IconSignIn,
         id: "connect",
         label: "Connect",
         onSelect: connectPetra(connect),
@@ -97,8 +106,8 @@ function MyMenu() {
   }
 
   const feePayerItem = globalState.useFeePayer
-    ? getFeePayerItem("Pay Own Gas", IconGasStationLine)
-    : getFeePayerItem("Use Fee Payer", IconMoneyDollarBoxLine);
+    ? getFeePayerItem("Pay Own Gas", IconGasPump)
+    : getFeePayerItem("Use Fee Payer", IconMoney);
 
   return (
     <Menu
@@ -106,7 +115,7 @@ function MyMenu() {
         walletItem,
         feePayerItem,
         {
-          Icon: IconGithubLine,
+          Icon: IconGithub,
           id: "source",
           label: "View Source",
           onSelect: () => {
@@ -115,14 +124,9 @@ function MyMenu() {
         },
       ]}
       trigger={
-        <Button
-          iconOnly={true}
-          variant="secondaryText"
-          size="sm"
-          aria-label="Open Menu"
-        >
-          <IconMore2Line className={css({ h: "24", w: "24" })} />
-        </Button>
+        <IconButton variant="secondary" size="sm" ariaLabel="Open Menu">
+          <IconDotsThreeVertical />
+        </IconButton>
       }
     />
   );

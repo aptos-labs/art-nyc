@@ -1,3 +1,4 @@
+import { knownMetadataKeys } from "@/types/surf";
 import { FormField, Input, Button } from "@aptos-internal/design-system-web";
 import React, { useState } from "react";
 import { css } from "styled-system/css";
@@ -11,7 +12,10 @@ export function MetadataFields({
 }) {
   const [newKey, setNewKey] = useState("");
 
-  const newKeyValid = newKey.length > 0 && !metadata.has(newKey);
+  const newKeyValid =
+    newKey.length > 0 &&
+    !metadata.has(newKey) &&
+    knownMetadataKeys.includes(newKey as any);
 
   const addField = () => {
     if (newKeyValid) {

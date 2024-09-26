@@ -1,9 +1,11 @@
 import { Route, Routes } from "react-router-dom";
-import { HomePage } from "./pages/HomePage";
-import MainLayout from "./layouts/MainLayout";
+import { HomePage } from "./pages/office/HomePage";
+import { MainLayout } from "./layouts/MainLayout";
 import { NotFoundPage } from "./pages/NotFoundPage";
-import { MintPage } from "./pages/MintPage";
-import { EditorPage } from "./pages/EditorPage";
+import { MintPage } from "./pages/office/MintPage";
+import { EditorPage } from "./pages/office/EditorPage";
+import { LandingPage } from "./pages/LandingPage";
+import { Office, OfficeStateProvider } from "./context/OfficeState";
 
 export default function MyRoutes() {
   return (
@@ -11,31 +13,17 @@ export default function MyRoutes() {
       <Route
         path="/"
         element={
-          <MainLayout>
-            <HomePage />
+          <MainLayout headerText="Aptos Art Gallery">
+            <LandingPage />
           </MainLayout>
         }
       />
-      <Route
-        path="/mint/:pieceId"
-        element={
-          <MainLayout>
-            <MintPage />
-          </MainLayout>
-        }
-      />
-      <Route
-        path="/edit"
-        element={
-          <MainLayout>
-            <EditorPage />
-          </MainLayout>
-        }
-      />
+      {OfficeRoutes({ office: Office.NYC })}
+      {OfficeRoutes({ office: Office.BAYAREA })}
       <Route
         path="*"
         element={
-          <MainLayout>
+          <MainLayout headerText="Aptos Art Gallery">
             <NotFoundPage />
           </MainLayout>
         }
@@ -43,3 +31,47 @@ export default function MyRoutes() {
     </Routes>
   );
 }
+
+const OfficeRoutes = ({ office }: { office: Office }) => {
+  const pretty = office === Office.NYC ? "NYC" : "Bay Area";
+  const path = `/${office}`;
+
+  const RouteWrapper = ({ children }: { children: React.ReactNode }) => {
+    return (
+      <OfficeStateProvider office={office}>
+        <MainLayout headerText={`Aptos Art Gallery ${pretty}`}>
+          {children}
+        </MainLayout>
+      </OfficeStateProvider>
+    );
+  };
+
+  return (
+    <>
+      <Route
+        path={path}
+        element={
+          <RouteWrapper>
+            <HomePage />
+          </RouteWrapper>
+        }
+      />
+      <Route
+        path={`${path}/mint/:pieceId`}
+        element={
+          <RouteWrapper>
+            <MintPage />
+          </RouteWrapper>
+        }
+      />
+      <Route
+        path={`${path}/edit`}
+        element={
+          <RouteWrapper>
+            <EditorPage />
+          </RouteWrapper>
+        }
+      />
+    </>
+  );
+};

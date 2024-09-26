@@ -1,4 +1,5 @@
 import { useGlobalState } from "@/context/GlobalState";
+import { getIdentifier, useOfficeState } from "@/context/OfficeState";
 import {
   FeePayerArgs,
   onClickSubmitTransaction,
@@ -15,12 +16,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 export function useMintPiece() {
   const { account, signAndSubmitTransaction, signTransaction } = useWallet();
   const [globalState] = useGlobalState();
+  const officeState = useOfficeState();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (pieceId: string) => {
       const payload: InputEntryFunctionData = {
-        function: `${globalState.moduleAddress}::nyc_token::mint`,
+        function: getIdentifier(officeState, "token", "mint"),
         typeArguments: [],
         functionArguments: [pieceId],
       };

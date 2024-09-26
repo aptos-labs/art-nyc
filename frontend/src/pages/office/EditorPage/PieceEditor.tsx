@@ -6,12 +6,13 @@ import { css } from "styled-system/css";
 import { MetadataFields } from "./MetadataFields";
 import { mapsAreEqual } from "@/utils";
 import { Link } from "react-router-dom";
-import { useGlobalState } from "@/context/GlobalState";
+import { getNetworkQueryParam, useGlobalState } from "@/context/GlobalState";
 import {
-  Button,
-  IconClipboardLine,
+  IconButton,
+  IconClipboard,
   Tooltip,
 } from "@aptos-internal/design-system-web";
+import { useOfficeState } from "@/context/OfficeState";
 
 /** A component where you can see the existing art data and make changes. */
 export const PieceEditor = ({
@@ -22,6 +23,7 @@ export const PieceEditor = ({
   pieceData: PieceData;
 }) => {
   const [globalState] = useGlobalState();
+  const officeState = useOfficeState();
   const [pieceName, setPieceName] = useState(pieceData.token_name);
   const [pieceDescription, setPieceDescription] = useState(
     pieceData.token_description,
@@ -38,39 +40,33 @@ export const PieceEditor = ({
     pieceUri !== pieceData.token_uri ||
     !mapsAreEqual(metadata, originalMetadata);
 
+  const linkTo = `/${officeState.office}/mint/${pieceId}`;
   return (
     <form
       className={css({ display: "flex", flexDirection: "column", gap: "16" })}
     >
-      <p className={css({ textStyle: "heading.100.semibold" })}>
-        <Link to={`/mint/${pieceId}?network=${globalState.network}`}>
-          {pieceId}
+      <div>
+        <Link to={`${linkTo}${getNetworkQueryParam(globalState)}`}>
+          <span className={css({ textStyle: "heading.md" })}>{pieceId}</span>
         </Link>
-        <Tooltip
-          placement="top-start"
-          content={
-            <p className={css({ textStyle: "body.300.regular" })}>
-              Copy Petra deeplink URL
-            </p>
-          }
-        >
-          <Button
+        <Tooltip placement="top-start" content="Copy Petra deeplink URL">
+          <IconButton
             type="button"
             className={css({ marginLeft: "16" })}
-            iconOnly={true}
             variant="secondary"
+            ariaLabel="Copy Petra deeplink URL"
             size="sm"
             onClick={async () => {
-              const url = `${window.location.protocol}//${window.location.host}/mint/${pieceId}?network=${globalState.network}`;
+              const url = `${window.location.protocol}//${window.location.host}${linkTo}`;
               await navigator.clipboard.writeText(
                 `https://petra.app/explore?link=${url}`,
               );
             }}
           >
-            <IconClipboardLine />
-          </Button>
+            <IconClipboard />
+          </IconButton>
         </Tooltip>
-      </p>
+      </div>
       <SharedFormFields
         pieceName={pieceName}
         pieceDescription={pieceDescription}

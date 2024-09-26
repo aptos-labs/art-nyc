@@ -1,4 +1,6 @@
 import { useGetArtData } from "@/api/hooks/useGetArtData";
+import { getNetworkQueryParam, useGlobalState } from "@/context/GlobalState";
+import { useOfficeState } from "@/context/OfficeState";
 import { getPieceDataMetadata, getTypedMetadata } from "@/types/surf";
 import { getImageUrl } from "@/utils";
 import { Card, Skeleton, range } from "@aptos-internal/design-system-web";
@@ -7,6 +9,8 @@ import { flex, stack } from "styled-system/patterns";
 
 export const HomePage = () => {
   const { artDataInner, isLoading } = useGetArtData();
+  const [globalState] = useGlobalState();
+  const officeState = useOfficeState();
 
   return (
     <div
@@ -56,7 +60,10 @@ export const HomePage = () => {
               })}
               asChild
             >
-              <a href={`/mint/${key}`} style={{ animationDelay: `${i / 20}s` }}>
+              <a
+                href={`${officeState.office}/mint/${key}${getNetworkQueryParam(globalState)}`}
+                style={{ animationDelay: `${i / 20}s` }}
+              >
                 <img
                   src={imgSrc}
                   alt={value.token_name}
@@ -64,14 +71,14 @@ export const HomePage = () => {
                     w: "full",
                     h: "120",
                     objectFit: "cover",
-                    bg: "background.disabled",
+                    bg: "[background.disabled]",
                   })}
                 />
                 <div className={stack({ gap: "[2px]", px: "12", py: "8" })}>
-                  <div className={css({ textStyle: "body.200.regular" })}>
+                  <div className={css({ textStyle: "body.md" })}>
                     {metadata.artist_name}
                   </div>
-                  <div className={css({ textStyle: "label.300.semibold" })}>
+                  <div className={css({ textStyle: "label.md" })}>
                     {value.token_name}
                   </div>
                 </div>

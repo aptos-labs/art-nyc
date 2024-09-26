@@ -1,0 +1,6 @@
+*.bpl
+build/
+.aptos
+*.trace
+*.mvcov
+

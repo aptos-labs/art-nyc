@@ -1,4 +1,5 @@
 import { useGlobalState } from "@/context/GlobalState";
+import { getIdentifier, useOfficeState } from "@/context/OfficeState";
 import { FeePayerArgs, onClickSubmitTransaction } from "@/utils";
 import { Button } from "@aptos-internal/design-system-web";
 import { InputEntryFunctionData } from "@aptos-labs/ts-sdk";
@@ -27,15 +28,14 @@ export const UpdateButton = ({
     useWallet();
   const [submitting, setSubmitting] = useState(false);
   const [globalState] = useGlobalState();
-
-  // todo
+  const officeState = useOfficeState();
 
   const onClick = async () => {
     setSubmitting(true);
     let metadataKeys = Array.from(metadata.keys());
     let metadataValues = Array.from(metadata.values());
     const payload: InputEntryFunctionData = {
-      function: `${globalState.moduleAddress}::nyc_collection::set_art_data`,
+      function: getIdentifier(officeState, "collection", "set_art_data"),
       typeArguments: [],
       functionArguments: [
         pieceId,

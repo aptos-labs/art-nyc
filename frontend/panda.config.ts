@@ -1,5 +1,5 @@
 import { defineConfig, Config } from "@pandacss/dev";
-import { aptosPandaPreset } from "@aptos-internal/design-system-web";
+import { aptosLabsPreset } from "@aptos-internal/design-system-web";
 
 const themeExtension: NonNullable<Config["theme"]>["extend"] = {
   keyframes: {
@@ -16,7 +16,7 @@ export default defineConfig({
   preflight: false,
 
   // Use the Aptos Panda preset
-  presets: [aptosPandaPreset],
+  presets: [aptosLabsPreset],
 
   theme: { extend: themeExtension },
 

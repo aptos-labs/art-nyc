@@ -7,10 +7,16 @@ import urllib.request
 
 logging.basicConfig(level="INFO", format="%(asctime)s - %(levelname)s - %(message)s")
 
+# These values are for "nyc", if the office is "bayarea" we'll update them.
 
 PRIVATE_KEY = "0xece937b5a5f1df41ba6a550e212492ee98573d3799d0035aa20c29674cd0ceff"
 ACCOUNT_ADDRESS = "0x296102a3893d43e11de2aa142fbb126377120d7d71c246a2f95d5b4f3ba16b30"
 PROFILE_NAME = "local"
+
+COLLECTION_MODULE = "nyc_collection"
+TOKEN_MODULE = "nyc_token"
+
+# End
 
 PLAYER2_PRIVATE_KEY = (
     "0xece937b5a5f1df41ba6a550e212492ee98573d3799d0035aa20c29674cd0cefd"
@@ -18,14 +24,9 @@ PLAYER2_PRIVATE_KEY = (
 PLAYER2_ADDRESS = "0xaf769425b319270f91768e8910ed4cde16c4cea32751062c9ab3f2b21adc27b4"
 PLAYER2_PROFILE_NAME = "player2"
 
-COLLECTION_MODULE = "nyc_collection"
-TOKEN_MODULE = "nyc_token"
-
-
 DEFAULT_SUBPROCESS_KWARGS = {
     "check": True,
     "universal_newlines": True,
-    "cwd": "move/",
 }
 
 
@@ -34,6 +35,11 @@ def parse_args():
     parser.add_argument("-d", "--debug", action="store_true")
     parser.add_argument(
         "-f", "--force-restart", action="store_true", help="Start afresh"
+    )
+    parser.add_argument(
+        "--office",
+        required=True,
+        choices=["nyc", "bayarea"],
     )
     parser.add_argument(
         "--offline",
@@ -47,6 +53,21 @@ def parse_args():
 
 def main():
     args = parse_args()
+
+    # Janky but update the globals based on the office.
+    global PRIVATE_KEY
+    global ACCOUNT_ADDRESS
+    global COLLECTION_MODULE
+    global TOKEN_MODULE
+
+    if args.office == "bayarea":
+        PRIVATE_KEY = "0x0d558690c9e60797ccfc4f13c86442e979b5f1374195d5c5c46a1eb9f6188de3"
+        ACCOUNT_ADDRESS = "0x9e1f28eafc90fbf6353b9a84b6f87914eee13f62af3d15cb449d0f6e72d569ed"
+        COLLECTION_MODULE = "bayarea_collection"
+        TOKEN_MODULE = "bayarea_token"
+
+    global DEFAULT_SUBPROCESS_KWARGS
+    DEFAULT_SUBPROCESS_KWARGS["cwd"] = f"move/{args.office}/"
 
     if args.debug:
         logging.setLevel("DEBUG")

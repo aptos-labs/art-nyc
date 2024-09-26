@@ -1,11 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { useGlobalState } from "../../context/GlobalState";
+import { useOfficeState } from "@/context/OfficeState";
 
 export function useGetTokenAddresses(
   accountAddress: string,
   options: { enabled?: boolean; refetchInterval?: number } = {},
 ) {
   const [globalState] = useGlobalState();
+  const officeState = useOfficeState();
   return useQuery({
     queryKey: ["tokenAddresses", accountAddress, globalState.network],
     queryFn: async () => {
@@ -18,7 +20,7 @@ export function useGetTokenAddresses(
         await globalState.client.account.getAccountOwnedTokensFromCollectionAddress(
           {
             accountAddress,
-            collectionAddress: globalState.collectionAddress,
+            collectionAddress: officeState.collectionAddress,
             options: {
               tokenStandard: "v2",
             },

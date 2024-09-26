@@ -1,7 +1,8 @@
-import { useGlobalState } from "../../context/GlobalState";
 import { useQueries } from "@tanstack/react-query";
 import { TokenRefs } from "@/types/surf";
 import { MoveStructId } from "@aptos-labs/ts-sdk";
+import { getIdentifier, useOfficeState } from "@/context/OfficeState";
+import { useGlobalState } from "@/context/GlobalState";
 
 type Output = {
   pieceIds: (string | undefined)[];
@@ -19,7 +20,8 @@ export function useGetPieceIds(
   options: { enabled?: boolean; refetchInterval?: number } = {},
 ) {
   const [globalState] = useGlobalState();
-  const resourceType = `${globalState.moduleAddress}::nyc_token::TokenRefs`;
+  const officeState = useOfficeState();
+  const resourceType = getIdentifier(officeState, "token", "TokenRefs");
 
   const result: Output = useQueries({
     queries: (tokenAddresses ?? []).map((address) => ({

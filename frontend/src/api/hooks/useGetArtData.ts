@@ -1,15 +1,15 @@
 import { simpleMapArrayToMap } from "@/utils";
-import { useGlobalState } from "../../context/GlobalState";
 import { useGetAccountResource } from "./useGetAccountResource";
 import { ArtData, PieceData } from "@/types/surf";
+import { getIdentifier, useOfficeState } from "@/context/OfficeState";
 
 export function useGetArtData(
   options: { enabled?: boolean; refetchInterval?: number } = {},
 ) {
-  const [globalState] = useGlobalState();
-  let resourceType = `${globalState.moduleAddress}::nyc_collection::ArtData`;
+  const officeState = useOfficeState();
+  const resourceType = getIdentifier(officeState, "collection", "ArtData");
   const result = useGetAccountResource(
-    globalState.collectionAddress,
+    officeState.collectionAddress,
     resourceType,
     options,
   );

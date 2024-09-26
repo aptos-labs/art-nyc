@@ -40,9 +40,7 @@ export const EditorPage = () => {
   let walletConnectComponent = null;
   if (!connected) {
     walletConnectComponent = (
-      <div
-        className={css({ padding: "12", textStyle: "heading.100.semibold" })}
-      >
+      <div className={css({ padding: "12", textStyle: "heading.md" })}>
         <p>Please connect your wallet.</p>
       </div>
     );
@@ -53,7 +51,7 @@ export const EditorPage = () => {
       <p
         className={css({
           paddingLeft: "12",
-          textStyle: "heading.300.semibold",
+          textStyle: "heading.md",
         })}
       >
         Editor
@@ -86,7 +84,7 @@ const Divider = () => (
   <div
     className={css({
       height: "[1px]",
-      backgroundColor: "border.divider.primary",
+      backgroundColor: "border.primary",
       marginLeft: "[100px]",
       marginRight: "[100px]",
       marginTop: "24",

@@ -1,4 +1,6 @@
-// See the README for an explanation of where these came from.
+// See the README for an explanation of where these came from. Don't rely on the module
+// address or name, we publish essentially identical modules under different addresses
+// and names.
 
 export const COLLECTION_ABI = {
   address: "0x296102a3893d43e11de2aa142fbb126377120d7d71c246a2f95d5b4f3ba16b30",

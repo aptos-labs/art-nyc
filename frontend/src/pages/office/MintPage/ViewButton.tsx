@@ -2,7 +2,8 @@ import { PieceData } from "@/types/surf";
 import { getImageUrl } from "@/utils";
 import {
   Button,
-  IconCloseLine,
+  IconButton,
+  IconX,
   Modal,
 } from "@aptos-internal/design-system-web";
 import { css } from "styled-system/css";
@@ -34,9 +35,9 @@ export const ViewButton = ({ pieceData }: { pieceData: PieceData }) => {
                 objectFit: "contain",
               })}
             />
-            <Button variant="secondary" iconOnly onClick={close}>
-              <IconCloseLine />
-            </Button>
+            <IconButton variant="secondary" onClick={close} ariaLabel="Close">
+              <IconX />
+            </IconButton>
           </div>
         );
       }}

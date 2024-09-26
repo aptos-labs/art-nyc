@@ -7,9 +7,9 @@ import { getImageUrl } from "@/utils";
 import {
   Button,
   Card,
-  IconExternalLinkLine,
-  IconInstagramLine,
-  IconTwitterLine,
+  IconArrowSquareOut,
+  IconInstagramLogo,
+  IconXLogo,
 } from "@aptos-internal/design-system-web";
 import { useEffect, useRef, useState } from "react";
 import { css } from "styled-system/css";
@@ -44,53 +44,50 @@ export const TokenInfo = ({ pieceData }: { pieceData: PieceData }) => {
       <ImageShadow name={pieceData.token_name} src={getImageUrl(pieceData)} />
       <div className={flex({ align: "center" })}>
         {metadata.artist_name && (
-          <p className={css({ textStyle: "body.300.regular", pr: "4" })}>
+          <p className={css({ textStyle: "body.md", pr: "4" })}>
             {metadata.artist_name}
           </p>
         )}
         {instagramHref && (
           <Button
             className={css({ p: "4" })}
-            variant="secondaryText"
+            variant="text"
             size="sm"
-            iconOnly
-            asChild
+            ariaLabel="Visit artist's Instagram"
           >
             <a href={instagramHref}>
-              <IconInstagramLine className={css({ h: "24", w: "24" })} />
+              <IconInstagramLogo />
             </a>
           </Button>
         )}
         {twitterHref && (
           <Button
             className={css({ p: "4" })}
-            variant="secondaryText"
+            variant="text"
             size="sm"
-            iconOnly
-            asChild
+            ariaLabel="Visit artist's X profile"
           >
             <a href={twitterHref}>
-              <IconTwitterLine className={css({ h: "24", w: "24" })} />
+              <IconXLogo />
             </a>
           </Button>
         )}
         {websiteHref && (
           <Button
             className={css({ p: "4" })}
-            variant="secondaryText"
+            variant="text"
             size="sm"
-            iconOnly
-            asChild
+            ariaLabel="Visit artist's website"
           >
             <a href={websiteHref}>
-              <IconExternalLinkLine className={css({ h: "24", w: "24" })} />
+              <IconArrowSquareOut />
             </a>
           </Button>
         )}
       </div>
       <p
         className={css({
-          textStyle: "heading.100.semibold",
+          textStyle: "heading.md",
           fontWeight: "bold",
         })}
       >
@@ -103,7 +100,7 @@ export const TokenInfo = ({ pieceData }: { pieceData: PieceData }) => {
         <p
           className={css({
             color: "text.secondary",
-            textStyle: "body.300.regular",
+            textStyle: "body.md",
           })}
         >
           {metadata.material_description}
@@ -113,7 +110,7 @@ export const TokenInfo = ({ pieceData }: { pieceData: PieceData }) => {
       <p
         className={css({
           whiteSpace: "pre-wrap",
-          textStyle: "body.300.regular",
+          textStyle: "body.md",
           maxW: "prose",
         })}
       >
