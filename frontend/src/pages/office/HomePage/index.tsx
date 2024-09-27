@@ -74,8 +74,20 @@ export const HomePage = () => {
                     bg: "[background.disabled]",
                   })}
                 />
-                <div className={stack({ gap: "[2px]", px: "12", py: "8" })}>
-                  <div className={css({ textStyle: "body.md" })}>
+                <div
+                  className={stack({
+                    gap: "[2px]",
+                    px: "12",
+                    pt: "12",
+                    pb: "8",
+                  })}
+                >
+                  <div
+                    className={css({
+                      textStyle: "body.md",
+                      color: "text.secondary",
+                    })}
+                  >
                     {metadata.artist_name}
                   </div>
                   <div className={css({ textStyle: "label.md" })}>

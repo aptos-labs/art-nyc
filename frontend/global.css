@@ -3,20 +3,20 @@
 
 @layer base {
   @font-face {
-    font-family: "IBMPlexSans";
+    font-family: "F37Zagma";
     font-style: normal;
-    font-weight: 100 700;
+    font-weight: 100 800;
     font-display: fallback;
-    src: url(/IBMPlexSans-Variable.woff2) format("woff2");
+    src: url(/F37Zagma-VF.woff2) format("woff2");
   }
 
   html {
-    --font-ibm-plex-sans: "IBMPlexSans";
+    --font-f37-zagma: "F37Zagma";
   }
 
   body {
-    font-family: var(--font-ibm-plex-sans);
-    background-color: var(--aptos-colors-background-primary);
-    color: var(--aptos-colors-text-primary);
+    font-family: var(--font-f37-zagma);
+    background-color: var(--ds-colors-background-canvas);
+    color: var(--ds-colors-text-primary);
   }
 }

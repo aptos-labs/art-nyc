@@ -15,9 +15,9 @@ import {
   AccountInfo,
   InputTransactionData,
   Types,
-} from "@aptos-labs/wallet-adapter-core";
-import { PieceData } from "./types/surf";
+} from "@aptos-labs/wallet-adapter-react";
 import { PINATA_GATEWAY_TOKEN } from "./constants";
+import { PieceData } from "./types/surf";
 
 /*
  * Converts a utf8 string encoded as hex back to string
@@ -130,10 +130,6 @@ export const OCTA_POSITIVE_EXPONENT = 10 ** OCTA_NUMBER;
 export const aptToOcta = (octa: number) => octa * OCTA_POSITIVE_EXPONENT;
 export const octaToApt = (apt: bigint) => apt / BigInt(OCTA_POSITIVE_EXPONENT);
 export const octaToAptNormal = (apt: number) => apt / OCTA_POSITIVE_EXPONENT;
-
-function range(size: number, startAt: number = 0): ReadonlyArray<number> {
-  return [...Array(size).keys()].map((i) => i + startAt);
-}
 
 export function getShortAddress(addr: string): string {
   console.log(`addrrrrrrrrrrr: ${JSON.stringify(addr)}`);

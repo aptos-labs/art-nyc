@@ -41,7 +41,6 @@ export default defineConfig({
   outdir: "styled-system",
 
   // Enable optimization flags for production builds
-  optimize: process.env.NODE_ENV === "production",
   minify: process.env.NODE_ENV === "production",
   hash: process.env.NODE_ENV === "production",
 });

@@ -4,10 +4,11 @@ import { connectPetra } from "@/components/WalletSelector";
 import { getNetworkQueryParam, useGlobalState } from "@/context/GlobalState";
 import { navigateExternal } from "@/utils";
 import {
+  focusRing,
   IconButton,
   IconDotsThreeVertical,
   IconGasPump,
-  IconGithub,
+  IconGithubLogo,
   IconMoney,
   IconSignIn,
   IconSignOut,
@@ -47,9 +48,12 @@ export function MainLayout({ children, headerText }: LayoutProps) {
         color: "text.primary",
       })}
     >
-      <Link to={`/${office}${getNetworkQueryParam(globalState)}`}>
+      <Link
+        to={`/${office}${getNetworkQueryParam(globalState)}`}
+        className={focusRing()}
+      >
         <AptosLogo
-          className={css({ h: "32", w: "32", color: "text.primary" })}
+          className={css({ h: "32", w: "32", color: "icon.secondary" })}
         />
       </Link>
       <h1 className={css({ textStyle: "heading.md" })}>{headerText}</h1>
@@ -115,11 +119,11 @@ function MyMenu() {
         walletItem,
         feePayerItem,
         {
-          Icon: IconGithub,
+          Icon: IconGithubLogo,
           id: "source",
           label: "View Source",
           onSelect: () => {
-            navigateExternal("https://github.com/banool/aptos-nyc-2024");
+            navigateExternal("https://github.com/aptos-labs/art-nyc");
           },
         },
       ]}
