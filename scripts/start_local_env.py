@@ -151,6 +151,7 @@ def fresh_start(args):
             "--assume-yes",
             "--profile",
             PROFILE_NAME,
+            "--move-2",
         ]
         + move_cmd_extra,
         **DEFAULT_SUBPROCESS_KWARGS,

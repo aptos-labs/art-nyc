@@ -60,6 +60,20 @@ function deriveOfficeState({
     } else {
       throw new Error(`Unknown office: ${office}`);
     }
+  } else if (network === "testnet") {
+    if (office === Office.NYC) {
+      moduleAddress =
+        "0x866ae3b06cf161789f5c17d5e616513181e017f75866635d6c9cfd435c1b3782";
+      collectionAddress =
+        "0xd3b9f0214173cef4d48ddb7c63f3d8b65bfaa196966d2446a9a6a606815f68c2";
+    } else if (office === Office.BAYAREA) {
+      moduleAddress =
+        "0xf475ee7a2fbff4b6c5bc8e5b39d7a33660c4492eec3790fc66aa5939b2121408";
+      collectionAddress =
+        "0xd1c16330ba12a1c29d2f6229e7be8bb6ef6655a32e5d787e2ad29acc65390152";
+    } else {
+      throw new Error(`Unknown office: ${office}`);
+    }
   } else {
     throw new Error(`Unknown network: ${network}`);
   }

@@ -12,10 +12,12 @@ import {
 } from "@aptos-labs/ts-sdk";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useGasStation } from "./useGasStation";
 
 export function useMintPiece() {
   const { account, signAndSubmitTransaction, signTransaction } = useWallet();
   const [globalState] = useGlobalState();
+  const { gasStationSignAndSubmit } = useGasStation();
   const officeState = useOfficeState();
   const queryClient = useQueryClient();
 
@@ -27,16 +29,17 @@ export function useMintPiece() {
         functionArguments: [pieceId],
       };
       let feePayerArgs: FeePayerArgs | undefined;
-      if (globalState.feePayerClient) {
+      if (globalState.gasStationClient) {
         feePayerArgs = {
           useFeePayer: globalState.useFeePayer,
-          feePayerClient: globalState.feePayerClient,
           signTransaction,
+          gasStationClient: globalState.gasStationClient,
         };
       }
       const waitResponse = await onClickSubmitTransaction({
         payload,
         signAndSubmitTransaction,
+        gasStationSignAndSubmit,
         feePayerArgs,
         account,
         aptos: globalState.client,

@@ -22,7 +22,7 @@ module addr::bayarea_collection {
 
     /// The account that is allowed to create the collection. For now we just enforce
     /// that the collection creator is the same account that published the module.
-    const PERMITTED_COLLECTION_CREATOR: address = @addr;
+    const PERMITTED_COLLECTION_CREATOR: address = @creator;
 
     /// Resource we store at the object address to enable mutation / of the collection.
     struct CollectionRefs has key {

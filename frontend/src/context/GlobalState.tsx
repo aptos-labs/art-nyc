@@ -1,18 +1,22 @@
 import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
 import React, { createContext, useMemo } from "react";
-import { defaultNetwork } from "../constants";
+import { GasStationClient } from "../api/gasStation";
+import {
+  defaultNetwork,
+  fullnodeConfig,
+  gasStationConfig,
+  indexerConfig,
+} from "../constants";
 import { useNetworkSelector } from "./networkSelection";
-import { Client } from "@aptos-labs/aptos-fee-payer-client";
 
 export interface GlobalState {
   /** Derived from external state ?network=<network> query parameter - e.g. devnet */
   readonly network: Network;
   /** Derived from network */
   readonly client: Aptos;
-  /** Derived from network */
-  readonly feePayerClient?: Client;
   /** Determined by the user using the toggle in the menu */
   readonly useFeePayer: boolean;
+  readonly gasStationClient: GasStationClient;
 }
 
 function deriveGlobalState({
@@ -26,22 +30,31 @@ function deriveGlobalState({
   if (network === "mainnet") {
     // This is a frontend API key made by dport.
     apiKey = "AG-82QP58357YNHHMZMTG8D2MQT99962GQGT";
+  } else if (network === "testnet") {
+    apiKey = "<TESTNET_STAGING_API_KEY>";
+  } else {
+    throw new Error("Invalid network");
   }
 
   const clientConfig = apiKey ? { API_KEY: apiKey } : undefined;
-  const config = new AptosConfig({ network, clientConfig });
+  const config = new AptosConfig({
+    network,
+    fullnode: fullnodeConfig[network],
+    indexer: indexerConfig[network],
+    clientConfig,
+  });
   const client = new Aptos(config);
-  let feePayerClient;
-  if (network === "mainnet") {
-    feePayerClient = new Client({
-      url: "https://art-nyc.mainnet-prod.gcp.aptosdev.com",
-    });
-  }
+
+  const gasStationClient = new GasStationClient(
+    gasStationConfig[network]!,
+    apiKey,
+  );
+
   return {
     network,
     client,
-    feePayerClient,
     useFeePayer,
+    gasStationClient,
   };
 }
 

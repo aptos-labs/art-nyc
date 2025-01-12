@@ -18,6 +18,7 @@ import {
 } from "@aptos-labs/wallet-adapter-react";
 import { PINATA_GATEWAY_TOKEN } from "./constants";
 import { PieceData } from "./types/surf";
+import { GasStationClient, SignAndSubmitResponse } from "./api/gasStation";
 
 /*
  * Converts a utf8 string encoded as hex back to string
@@ -216,7 +217,7 @@ export const navigateExternal = (url: string) => {
 export type FeePayerArgs = {
   /** This should come from useFeePayer in the global state. */
   useFeePayer: boolean;
-  feePayerClient: Client;
+  gasStationClient: GasStationClient;
   signTransaction: (
     transactionOrPayload: AnyRawTransaction | Types.TransactionPayload,
     asFeePayer?: boolean,
@@ -230,6 +231,7 @@ export type FeePayerArgs = {
 export async function onClickSubmitTransaction({
   payload,
   signAndSubmitTransaction,
+  gasStationSignAndSubmit,
   feePayerArgs,
   account,
   aptos,
@@ -238,6 +240,11 @@ export async function onClickSubmitTransaction({
 }: {
   payload: InputEntryFunctionData;
   signAndSubmitTransaction: (transaction: InputTransactionData) => Promise<any>;
+  gasStationSignAndSubmit: (
+    transaction: AnyRawTransaction,
+    senderAuth: AccountAuthenticator,
+    additionalSignersAuth?: AccountAuthenticator[],
+  ) => Promise<SignAndSubmitResponse>;
   feePayerArgs?: FeePayerArgs;
   account: AccountInfo | null;
   aptos: Aptos;
@@ -250,7 +257,7 @@ export async function onClickSubmitTransaction({
 
   let out: CommittedTransactionResponse | null = null;
   try {
-    let submissionResponse: PendingTransactionResponse;
+    let submissionResponse: SignAndSubmitResponse | PendingTransactionResponse;
     if (feePayerArgs && feePayerArgs.useFeePayer) {
       const unsignedTransaction = await aptos.transaction.build.simple({
         sender: account.address,
@@ -258,29 +265,17 @@ export async function onClickSubmitTransaction({
         withFeePayer: true,
       });
 
-      let publicKey: PublicKey;
-      if (typeof account.publicKey === "string") {
-        publicKey = new Ed25519PublicKey(account.publicKey);
-      } else {
-        throw "Multi public key not supported right now";
-      }
-
+      // Sign TX as user
       const senderAuthenticator = await feePayerArgs.signTransaction(
         unsignedTransaction,
         false,
         feePayerArgs.options,
       );
 
-      const output = await feePayerArgs.feePayerClient.signAndReturn({
-        transaction: unsignedTransaction,
-        publicKey,
-      });
-
-      submissionResponse = await aptos.transaction.submit.simple({
-        transaction: output.signedTransaction,
+      submissionResponse = await gasStationSignAndSubmit(
+        unsignedTransaction,
         senderAuthenticator,
-        feePayerAuthenticator: output.feePayerAuthenticator,
-      });
+      );
     } else {
       submissionResponse = await signAndSubmitTransaction({
         sender: account.address,
@@ -289,7 +284,9 @@ export async function onClickSubmitTransaction({
     }
 
     out = await aptos.waitForTransaction({
-      transactionHash: submissionResponse.hash,
+      transactionHash:
+        (submissionResponse as SignAndSubmitResponse).transactionHash ||
+        (submissionResponse as PendingTransactionResponse).hash,
       options: { checkSuccess: true, waitForIndexer: true },
     });
     toast(successToast);

@@ -14,3 +14,4 @@ subdir = "aptos-move/framework/aptos-token-objects"
 
 [addresses]
 addr = "_"
+creator = "_"

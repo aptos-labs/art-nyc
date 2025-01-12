@@ -1,5 +1,11 @@
 # Aptos NYC Art Frontend
 
+## Build
+Run:
+```bash
+pnpm artifactregistry-login
+```
+
 ## Development
 Run the development server:
 ```bash

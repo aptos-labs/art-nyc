@@ -1,3 +1,4 @@
+import { useGasStation } from "@/api/hooks/useGasStation";
 import { useGlobalState } from "@/context/GlobalState";
 import { getIdentifier, useOfficeState } from "@/context/OfficeState";
 import { FeePayerArgs, onClickSubmitTransaction } from "@/utils";
@@ -26,6 +27,7 @@ export const UpdateButton = ({
 }) => {
   const { account, connected, signAndSubmitTransaction, signTransaction } =
     useWallet();
+  const { gasStationSignAndSubmit } = useGasStation();
   const [submitting, setSubmitting] = useState(false);
   const [globalState] = useGlobalState();
   const officeState = useOfficeState();
@@ -47,16 +49,17 @@ export const UpdateButton = ({
       ],
     };
     let feePayerArgs: FeePayerArgs | undefined;
-    if (globalState.feePayerClient) {
+    if (globalState.gasStationClient) {
       feePayerArgs = {
         useFeePayer: globalState.useFeePayer,
-        feePayerClient: globalState.feePayerClient,
         signTransaction,
+        gasStationClient: globalState.gasStationClient,
       };
     }
     await onClickSubmitTransaction({
       payload,
       signAndSubmitTransaction,
+      gasStationSignAndSubmit,
       feePayerArgs,
       account,
       aptos: globalState.client,
