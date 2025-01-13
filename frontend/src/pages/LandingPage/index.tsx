@@ -1,11 +1,11 @@
-import { getNetworkQueryParam, useGlobalState } from "@/context/GlobalState";
+import { useGetNetworkQueryParam } from "@/context/GlobalState";
 import { Button } from "@aptos-internal/design-system-web";
 import { Link } from "react-router-dom";
 import { css } from "styled-system/css";
 import { flex } from "styled-system/patterns";
 
 export const LandingPage = () => {
-  const [globalState] = useGlobalState();
+  const networkQueryParam = useGetNetworkQueryParam();
 
   return (
     <div
@@ -25,9 +25,7 @@ export const LandingPage = () => {
         size="lg"
         children="NYC"
         render={(children) => (
-          <Link to={`/nyc${getNetworkQueryParam(globalState)}`}>
-            {children}
-          </Link>
+          <Link to={`/nyc${networkQueryParam}`}>{children}</Link>
         )}
       />
 
@@ -37,9 +35,7 @@ export const LandingPage = () => {
         size="lg"
         children="Bay Area"
         render={(children) => (
-          <Link to={`/bayarea${getNetworkQueryParam(globalState)}`}>
-            {children}
-          </Link>
+          <Link to={`/bayarea${networkQueryParam}`}>{children}</Link>
         )}
       />
     </div>

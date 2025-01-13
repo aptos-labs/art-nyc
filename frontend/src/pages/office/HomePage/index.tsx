@@ -1,5 +1,5 @@
 import { useGetArtData } from "@/api/hooks/useGetArtData";
-import { getNetworkQueryParam, useGlobalState } from "@/context/GlobalState";
+import { useGetNetworkQueryParam } from "@/context/GlobalState";
 import { useOfficeState } from "@/context/OfficeState";
 import { getPieceDataMetadata, getTypedMetadata } from "@/types/surf";
 import { getImageUrl } from "@/utils";
@@ -9,7 +9,7 @@ import { flex, stack } from "styled-system/patterns";
 
 export const HomePage = () => {
   const { artDataInner, isLoading } = useGetArtData();
-  const [globalState] = useGlobalState();
+  const networkQueryParam = useGetNetworkQueryParam();
   const officeState = useOfficeState();
 
   return (
@@ -61,7 +61,7 @@ export const HomePage = () => {
               asChild
             >
               <a
-                href={`${officeState.office}/mint/${key}${getNetworkQueryParam(globalState)}`}
+                href={`${officeState.office}/mint/${key}${networkQueryParam}`}
                 style={{ animationDelay: `${i / 20}s` }}
               >
                 <img

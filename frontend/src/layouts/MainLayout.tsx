@@ -1,7 +1,7 @@
 import "../../global.css";
 import { AptosLogo } from "@/components/AptosLogo";
 import { connectPetra } from "@/components/WalletSelector";
-import { getNetworkQueryParam, useGlobalState } from "@/context/GlobalState";
+import { useGetNetworkQueryParam, useGlobalState } from "@/context/GlobalState";
 import { navigateExternal } from "@/utils";
 import {
   focusRing,
@@ -10,6 +10,7 @@ import {
   IconGasPump,
   IconGithubLogo,
   IconMoney,
+  IconNetwork,
   IconSignIn,
   IconSignOut,
   Menu,
@@ -31,7 +32,7 @@ interface LayoutProps {
  * expect that GlobalState is set.
  */
 export function MainLayout({ children, headerText }: LayoutProps) {
-  const [globalState] = useGlobalState();
+  const networkQueryParam = useGetNetworkQueryParam();
 
   // Make the home button just return to the office specific home page if we're "in an office".
   const location = useLocation();
@@ -48,10 +49,7 @@ export function MainLayout({ children, headerText }: LayoutProps) {
         color: "text.primary",
       })}
     >
-      <Link
-        to={`/${office}${getNetworkQueryParam(globalState)}`}
-        className={focusRing()}
-      >
+      <Link to={`/${office}${networkQueryParam}`} className={focusRing()}>
         <AptosLogo
           className={css({ h: "32", w: "32", color: "icon.secondary" })}
         />
@@ -118,6 +116,34 @@ function MyMenu() {
       menuItems={[
         walletItem,
         feePayerItem,
+        // This isn't perfect, there are issues where you set it to mainnet but then
+        // navigate and it still adds the testnet network query param, implying that
+        // there is some issue with useGetNetworkQueryParam.
+        {
+          Icon: IconNetwork,
+          id: "network",
+          label: "Switch Network",
+          onSelect: () => {
+            const currentNetwork = globalState.network;
+            const newNetwork =
+              currentNetwork === "mainnet" ? "testnet" : "mainnet";
+            globalActions.selectNetwork(newNetwork);
+            // Remove the query param from the URL if we're now on mainnet.
+            if (newNetwork === "mainnet") {
+              window.history.replaceState(
+                null,
+                "",
+                window.location.pathname.replace(`?network=testnet`, ""),
+              );
+            }
+            toast({
+              title: "Network Switched",
+              description: `You are now using ${newNetwork}.`,
+              variant: "info",
+              duration: 5000,
+            });
+          },
+        },
         {
           Icon: IconGithubLogo,
           id: "source",

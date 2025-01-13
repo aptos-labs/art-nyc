@@ -10,7 +10,7 @@ import {
 import { useNetworkSelector } from "./networkSelection";
 
 export interface GlobalState {
-  /** Derived from external state ?network=<network> query parameter - e.g. devnet */
+  /** Derived from external state ?network=<network> query parameter - e.g. testnet */
   readonly network: Network;
   /** Derived from network */
   readonly client: Aptos;
@@ -31,7 +31,8 @@ function deriveGlobalState({
     // This is a frontend API key made by dport.
     apiKey = "AG-82QP58357YNHHMZMTG8D2MQT99962GQGT";
   } else if (network === "testnet") {
-    apiKey = "<TESTNET_STAGING_API_KEY>";
+    // This is created by John.
+    apiKey = "aptoslabs_F1fFrSzj8xQ_4Tin4WihqULB2fsdbMpSX8bpjZBKqDjfi";
   } else {
     throw new Error("Invalid network");
   }
@@ -111,8 +112,10 @@ export const useGlobalState = () =>
     React.useContext(GlobalActionsContext),
   ] as const;
 
-export function getNetworkQueryParam(globalState: GlobalState) {
-  return globalState.network === "mainnet"
+export function useGetNetworkQueryParam() {
+  const [globalState] = useGlobalState();
+  // Only include the query param if the network is not the default network.
+  return globalState.network === defaultNetwork
     ? ""
     : `?network=${globalState.network}`;
 }

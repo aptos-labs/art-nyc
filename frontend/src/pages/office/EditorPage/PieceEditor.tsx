@@ -6,7 +6,7 @@ import { css } from "styled-system/css";
 import { MetadataFields } from "./MetadataFields";
 import { mapsAreEqual } from "@/utils";
 import { Link } from "react-router-dom";
-import { getNetworkQueryParam, useGlobalState } from "@/context/GlobalState";
+import { useGetNetworkQueryParam } from "@/context/GlobalState";
 import {
   IconButton,
   IconClipboard,
@@ -22,7 +22,7 @@ export const PieceEditor = ({
   pieceId: string;
   pieceData: PieceData;
 }) => {
-  const [globalState] = useGlobalState();
+  const networkQueryParam = useGetNetworkQueryParam();
   const officeState = useOfficeState();
   const [pieceName, setPieceName] = useState(pieceData.token_name);
   const [pieceDescription, setPieceDescription] = useState(
@@ -46,7 +46,7 @@ export const PieceEditor = ({
       className={css({ display: "flex", flexDirection: "column", gap: "16" })}
     >
       <div>
-        <Link to={`${linkTo}${getNetworkQueryParam(globalState)}`}>
+        <Link to={`${linkTo}${networkQueryParam}`}>
           <span className={css({ textStyle: "heading.md" })}>{pieceId}</span>
         </Link>
         <Tooltip placement="top-start" content="Copy Petra deeplink URL">
