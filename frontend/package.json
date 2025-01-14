@@ -19,7 +19,6 @@
     "@aptos-labs/wallet-adapter-react": "^3.7.0",
     "@tanstack/react-query": "^5.32.0",
     "@thalalabs/surf": "^1.2.0",
-    "axios": "^1.7.9",
     "buffer": "^6.0.3",
     "petra-plugin-wallet-adapter": "^0.4.5",
     "react": "^18.3.1",
