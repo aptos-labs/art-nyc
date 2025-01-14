@@ -33,7 +33,6 @@ export function useMintPiece() {
         feePayerArgs = {
           useFeePayer: globalState.useFeePayer,
           signTransaction,
-          gasStationClient: globalState.gasStationClient,
         };
       }
       const waitResponse = await onClickSubmitTransaction({

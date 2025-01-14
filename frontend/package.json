@@ -14,8 +14,9 @@
   },
   "dependencies": {
     "@aptos-internal/design-system-web": "0.2.0-beta.16",
-    "@aptos-labs/ts-sdk": "=1.13.3",
+    "@aptos-internal/gas-station-api-client": "^1.0.0",
     "@aptos-labs/aptos-fee-payer-client": "^0.0.7",
+    "@aptos-labs/ts-sdk": "=1.13.3",
     "@aptos-labs/wallet-adapter-react": "^3.7.0",
     "@tanstack/react-query": "^5.32.0",
     "@thalalabs/surf": "^1.2.0",

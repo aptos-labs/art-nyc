@@ -53,7 +53,6 @@ export const UpdateButton = ({
       feePayerArgs = {
         useFeePayer: globalState.useFeePayer,
         signTransaction,
-        gasStationClient: globalState.gasStationClient,
       };
     }
     await onClickSubmitTransaction({

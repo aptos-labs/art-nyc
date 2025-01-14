@@ -1,6 +1,6 @@
+import { createGasStationApiClient } from "@aptos-internal/gas-station-api-client";
 import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
 import React, { createContext, useMemo } from "react";
-import { GasStationClient } from "../api/gasStation";
 import {
   defaultNetwork,
   fullnodeConfig,
@@ -16,7 +16,7 @@ export interface GlobalState {
   readonly client: Aptos;
   /** Determined by the user using the toggle in the menu */
   readonly useFeePayer: boolean;
-  readonly gasStationClient: GasStationClient;
+  readonly gasStationClient: ReturnType<typeof createGasStationApiClient>;
 }
 
 function deriveGlobalState({
@@ -46,10 +46,15 @@ function deriveGlobalState({
   });
   const client = new Aptos(config);
 
-  const gasStationClient = new GasStationClient(
-    gasStationConfig[network]!,
-    apiKey,
-  );
+  const gasStationClient = createGasStationApiClient({
+    baseUrl: gasStationConfig[network]!,
+    interceptors: {
+      request: (request) => {
+        request.headers.set("Authorization", `Bearer ${apiKey}`);
+        return request;
+      },
+    },
+  });
 
   return {
     network,

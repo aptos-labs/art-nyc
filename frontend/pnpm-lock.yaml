@@ -11,6 +11,9 @@ importers:
       '@aptos-internal/design-system-web':
         specifier: 0.2.0-beta.16
         version: 0.2.0-beta.16(@aptos-labs/wallet-adapter-react@3.7.0(@aptos-labs/ts-sdk@1.13.3)(@mizuwallet-sdk/core@1.3.2(@aptos-labs/ts-sdk@1.13.3)(graphql-request@7.1.0(graphql@16.9.0)))(@mizuwallet-sdk/protocol@0.0.1)(@types/react@18.3.9)(@wallet-standard/core@1.0.3)(aptos@1.21.0)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@aptos-internal/gas-station-api-client':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@aptos-labs/aptos-fee-payer-client':
         specifier: ^0.0.7
         version: 0.0.7(@trpc/server@10.45.2)
@@ -130,6 +133,9 @@ packages:
       '@aptos-labs/wallet-adapter-react': ^3.5.10
       react: ^18.2.0
       react-dom: ^18.2.0
+
+  '@aptos-internal/gas-station-api-client@1.0.0':
+    resolution: {integrity: sha512-cLhJB7aHdHAummMzIr4jkumDNKZjMnnN4q8UEbTSQusMO/ms8K5QloSTWkbFcfqhUYpdqxDhE0K/LVKVDO0o1g==, tarball: https://us-npm.pkg.dev/aptos-registry/npm/@aptos-internal/gas-station-api-client/-/@aptos-internal/gas-station-api-client-1.0.0.tgz}
 
   '@aptos-labs/aptos-cli@0.1.2':
     resolution: {integrity: sha512-MCi+9xPDG/Fx6c6b9ACqyQBYJLHqKJQKB8lay/1sUNJ2mNBB2OU1Lkmd5pmjUG1JbZ5cg2Fmgid5iMKdTnphhA==}
@@ -4275,6 +4281,8 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-dropzone: 14.2.3(react@18.3.1)
+
+  '@aptos-internal/gas-station-api-client@1.0.0': {}
 
   '@aptos-labs/aptos-cli@0.1.2': {}
 

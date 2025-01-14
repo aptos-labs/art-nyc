@@ -1,5 +1,9 @@
 import { CreateToastArgs, toast } from "@aptos-internal/design-system-web";
 import {
+  SignAndSubmitTransactionData,
+  SignAndSubmitTransactionResponse,
+} from "@aptos-internal/gas-station-api-client/build/generated/types.gen";
+import {
   AccountAuthenticator,
   AnyRawTransaction,
   Aptos,
@@ -15,7 +19,7 @@ import {
 } from "@aptos-labs/wallet-adapter-react";
 import { PINATA_GATEWAY_TOKEN } from "./constants";
 import { PieceData } from "./types/surf";
-import { GasStationClient, SignAndSubmitResponse } from "./api/gasStation";
+import { RequestResult } from "@aptos-internal/gas-station-api-client/build/generated/client";
 
 /*
  * Converts a utf8 string encoded as hex back to string
@@ -214,7 +218,6 @@ export const navigateExternal = (url: string) => {
 export type FeePayerArgs = {
   /** This should come from useFeePayer in the global state. */
   useFeePayer: boolean;
-  gasStationClient: GasStationClient;
   signTransaction: (
     transactionOrPayload: AnyRawTransaction | Types.TransactionPayload,
     asFeePayer?: boolean,
@@ -238,10 +241,8 @@ export async function onClickSubmitTransaction({
   payload: InputEntryFunctionData;
   signAndSubmitTransaction: (transaction: InputTransactionData) => Promise<any>;
   gasStationSignAndSubmit: (
-    transaction: AnyRawTransaction,
-    senderAuth: AccountAuthenticator,
-    additionalSignersAuth?: AccountAuthenticator[],
-  ) => Promise<SignAndSubmitResponse>;
+    options: SignAndSubmitTransactionData,
+  ) => Promise<RequestResult<SignAndSubmitTransactionResponse>>;
   feePayerArgs?: FeePayerArgs;
   account: AccountInfo | null;
   aptos: Aptos;
@@ -254,7 +255,9 @@ export async function onClickSubmitTransaction({
 
   let out: CommittedTransactionResponse | null = null;
   try {
-    let submissionResponse: SignAndSubmitResponse | PendingTransactionResponse;
+    let submissionResponse:
+      | SignAndSubmitTransactionResponse
+      | PendingTransactionResponse;
     if (feePayerArgs && feePayerArgs.useFeePayer) {
       const unsignedTransaction = await aptos.transaction.build.simple({
         sender: account.address,
@@ -269,10 +272,18 @@ export async function onClickSubmitTransaction({
         feePayerArgs.options,
       );
 
-      submissionResponse = await gasStationSignAndSubmit(
-        unsignedTransaction,
-        senderAuthenticator,
-      );
+      // Sign and submit transaction with gas station
+      const response = await gasStationSignAndSubmit({
+        body: {
+          transactionBytes: Array.from(unsignedTransaction.bcsToBytes()),
+          senderAuth: Array.from(senderAuthenticator.bcsToBytes()),
+        },
+      });
+      if (!response.data) {
+        throw new Error("Gas station response data is undefined");
+      }
+
+      submissionResponse = response.data;
     } else {
       submissionResponse = await signAndSubmitTransaction({
         sender: account.address,
@@ -282,7 +293,8 @@ export async function onClickSubmitTransaction({
 
     out = await aptos.waitForTransaction({
       transactionHash:
-        (submissionResponse as SignAndSubmitResponse).transactionHash ||
+        (submissionResponse as SignAndSubmitTransactionResponse)
+          .transactionHash ||
         (submissionResponse as PendingTransactionResponse).hash,
       options: { checkSuccess: true, waitForIndexer: true },
     });

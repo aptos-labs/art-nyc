@@ -1,6 +1,10 @@
 import { useCallback } from "react";
-import { AccountAuthenticator, AnyRawTransaction } from "@aptos-labs/ts-sdk";
 import { useGlobalState } from "../../context/GlobalState";
+import {
+  SignAndSubmitTransactionData,
+  SignAndSubmitTransactionResponse,
+} from "@aptos-internal/gas-station-api-client/build/generated/types.gen";
+import { RequestResult } from "@aptos-internal/gas-station-api-client/build/generated/client";
 
 export function useGasStation() {
   const [globalState] = useGlobalState();
@@ -8,15 +12,9 @@ export function useGasStation() {
 
   const gasStationSignAndSubmit = useCallback(
     async (
-      transaction: AnyRawTransaction,
-      senderAuth: AccountAuthenticator,
-      additionalSignersAuth?: AccountAuthenticator[],
-    ) => {
-      return gasStationClient.signAndSubmit(
-        transaction,
-        senderAuth,
-        additionalSignersAuth,
-      );
+      options: SignAndSubmitTransactionData,
+    ): Promise<RequestResult<SignAndSubmitTransactionResponse>> => {
+      return gasStationClient.signAndSubmitTransaction(options);
     },
     [gasStationClient],
   );
