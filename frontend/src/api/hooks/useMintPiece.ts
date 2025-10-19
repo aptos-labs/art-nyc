@@ -76,7 +76,11 @@ export function useMintPiece() {
     onSuccess: async (tokenAddress) => {
       if (!account?.address || !tokenAddress) return;
 
-      const queryKey = ["tokenAddresses", account.address, globalState.network];
+      const queryKey = [
+        "tokenAddresses",
+        account.address.toString(),
+        globalState.network,
+      ];
 
       await queryClient.cancelQueries({ queryKey });
 

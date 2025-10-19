@@ -5,7 +5,7 @@
   "homepage": "https://art.aptoslabs.com/",
   "scripts": {
     "prepare": "panda codegen",
-    "start": "vite --port 3000",
+    "dev": "vite --port 3000",
     "build": "tsc --noEmit && vite build",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "fmt": "prettier --write 'src/**/*.(ts|tsx)'",
