@@ -38,15 +38,20 @@ export const MintPage = () => {
   });
 
   // Lookup what tokens the user owns right now in this collection.
-  const { data: tokenAddresses, error: tokensError } = useGetTokenAddresses(
-    account?.address!,
-    {
-      enabled: account !== null && account.address !== undefined,
-    },
-  );
+  const {
+    data: tokenAddresses,
+    isLoading: tokenAddressesLoading,
+    error: tokensError,
+  } = useGetTokenAddresses(account?.address?.toString() ?? "", {
+    enabled: account !== null && account.address !== undefined,
+  });
 
   // Lookup the piece IDs of those tokens.
-  const { pieceIds, error: pieceIdsError } = useGetPieceIds(tokenAddresses!, {
+  const {
+    pieceIds,
+    isLoading: pieceIdsLoading,
+    error: pieceIdsError,
+  } = useGetPieceIds(tokenAddresses!, {
     enabled: tokenAddresses !== undefined,
   });
 
@@ -69,6 +74,8 @@ export const MintPage = () => {
   }
 
   const userOwnsThisPieceAlready = pieceIds.includes(pieceId);
+  const isLoadingOwnership =
+    connected && (tokenAddressesLoading || pieceIdsLoading);
 
   // At this point all the data we need is available.
   return (
@@ -95,6 +102,7 @@ export const MintPage = () => {
           pieceId={pieceId}
           pieceData={pieceData}
           userOwnsThisPieceAlready={userOwnsThisPieceAlready}
+          isLoadingOwnership={isLoadingOwnership}
         />
       )}
     </div>

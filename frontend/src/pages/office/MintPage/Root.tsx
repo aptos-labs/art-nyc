@@ -17,10 +17,12 @@ export const Root = ({
   pieceId,
   pieceData,
   userOwnsThisPieceAlready,
+  isLoadingOwnership,
 }: {
   pieceId: string;
   pieceData: PieceData;
   userOwnsThisPieceAlready: boolean;
+  isLoadingOwnership: boolean;
 }) => {
   const { connected: walletConnected, connect } = useWallet();
 
@@ -35,6 +37,12 @@ export const Root = ({
         onClick={connectPetra(connect)}
       >
         Connect Petra Wallet
+      </Button>
+    );
+  } else if (isLoadingOwnership) {
+    button = (
+      <Button size="lg" className={css({ w: "full" })} loading disabled>
+        Loading...
       </Button>
     );
   } else if (userOwnsThisPieceAlready) {

@@ -1,20 +1,12 @@
 import { CreateToastArgs, toast } from "@aptos-internal/design-system-web";
-import { Client } from "@aptos-labs/aptos-fee-payer-client";
 import {
-  AccountAuthenticator,
-  AnyRawTransaction,
   Aptos,
   CommittedTransactionResponse,
-  Ed25519PublicKey,
   InputEntryFunctionData,
-  InputGenerateTransactionOptions,
-  PendingTransactionResponse,
-  PublicKey,
 } from "@aptos-labs/ts-sdk";
 import {
   AccountInfo,
   InputTransactionData,
-  Types,
 } from "@aptos-labs/wallet-adapter-react";
 import { PINATA_GATEWAY_TOKEN } from "./constants";
 import { PieceData } from "./types/surf";
@@ -213,24 +205,14 @@ export const navigateExternal = (url: string) => {
   window.open(url, "_blank");
 };
 
-export type FeePayerArgs = {
-  /** This should come from useFeePayer in the global state. */
-  useFeePayer: boolean;
-  feePayerClient: Client;
-  signTransaction: (
-    transactionOrPayload: AnyRawTransaction | Types.TransactionPayload,
-    asFeePayer?: boolean,
-    options?: InputGenerateTransactionOptions,
-  ) => Promise<AccountAuthenticator>;
-  options?: InputGenerateTransactionOptions;
-};
-
-// TODO: Make successToast and errorToast be functions that take in the
-// wait response and error respectively instead.
+/**
+ * Submit a transaction using the wallet adapter.
+ * If gas station is configured in the Aptos client (via GlobalState), transactions
+ * will automatically be sponsored through the gas station.
+ */
 export async function onClickSubmitTransaction({
   payload,
   signAndSubmitTransaction,
-  feePayerArgs,
   account,
   aptos,
   successToast,
@@ -238,7 +220,6 @@ export async function onClickSubmitTransaction({
 }: {
   payload: InputEntryFunctionData;
   signAndSubmitTransaction: (transaction: InputTransactionData) => Promise<any>;
-  feePayerArgs?: FeePayerArgs;
   account: AccountInfo | null;
   aptos: Aptos;
   successToast: CreateToastArgs;
@@ -250,43 +231,10 @@ export async function onClickSubmitTransaction({
 
   let out: CommittedTransactionResponse | null = null;
   try {
-    let submissionResponse: PendingTransactionResponse;
-    if (feePayerArgs && feePayerArgs.useFeePayer) {
-      const unsignedTransaction = await aptos.transaction.build.simple({
-        sender: account.address,
-        data: payload,
-        withFeePayer: true,
-      });
-
-      let publicKey: PublicKey;
-      if (typeof account.publicKey === "string") {
-        publicKey = new Ed25519PublicKey(account.publicKey);
-      } else {
-        throw "Multi public key not supported right now";
-      }
-
-      const senderAuthenticator = await feePayerArgs.signTransaction(
-        unsignedTransaction,
-        false,
-        feePayerArgs.options,
-      );
-
-      const output = await feePayerArgs.feePayerClient.signAndReturn({
-        transaction: unsignedTransaction,
-        publicKey,
-      });
-
-      submissionResponse = await aptos.transaction.submit.simple({
-        transaction: output.signedTransaction,
-        senderAuthenticator,
-        feePayerAuthenticator: output.feePayerAuthenticator,
-      });
-    } else {
-      submissionResponse = await signAndSubmitTransaction({
-        sender: account.address,
-        data: payload,
-      });
-    }
+    const submissionResponse = await signAndSubmitTransaction({
+      sender: account.address,
+      data: payload,
+    });
 
     out = await aptos.waitForTransaction({
       transactionHash: submissionResponse.hash,
@@ -294,7 +242,7 @@ export async function onClickSubmitTransaction({
     });
     toast(successToast);
   } catch (error) {
-    console.log(`Error updating art data: ${JSON.stringify(error)}`);
+    console.log(`Error submitting transaction: ${JSON.stringify(error)}`);
     toast({
       description: `${error}`,
       ...errorToast,

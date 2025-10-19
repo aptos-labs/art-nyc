@@ -1,6 +1,6 @@
 import { useGlobalState } from "@/context/GlobalState";
 import { getIdentifier, useOfficeState } from "@/context/OfficeState";
-import { FeePayerArgs, onClickSubmitTransaction } from "@/utils";
+import { onClickSubmitTransaction } from "@/utils";
 import { Button } from "@aptos-internal/design-system-web";
 import { InputEntryFunctionData } from "@aptos-labs/ts-sdk";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
@@ -24,8 +24,7 @@ export const UpdateButton = ({
   enabled: boolean;
   text: string;
 }) => {
-  const { account, connected, signAndSubmitTransaction, signTransaction } =
-    useWallet();
+  const { account, connected, signAndSubmitTransaction } = useWallet();
   const [submitting, setSubmitting] = useState(false);
   const [globalState] = useGlobalState();
   const officeState = useOfficeState();
@@ -46,18 +45,9 @@ export const UpdateButton = ({
         metadataValues,
       ],
     };
-    let feePayerArgs: FeePayerArgs | undefined;
-    if (globalState.feePayerClient) {
-      feePayerArgs = {
-        useFeePayer: globalState.useFeePayer,
-        feePayerClient: globalState.feePayerClient,
-        signTransaction,
-      };
-    }
     await onClickSubmitTransaction({
       payload,
       signAndSubmitTransaction,
-      feePayerArgs,
       account,
       aptos: globalState.client,
       successToast: {
