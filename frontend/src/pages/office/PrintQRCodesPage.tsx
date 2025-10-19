@@ -64,28 +64,29 @@ export const PrintQRCodesPage = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: "8",
-            p: "12",
+            gap: "4",
+            p: "8",
             pageBreakInside: "avoid",
           })}
         >
           <h3
             className={css({
-              textStyle: "body.md",
+              textStyle: "body.sm",
               fontWeight: "bold",
               textAlign: "center",
+              fontSize: "[10px]",
             })}
           >
             SCAN TO MINT
           </h3>
           <div
             className={css({
-              p: "8",
+              p: "4",
               bg: "white",
               rounded: "100",
-              border: "2px solid black",
-              w: "[4cm]",
-              h: "[4cm]",
+              border: "1px solid black",
+              w: "[2.4cm]",
+              h: "[2.4cm]",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -93,13 +94,13 @@ export const PrintQRCodesPage = () => {
           >
             <QRCodeSVG
               value={petraDeeplink}
-              size={150}
+              size={90}
               level="H"
               includeMargin={false}
               imageSettings={{
                 src: logoDataUrl,
-                height: 30,
-                width: 30,
+                height: 18,
+                width: 18,
                 excavate: true,
               }}
             />
@@ -108,9 +109,9 @@ export const PrintQRCodesPage = () => {
             className={css({
               textStyle: "body.sm",
               textAlign: "center",
-              maxW: "[4cm]",
+              maxW: "[2.4cm]",
               wordBreak: "break-word",
-              fontSize: "[10px]",
+              fontSize: "[9px]",
             })}
           >
             {pieceData.token_name}
@@ -127,15 +128,15 @@ export const PrintQRCodesPage = () => {
           @media print {
             @page {
               margin: 0.5in;
-              size: letter;
+              size: letter landscape;
             }
           }
         `}
       </style>
       <div
         className={grid({
-          columns: 4,
-          gap: "16",
+          columns: 6,
+          gap: "12",
           p: "16",
         })}
       >
@@ -144,4 +145,3 @@ export const PrintQRCodesPage = () => {
     </>
   );
 };
-
