@@ -87,20 +87,20 @@ function MyMenu() {
         onSelect: connectPetra(connect),
       };
 
-  function getFeePayerItem(
+  function getGasStationItem(
     label: string,
     icon: (props: React.SVGProps<SVGSVGElement>) => React.JSX.Element,
   ) {
     return {
       Icon: icon,
-      id: "feepayer",
+      id: "gasstation",
       label,
       onSelect: () => {
-        globalActions.setUseFeePayer((current) => {
+        globalActions.setUseGasStation((current) => {
           let newValue = !current;
-          let title = newValue ? "Fee Payer Enabled" : "Fee Payer Disabled";
+          let title = newValue ? "Gas Station Enabled" : "Gas Station Disabled";
           let description = newValue
-            ? "The fee payer will pay gas on your behalf."
+            ? "The gas station will sponsor your transactions."
             : "You will pay for gas yourself.";
           toast({ title, description, variant: "info", duration: 5000 });
           return !current;
@@ -109,15 +109,15 @@ function MyMenu() {
     };
   }
 
-  const feePayerItem = globalState.useFeePayer
-    ? getFeePayerItem("Pay Own Gas", IconGasPump)
-    : getFeePayerItem("Use Fee Payer", IconMoney);
+  const gasStationItem = globalState.useGasStation
+    ? getGasStationItem("Pay Own Gas", IconGasPump)
+    : getGasStationItem("Use Gas Station", IconMoney);
 
   return (
     <Menu
       menuItems={[
         walletItem,
-        feePayerItem,
+        gasStationItem,
         {
           Icon: IconGithubLogo,
           id: "source",

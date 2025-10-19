@@ -39,7 +39,7 @@ export const MintPage = () => {
 
   // Lookup what tokens the user owns right now in this collection.
   const { data: tokenAddresses, error: tokensError } = useGetTokenAddresses(
-    account?.address!,
+    account?.address?.toString() ?? "",
     {
       enabled: account !== null && account.address !== undefined,
     },

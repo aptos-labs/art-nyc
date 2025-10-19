@@ -1,58 +1,76 @@
 import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
+import {
+  GasStationClient,
+  GasStationTransactionSubmitter,
+} from "@aptos-labs/gas-station-client";
 import React, { createContext, useMemo } from "react";
-import { defaultNetwork } from "../constants";
+import {
+  defaultNetwork,
+  FRONTEND_API_KEYS,
+  GAS_STATION_API_KEYS,
+} from "../constants";
 import { useNetworkSelector } from "./networkSelection";
-import { Client } from "@aptos-labs/aptos-fee-payer-client";
 
 export interface GlobalState {
   /** Derived from external state ?network=<network> query parameter - e.g. devnet */
   readonly network: Network;
   /** Derived from network */
   readonly client: Aptos;
-  /** Derived from network */
-  readonly feePayerClient?: Client;
   /** Determined by the user using the toggle in the menu */
-  readonly useFeePayer: boolean;
+  readonly useGasStation: boolean;
 }
 
 function deriveGlobalState({
   network,
-  useFeePayer,
+  useGasStation,
 }: {
   network: Network;
-  useFeePayer: boolean;
+  useGasStation: boolean;
 }): GlobalState {
-  let apiKey: string | undefined;
-  if (network === "mainnet") {
-    // This is a frontend API key made by dport.
-    apiKey = "AG-82QP58357YNHHMZMTG8D2MQT99962GQGT";
+  const clientConfig = FRONTEND_API_KEYS[network]
+    ? { API_KEY: FRONTEND_API_KEYS[network] }
+    : undefined;
+
+  // Configure gas station if enabled and API key is available.
+  let config: AptosConfig;
+  if (useGasStation && GAS_STATION_API_KEYS[network]) {
+    const gasStationClient = new GasStationClient({
+      network,
+      apiKey: GAS_STATION_API_KEYS[network],
+    });
+
+    const transactionSubmitter = new GasStationTransactionSubmitter(
+      gasStationClient,
+    );
+
+    config = new AptosConfig({
+      network,
+      clientConfig,
+      pluginSettings: {
+        TRANSACTION_SUBMITTER: transactionSubmitter,
+      },
+    });
+  } else {
+    config = new AptosConfig({ network, clientConfig });
   }
 
-  const clientConfig = apiKey ? { API_KEY: apiKey } : undefined;
-  const config = new AptosConfig({ network, clientConfig });
   const client = new Aptos(config);
-  let feePayerClient;
-  if (network === "mainnet") {
-    feePayerClient = new Client({
-      url: "https://art-nyc.mainnet-prod.gcp.aptosdev.com",
-    });
-  }
+
   return {
     network,
     client,
-    feePayerClient,
-    useFeePayer,
+    useGasStation,
   };
 }
 
 const initialGlobalState = deriveGlobalState({
   network: defaultNetwork,
-  useFeePayer: true,
+  useGasStation: true,
 });
 
 type GlobalActions = {
   selectNetwork: ReturnType<typeof useNetworkSelector>[1];
-  setUseFeePayer: React.Dispatch<React.SetStateAction<boolean>>;
+  setUseGasStation: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const GlobalStateContext = createContext(initialGlobalState);
@@ -64,23 +82,23 @@ export const GlobalStateProvider = ({
   children: React.ReactNode;
 }) => {
   const [selectedNetwork, selectNetwork] = useNetworkSelector();
-  const [useFeePayer, setUseFeePayer] = React.useState(true);
+  const [useGasStation, setUseGasStation] = React.useState(true);
 
   const globalState: GlobalState = useMemo(
     () =>
       deriveGlobalState({
         network: selectedNetwork,
-        useFeePayer,
+        useGasStation,
       }),
-    [selectedNetwork, useFeePayer],
+    [selectedNetwork, useGasStation],
   );
 
   const globalActions = useMemo(
     () => ({
       selectNetwork,
-      setUseFeePayer,
+      setUseGasStation,
     }),
-    [selectNetwork, setUseFeePayer],
+    [selectNetwork, setUseGasStation],
   );
 
   return (

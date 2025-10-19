@@ -1,10 +1,6 @@
 import { useGlobalState } from "@/context/GlobalState";
 import { getIdentifier, useOfficeState } from "@/context/OfficeState";
-import {
-  FeePayerArgs,
-  onClickSubmitTransaction,
-  standardizeAddress,
-} from "@/utils";
+import { onClickSubmitTransaction, standardizeAddress } from "@/utils";
 import {
   InputEntryFunctionData,
   TransactionResponseType,
@@ -14,7 +10,7 @@ import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useMintPiece() {
-  const { account, signAndSubmitTransaction, signTransaction } = useWallet();
+  const { account, signAndSubmitTransaction } = useWallet();
   const [globalState] = useGlobalState();
   const officeState = useOfficeState();
   const queryClient = useQueryClient();
@@ -26,18 +22,9 @@ export function useMintPiece() {
         typeArguments: [],
         functionArguments: [pieceId],
       };
-      let feePayerArgs: FeePayerArgs | undefined;
-      if (globalState.feePayerClient) {
-        feePayerArgs = {
-          useFeePayer: globalState.useFeePayer,
-          feePayerClient: globalState.feePayerClient,
-          signTransaction,
-        };
-      }
       const waitResponse = await onClickSubmitTransaction({
         payload,
         signAndSubmitTransaction,
-        feePayerArgs,
         account,
         aptos: globalState.client,
         successToast: {

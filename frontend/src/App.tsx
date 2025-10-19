@@ -1,30 +1,40 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
 import MyRoutes from "./MyRoutes";
-import {
-  AptosWalletAdapterProvider,
-  Wallet,
-} from "@aptos-labs/wallet-adapter-react";
-import { PetraWallet } from "petra-plugin-wallet-adapter";
+import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
 import { ModalContainer, Toaster } from "@aptos-internal/design-system-web";
-import { GlobalStateProvider } from "./context/GlobalState";
+import { GlobalStateProvider, useGlobalState } from "./context/GlobalState";
 
 const queryClient = new QueryClient();
 
-export const App = () => {
-  const wallets: Wallet[] = [new PetraWallet()];
+const AppContent = () => {
+  const [globalState] = useGlobalState();
 
   return (
+    <AptosWalletAdapterProvider
+      autoConnect={true}
+      dappConfig={{
+        network: globalState.network,
+        transactionSubmitter:
+          globalState.client.config.getTransactionSubmitter(),
+      }}
+      optInWallets={["Petra"]}
+    >
+      <MyRoutes />
+      <ModalContainer />
+      <Toaster />
+    </AptosWalletAdapterProvider>
+  );
+};
+
+export const App = () => {
+  return (
     <BrowserRouter>
-      <AptosWalletAdapterProvider plugins={wallets} autoConnect={true}>
-        <QueryClientProvider client={queryClient}>
-          <GlobalStateProvider>
-            <MyRoutes />
-            <ModalContainer />
-            <Toaster />
-          </GlobalStateProvider>
-        </QueryClientProvider>
-      </AptosWalletAdapterProvider>
+      <QueryClientProvider client={queryClient}>
+        <GlobalStateProvider>
+          <AppContent />
+        </GlobalStateProvider>
+      </QueryClientProvider>
     </BrowserRouter>
   );
 };
