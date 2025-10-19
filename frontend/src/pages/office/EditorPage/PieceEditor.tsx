@@ -13,6 +13,7 @@ import {
   Tooltip,
 } from "@aptos-internal/design-system-web";
 import { useOfficeState } from "@/context/OfficeState";
+import { QRCodeModal } from "./QRCodeModal";
 
 /** A component where you can see the existing art data and make changes. */
 export const PieceEditor = ({
@@ -41,31 +42,31 @@ export const PieceEditor = ({
     !mapsAreEqual(metadata, originalMetadata);
 
   const linkTo = `/${officeState.office}/mint/${pieceId}`;
+  const fullUrl = `${window.location.protocol}//${window.location.host}${linkTo}`;
+  const petraDeeplink = `https://petra.app/explore?link=${fullUrl}`;
+
   return (
     <form
       className={css({ display: "flex", flexDirection: "column", gap: "16" })}
     >
-      <div>
+      <div className={css({ display: "flex", alignItems: "center", gap: "8" })}>
         <Link to={`${linkTo}${getNetworkQueryParam(globalState)}`}>
           <span className={css({ textStyle: "heading.md" })}>{pieceId}</span>
         </Link>
         <Tooltip placement="top-start" content="Copy Petra deeplink URL">
           <IconButton
             type="button"
-            className={css({ marginLeft: "16" })}
             variant="secondary"
             ariaLabel="Copy Petra deeplink URL"
             size="sm"
             onClick={async () => {
-              const url = `${window.location.protocol}//${window.location.host}${linkTo}`;
-              await navigator.clipboard.writeText(
-                `https://petra.app/explore?link=${url}`,
-              );
+              await navigator.clipboard.writeText(petraDeeplink);
             }}
           >
             <IconClipboard />
           </IconButton>
         </Tooltip>
+        <QRCodeModal url={petraDeeplink} pieceId={pieceId} />
       </div>
       <SharedFormFields
         pieceName={pieceName}
