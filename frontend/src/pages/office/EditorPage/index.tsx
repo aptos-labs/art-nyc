@@ -1,6 +1,7 @@
 import { useGetArtData } from "@/api/hooks/useGetArtData";
 import { PieceEditor } from "./PieceEditor";
 import { PieceCreator } from "./PieceCreator";
+import { PrintableQRCodes } from "./PrintableQRCodes";
 import { css } from "styled-system/css";
 import { Card } from "@aptos-internal/design-system-web";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
@@ -48,14 +49,19 @@ export const EditorPage = () => {
 
   return (
     <div className={css({ paddingTop: "32" })}>
-      <p
+      <div
         className={css({
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
           paddingLeft: "12",
-          textStyle: "heading.md",
+          paddingRight: "12",
+          paddingBottom: "16",
         })}
       >
-        Editor
-      </p>
+        <p className={css({ textStyle: "heading.md" })}>Editor</p>
+        <PrintableQRCodes />
+      </div>
       <p className={css({ paddingLeft: "12" })}>
         It is not recommended to edit names for pieces that people have minted,
         it makes indexing complex.

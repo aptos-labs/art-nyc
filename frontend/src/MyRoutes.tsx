@@ -4,6 +4,7 @@ import { MainLayout } from "./layouts/MainLayout";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { MintPage } from "./pages/office/MintPage";
 import { EditorPage } from "./pages/office/EditorPage";
+import { PrintQRCodesPage } from "./pages/office/PrintQRCodesPage";
 import { LandingPage } from "./pages/LandingPage";
 import { Office, OfficeStateProvider } from "./context/OfficeState";
 
@@ -70,6 +71,14 @@ const OfficeRoutes = ({ office }: { office: Office }) => {
           <RouteWrapper>
             <EditorPage />
           </RouteWrapper>
+        }
+      />
+      <Route
+        path={`${path}/print-qr-codes`}
+        element={
+          <OfficeStateProvider office={office}>
+            <PrintQRCodesPage />
+          </OfficeStateProvider>
         }
       />
     </>
